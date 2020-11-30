@@ -53,8 +53,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 12824b3cb837e419c81d44a6d7ae5819, type: 3}
   - {fileID: 21300000, guid: 9e941e11642bd4cc3860d1e4639a2efd, type: 3}
   - {fileID: 21300000, guid: 7cf3c856ef63c40119cb04a2a3fd6a4d, type: 3}
-  TilePrefab: {fileID: 8240428727968202350, guid: 6024e5dc0c4d04015abe2e6a3d7e0a56, type: 3}
+  TilePrefab: {fileID: 0}
   GridDimension: 8
   Distance: 1
-  StartingMoves: 50
-  GameOverMenu: {fileID: 0}
