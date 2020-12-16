@@ -31,20 +31,20 @@ public class Tile : MonoBehaviour
             if (selected == this)
                 return;
             selected.Unselect();
-            
-            Debug.Log(Vector2Int.Distance(selected.Position, Position));
+        
+            Debug.Log("A = " + selected.Position + " B = " + Position + " Distance = " + Vector2Int.Distance(selected.Position, Position));
             if (Vector2Int.Distance(selected.Position, Position) == 1)
             {
                 GridManager.Instance.SwapTiles(Position, selected.Position);
-                Debug.Log("Tile Pressed");
+                //Debug.Log("Tile Pressed");
                 selected = null;
             } else {
-                Debug.Log("Tile");
+                //Debug.Log("Tile");
                 selected = this;
                 Select();
             }
         } else {
-            Debug.Log("gnfg");
+            //Debug.Log("gnfg");
             selected = this;
             Select();
         }
