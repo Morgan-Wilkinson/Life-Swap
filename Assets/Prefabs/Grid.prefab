@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2831557959601860342}
   - component: {fileID: 2831557959601860343}
+  - component: {fileID: 1095743584961209552}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -38,7 +39,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2831557959601860104}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7468e668ff89b449384a47ab99ecfd85, type: 3}
   m_Name: 
@@ -53,6 +54,31 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 12824b3cb837e419c81d44a6d7ae5819, type: 3}
   - {fileID: 21300000, guid: 9e941e11642bd4cc3860d1e4639a2efd, type: 3}
   - {fileID: 21300000, guid: 7cf3c856ef63c40119cb04a2a3fd6a4d, type: 3}
-  TilePrefab: {fileID: 0}
+  TilePrefab: {fileID: 2112744585714510340, guid: 6024e5dc0c4d04015abe2e6a3d7e0a56, type: 3}
+  GridDimension: 8
+  Distance: 1
+--- !u!114 &1095743584961209552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2831557959601860104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e729a263e65940dea1fa612ff0effda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sprites:
+  - {fileID: 21300000, guid: 901f3a48fbf034406a5e7370bf18c912, type: 3}
+  - {fileID: 21300000, guid: aa5afda0f456e44c19855705eca8511b, type: 3}
+  - {fileID: 21300000, guid: 82c6a4ff84d594446a144cae423b7941, type: 3}
+  - {fileID: 21300000, guid: 943dfb82fce144de6b70f79ab1cb7e13, type: 3}
+  - {fileID: 21300000, guid: 0f26b1bf5fd9b45f4945147adb0d69d7, type: 3}
+  - {fileID: 21300000, guid: 68acd9be46ae1459ebd0c36af96430a6, type: 3}
+  - {fileID: 21300000, guid: 12824b3cb837e419c81d44a6d7ae5819, type: 3}
+  - {fileID: 21300000, guid: 9e941e11642bd4cc3860d1e4639a2efd, type: 3}
+  - {fileID: 21300000, guid: 7cf3c856ef63c40119cb04a2a3fd6a4d, type: 3}
+  TilePrefab: {fileID: 2112744585714510340, guid: 6024e5dc0c4d04015abe2e6a3d7e0a56, type: 3}
   GridDimension: 8
   Distance: 1

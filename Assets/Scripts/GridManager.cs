@@ -39,6 +39,7 @@ public class GridManager : MonoBehaviour
 
                 List<Sprite> possibleSprites = new List<Sprite>(Sprites);
 
+                /* This sections prevents the creation of 3 in a row.
                 //Choose what sprite to use for this cell
                 Sprite left1 = GetSpriteAt(column - 1, row);
                 Sprite left2 = GetSpriteAt(column - 2, row);
@@ -53,6 +54,7 @@ public class GridManager : MonoBehaviour
                 {
                     possibleSprites.Remove(down1);
                 }
+                */
 
                 SpriteRenderer renderer = newTile.GetComponent<SpriteRenderer>();
                 renderer.sprite = possibleSprites[Random.Range(0, possibleSprites.Count)];
