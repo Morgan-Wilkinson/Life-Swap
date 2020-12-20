@@ -106,8 +106,6 @@ public class GridManager2 : MonoBehaviour
         }
     }
 
-    
-    
     bool CheckMatches()
     {
         HashSet<SpriteRenderer> matchedTiles = new HashSet<SpriteRenderer>(); // 1
@@ -138,6 +136,13 @@ public class GridManager2 : MonoBehaviour
             renderer.sprite = null;
         }
         return matchedTiles.Count > 0; // 8
+    }
+
+    // Check both the row and columns of the selected position and only stop until
+    // A non match is found in that particular direction
+    bool CheckAdjacentMatches(Vector2Int tilePosition)
+    {
+        HashSet<SpriteRenderer> matchedTiles = new HashSet<SpriteRenderer>();
     }
 
     List<SpriteRenderer> FindColumnMatchForTile(int col, int row, Sprite sprite)
