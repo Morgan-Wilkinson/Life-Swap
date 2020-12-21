@@ -8,9 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2831557959601860342}
+  - component: {fileID: 5660317271556194403}
   - component: {fileID: 2831557959601860343}
   - component: {fileID: 1095743584961209552}
+  - component: {fileID: 5660317271556194402}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -18,8 +19,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2831557959601860342
-Transform:
+--- !u!224 &5660317271556194403
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -32,6 +33,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2831557959601860343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,11 +80,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: aa5afda0f456e44c19855705eca8511b, type: 3}
   - {fileID: 21300000, guid: 82c6a4ff84d594446a144cae423b7941, type: 3}
   - {fileID: 21300000, guid: 943dfb82fce144de6b70f79ab1cb7e13, type: 3}
-  - {fileID: 21300000, guid: 0f26b1bf5fd9b45f4945147adb0d69d7, type: 3}
-  - {fileID: 21300000, guid: 68acd9be46ae1459ebd0c36af96430a6, type: 3}
-  - {fileID: 21300000, guid: 12824b3cb837e419c81d44a6d7ae5819, type: 3}
-  - {fileID: 21300000, guid: 9e941e11642bd4cc3860d1e4639a2efd, type: 3}
-  - {fileID: 21300000, guid: 7cf3c856ef63c40119cb04a2a3fd6a4d, type: 3}
   TilePrefab: {fileID: 2112744585714510340, guid: 6024e5dc0c4d04015abe2e6a3d7e0a56, type: 3}
   GridDimension: 8
   Distance: 1
+--- !u!222 &5660317271556194402
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2831557959601860104}
+  m_CullTransparentMesh: 0

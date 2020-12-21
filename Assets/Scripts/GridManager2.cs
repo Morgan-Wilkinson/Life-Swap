@@ -33,6 +33,7 @@ public class GridManager2 : MonoBehaviour
             for (int column = 0; column < GridDimension; column++)
             {
                 GameObject newTile = Instantiate(TilePrefab);
+                newTile.name = "(" + row + "," + column + ")";
 
                 List<Sprite> possibleSprites = new List<Sprite>(Sprites);
 
@@ -64,34 +65,14 @@ public class GridManager2 : MonoBehaviour
             }
     }
 
-    Sprite GetSpriteAt(int column, int row)
-    {
-        if (column < 0 || column >= GridDimension
-            || row < 0 || row >= GridDimension)
-            return null;
-        GameObject tile = Grid[column, row];
-        SpriteRenderer renderer = tile.GetComponent<SpriteRenderer>();
-        return renderer.sprite;
-    }
-
-    SpriteRenderer GetSpriteRendererAt(int column, int row)
-    {
-        if (column < 0 || column >= GridDimension
-            || row < 0 || row >= GridDimension)
-            return null;
-        GameObject tile = Grid[column, row];
-        SpriteRenderer renderer = tile.GetComponent<SpriteRenderer>();
-        return renderer;
-    }
-
     public void MatchTiles(Vector2Int tilePosition)
     {
         GameObject tile = Grid[tilePosition.x, tilePosition.y];
         SpriteRenderer renderer = tile.GetComponent<SpriteRenderer>();
 
         // CheckMatches in column and row.
-        // Add those spirt to be deleted.  
-        bool changesOccurs = CheckMatches();
+        // Add those sprite to be deleted.  
+        bool changesOccurs = CheckAdjacentMatches(tilePosition);
         if(!changesOccurs)
         {
             // Enable Animator for Shake for this one tile.
@@ -102,49 +83,36 @@ public class GridManager2 : MonoBehaviour
             do
             {
                 FillHoles();
-            } while (CheckMatches());
+            } while (CheckAdjacentMatches(tilePosition));
         }
     }
 
-    bool CheckMatches()
+    // Checks if the column and row are in legal bounds. If so then it returns the tile
+    // GameObject sprite at that location Grid[column, row];
+    Sprite GetSpriteAt(int column, int row)
     {
-        HashSet<SpriteRenderer> matchedTiles = new HashSet<SpriteRenderer>(); // 1
-        for (int row = 0; row < GridDimension; row++)
-        {
-            for (int column = 0; column < GridDimension; column++) // 2
-            {
-                SpriteRenderer current = GetSpriteRendererAt(column, row); // 3
-    
-                List<SpriteRenderer> horizontalMatches = FindColumnMatchForTile(column, row, current.sprite); // 4
-                if (horizontalMatches.Count >= 2)
-                {
-                    matchedTiles.UnionWith(horizontalMatches);
-                    matchedTiles.Add(current); // 5
-                }
-    
-                List<SpriteRenderer> verticalMatches = FindRowMatchForTile(column, row, current.sprite); // 6
-                if (verticalMatches.Count >= 2)
-                {
-                    matchedTiles.UnionWith(verticalMatches);
-                    matchedTiles.Add(current);
-                }
-            }
-        }
-    
-        foreach (SpriteRenderer renderer in matchedTiles) // 7
-        {
-            renderer.sprite = null;
-        }
-        return matchedTiles.Count > 0; // 8
+        if (column < 0 || column >= GridDimension
+            || row < 0 || row >= GridDimension)
+            return null;
+        GameObject tile = Grid[column, row];
+        SpriteRenderer renderer = tile.GetComponent<SpriteRenderer>();
+        return renderer.sprite;
     }
 
-    // Check both the row and columns of the selected position and only stop until
-    // A non match is found in that particular direction
-    bool CheckAdjacentMatches(Vector2Int tilePosition)
+    // Checks if the column and row are in legal bounds. If so then it returns the tile
+    // GameObject SpriteRenderer at that location Grid[column, row];
+    SpriteRenderer GetSpriteRendererAt(int column, int row)
     {
-        HashSet<SpriteRenderer> matchedTiles = new HashSet<SpriteRenderer>();
+        if (column < 0 || column >= GridDimension
+            || row < 0 || row >= GridDimension)
+            return null;
+        GameObject tile = Grid[column, row];
+        SpriteRenderer renderer = tile.GetComponent<SpriteRenderer>();
+        return renderer;
     }
 
+    // Returns a list of SpriteRenderers where the SpriteRenderer all match the initial sprite
+    // parameter and are adjacent to each other column wise.
     List<SpriteRenderer> FindColumnMatchForTile(int col, int row, Sprite sprite)
     {
         List<SpriteRenderer> result = new List<SpriteRenderer>();
@@ -157,9 +125,20 @@ public class GridManager2 : MonoBehaviour
             }
             result.Add(nextColumn);
         }
+        for (int i = col - 1; i >= 0; i--)
+        {
+            SpriteRenderer nextColumn = GetSpriteRendererAt(i, row);
+            if (nextColumn.sprite != sprite)
+            {
+                break;
+            }
+            result.Add(nextColumn);
+        }
         return result;
     }
 
+    // Returns a list of SpriteRenderers where the SpriteRenderer all match the initial sprite
+    // parameter and are adjacent to each other row wise.
     List<SpriteRenderer> FindRowMatchForTile(int col, int row, Sprite sprite)
     {
         List<SpriteRenderer> result = new List<SpriteRenderer>();
@@ -172,7 +151,47 @@ public class GridManager2 : MonoBehaviour
             }
             result.Add(nextRow);
         }
+        for (int i = row - 1; i >= 0; i--)
+        {
+            SpriteRenderer nextRow = GetSpriteRendererAt(col, i);
+            if (nextRow.sprite != sprite)
+            {
+                break;
+            }
+            result.Add(nextRow);
+        }
         return result;
+    }
+   
+    // Check both the row and columns of the selected position and only stop until
+    // A non match is found in that particular direction
+    bool CheckAdjacentMatches(Vector2Int tilePosition)
+    {
+        HashSet<SpriteRenderer> matchedTiles = new HashSet<SpriteRenderer>();
+        
+        SpriteRenderer current = GetSpriteRendererAt(tilePosition.x, tilePosition.y);
+
+        List<SpriteRenderer> horizontalMatches = FindColumnMatchForTile(tilePosition.x, tilePosition.y, current.sprite); 
+        if (horizontalMatches.Count >= 1)
+        {
+            matchedTiles.UnionWith(horizontalMatches);
+            matchedTiles.Add(current);
+        }
+
+        List<SpriteRenderer> verticalMatches = FindRowMatchForTile(tilePosition.x, tilePosition.y, current.sprite);
+        if (verticalMatches.Count >= 1)
+        {
+            matchedTiles.UnionWith(verticalMatches);
+            matchedTiles.Add(current);
+        }
+
+        // Effectively deletes the sprites in the match.
+        foreach (SpriteRenderer renderer in matchedTiles)
+        {
+            renderer.sprite = null;
+        }
+
+        return matchedTiles.Count > 0;
     }
 
     void FillHoles()
