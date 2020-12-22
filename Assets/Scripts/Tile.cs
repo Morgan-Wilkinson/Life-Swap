@@ -8,6 +8,9 @@ public class Tile : MonoBehaviour
     private SpriteRenderer Renderer;
 
     public Vector2Int Position;
+    public int column;
+    public int row;
+    
     Animator animator;
 
     private void Start()
@@ -31,7 +34,7 @@ public class Tile : MonoBehaviour
         Debug.Log("Selected 1");
         selected = this;
         Select();
-        GridManager2.Instance.MatchTiles(selected.Position);
+        //GridManager2.Instance.MatchTiles(selected.Position);
         Unselect();
         selected = null;
     }

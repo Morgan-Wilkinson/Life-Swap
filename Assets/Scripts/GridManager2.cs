@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class GridManager2 : MonoBehaviour
 {
-    public List<Sprite> Sprites = new List<Sprite>();
+    public GameObject[] Sprites;
     public GameObject TilePrefab;
-    public int GridDimension = 8;
+    public int height = 8; // x
+    public int width = 8; // y
+    public int offSet = 15;
     public float Distance = 1.0f;
     private GameObject[,] Grid;
+    private GameObject[,] allSprites;
 
     public static GridManager2 Instance { get; private set; }
 
@@ -20,57 +23,38 @@ public class GridManager2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Grid = new GameObject[GridDimension, GridDimension];
+        Grid = new GameObject[width, height];
+        allSprites = new GameObject[width, height];
         InitGrid();
     }
 
     // Change init so that it allows for the creation of multiple 3 or more matches.
     void InitGrid()
     {
-        Vector3 positionOffset = transform.position - new Vector3(GridDimension * Distance / 2.0f, GridDimension * Distance / 2.0f, 0);
-
-        for (int row = 0; row < GridDimension; row++)
-            for (int column = 0; column < GridDimension; column++)
+        //Vector3 positionOffset = transform.position - new Vector3(GridDimension * Distance / 2.0f, GridDimension * Distance / 2.0f, 0);
+        for (int x = 0; x < width; x++) 
+            for (int y = 0; y < height; y++) 
             {
-                GameObject newTile = Instantiate(TilePrefab);
-                newTile.name = "(" + row + "," + column + ")";
-
-                List<Sprite> possibleSprites = new List<Sprite>(Sprites);
-
-                 /* This sections prevents the creation of 3 in a row. Change this to force 3 or more in a row.
-                //Choose what sprite to use for this cell
-                Sprite left1 = GetSpriteAt(column - 1, row);
-                Sprite left2 = GetSpriteAt(column - 2, row);
-                if (left2 != null && left1 == left2)
-                {
-                    possibleSprites.Remove(left1);
-                }
-
-                Sprite down1 = GetSpriteAt(column, row - 1);
-                Sprite down2 = GetSpriteAt(column, row - 2);
-                if (down2 != null && down1 == down2)
-                {
-                    possibleSprites.Remove(down1);
-                }
-                */
-
-                SpriteRenderer renderer = newTile.GetComponent<SpriteRenderer>();
-                renderer.sprite = possibleSprites[Random.Range(0, possibleSprites.Count)];
-
-                newTile.GetComponent<Tile>().Position = new Vector2Int(column, row);
-                newTile.transform.parent = transform;
-                newTile.transform.position = new Vector3(column * Distance, row * Distance, 0) + positionOffset;
+                Vector2 tempPosition = new Vector2(x, y + offSet);
+                GameObject backgroundTile = Instantiate(TilePrefab, tempPosition, Quaternion.identity) as GameObject;
+                backgroundTile.transform.parent = this.transform;
+                backgroundTile.name = "(" + x + "," + y + ")";
                 
-                Grid[column, row] = newTile;
+                int spriteToUse = Random.Range(0, Sprites.Length);
+                GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
+                sprite.transform.parent = this.transform;
+                sprite.name = "(" + x + "," + y + ")";
+                allSprites[x, y] = sprite;
             }
     }
 
+/*
     public void MatchTiles(Vector2Int tilePosition)
     {
         GameObject tile = Grid[tilePosition.x, tilePosition.y];
         SpriteRenderer renderer = tile.GetComponent<SpriteRenderer>();
 
-        // CheckMatches in column and row.
+        // CheckMatches in y and x.
         // Add those sprite to be deleted.  
         bool changesOccurs = CheckAdjacentMatches(tilePosition);
         if(!changesOccurs)
@@ -87,83 +71,83 @@ public class GridManager2 : MonoBehaviour
         }
     }
 
-    // Checks if the column and row are in legal bounds. If so then it returns the tile
-    // GameObject sprite at that location Grid[column, row];
-    Sprite GetSpriteAt(int column, int row)
+    // Checks if the y and x are in legal bounds. If so then it returns the tile
+    // GameObject sprite at that location Grid[y, x];
+    Sprite GetSpriteAt(int y, int x)
     {
-        if (column < 0 || column >= GridDimension
-            || row < 0 || row >= GridDimension)
+        if (y < 0 || y >= width
+            || x < 0 || x >= height)
             return null;
-        GameObject tile = Grid[column, row];
+        GameObject tile = Grid[y, x];
         SpriteRenderer renderer = tile.GetComponent<SpriteRenderer>();
         return renderer.sprite;
     }
 
-    // Checks if the column and row are in legal bounds. If so then it returns the tile
-    // GameObject SpriteRenderer at that location Grid[column, row];
-    SpriteRenderer GetSpriteRendererAt(int column, int row)
+    // Checks if the y and x are in legal bounds. If so then it returns the tile
+    // GameObject SpriteRenderer at that location Grid[y, x];
+    SpriteRenderer GetSpriteRendererAt(int y, int x)
     {
-        if (column < 0 || column >= GridDimension
-            || row < 0 || row >= GridDimension)
+        if (y < 0 || y >= width
+            || x < 0 || x >= height)
             return null;
-        GameObject tile = Grid[column, row];
+        GameObject tile = Grid[y, x];
         SpriteRenderer renderer = tile.GetComponent<SpriteRenderer>();
         return renderer;
     }
 
     // Returns a list of SpriteRenderers where the SpriteRenderer all match the initial sprite
-    // parameter and are adjacent to each other column wise.
-    List<SpriteRenderer> FindColumnMatchForTile(int col, int row, Sprite sprite)
+    // parameter and are adjacent to each other y wise.
+    List<SpriteRenderer> FindYMatchForTile(int col, int x, Sprite sprite)
     {
         List<SpriteRenderer> result = new List<SpriteRenderer>();
-        for (int i = col + 1; i < GridDimension; i++)
+        for (int i = col + 1; i < width; i++)
         {
-            SpriteRenderer nextColumn = GetSpriteRendererAt(i, row);
-            if (nextColumn.sprite != sprite)
+            SpriteRenderer nextY = GetSpriteRendererAt(i, x);
+            if (nextY.sprite != sprite)
             {
                 break;
             }
-            result.Add(nextColumn);
+            result.Add(nextY);
         }
         for (int i = col - 1; i >= 0; i--)
         {
-            SpriteRenderer nextColumn = GetSpriteRendererAt(i, row);
-            if (nextColumn.sprite != sprite)
+            SpriteRenderer nextY = GetSpriteRendererAt(i, x);
+            if (nextY.sprite != sprite)
             {
                 break;
             }
-            result.Add(nextColumn);
+            result.Add(nextY);
         }
         return result;
     }
 
     // Returns a list of SpriteRenderers where the SpriteRenderer all match the initial sprite
-    // parameter and are adjacent to each other row wise.
-    List<SpriteRenderer> FindRowMatchForTile(int col, int row, Sprite sprite)
+    // parameter and are adjacent to each other x wise.
+    List<SpriteRenderer> FindXMatchForTile(int col, int x, Sprite sprite)
     {
         List<SpriteRenderer> result = new List<SpriteRenderer>();
-        for (int i = row + 1; i < GridDimension; i++)
+        for (int i = x + 1; i < height; i++)
         {
-            SpriteRenderer nextRow = GetSpriteRendererAt(col, i);
-            if (nextRow.sprite != sprite)
+            SpriteRenderer nextX = GetSpriteRendererAt(col, i);
+            if (nextX.sprite != sprite)
             {
                 break;
             }
-            result.Add(nextRow);
+            result.Add(nextX);
         }
-        for (int i = row - 1; i >= 0; i--)
+        for (int i = x - 1; i >= 0; i--)
         {
-            SpriteRenderer nextRow = GetSpriteRendererAt(col, i);
-            if (nextRow.sprite != sprite)
+            SpriteRenderer nextX = GetSpriteRendererAt(col, i);
+            if (nextX.sprite != sprite)
             {
                 break;
             }
-            result.Add(nextRow);
+            result.Add(nextX);
         }
         return result;
     }
    
-    // Check both the row and columns of the selected position and only stop until
+    // Check both the x and ys of the selected position and only stop until
     // A non match is found in that particular direction
     bool CheckAdjacentMatches(Vector2Int tilePosition)
     {
@@ -171,14 +155,14 @@ public class GridManager2 : MonoBehaviour
         
         SpriteRenderer current = GetSpriteRendererAt(tilePosition.x, tilePosition.y);
 
-        List<SpriteRenderer> horizontalMatches = FindColumnMatchForTile(tilePosition.x, tilePosition.y, current.sprite); 
+        List<SpriteRenderer> horizontalMatches = FindYMatchForTile(tilePosition.x, tilePosition.y, current.sprite); 
         if (horizontalMatches.Count >= 1)
         {
             matchedTiles.UnionWith(horizontalMatches);
             matchedTiles.Add(current);
         }
 
-        List<SpriteRenderer> verticalMatches = FindRowMatchForTile(tilePosition.x, tilePosition.y, current.sprite);
+        List<SpriteRenderer> verticalMatches = FindXMatchForTile(tilePosition.x, tilePosition.y, current.sprite);
         if (verticalMatches.Count >= 1)
         {
             matchedTiles.UnionWith(verticalMatches);
@@ -196,22 +180,23 @@ public class GridManager2 : MonoBehaviour
 
     void FillHoles()
     {
-        for (int column = 0; column < GridDimension; column++)
+        for (int y = 0; y < width; y++)
         {
-            for (int row = 0; row < GridDimension; row++) // 1
+            for (int x = 0; x < height; x++) // 1
             {
-                while (GetSpriteRendererAt(column, row).sprite == null) // 2
+                while (GetSpriteRendererAt(y, x).sprite == null) // 2
                 {
-                    for (int filler = row; filler < GridDimension - 1; filler++) // 3
+                    for (int filler = x; filler < height - 1; filler++) // 3
                     {
-                        SpriteRenderer current = GetSpriteRendererAt(column, filler); // 4
-                        SpriteRenderer next = GetSpriteRendererAt(column, filler + 1);
+                        SpriteRenderer current = GetSpriteRendererAt(y, filler); // 4
+                        SpriteRenderer next = GetSpriteRendererAt(y, filler + 1);
                         current.sprite = next.sprite;
                     }
-                    SpriteRenderer last = GetSpriteRendererAt(column, GridDimension - 1);
-                    last.sprite = Sprites[Random.Range(0, Sprites.Count)]; // 5
+                    SpriteRenderer last = GetSpriteRendererAt(y, height - 1);
+                    //last.sprite = Sprites[Random.Range(0, Sprites.Length)]; // 5
                 }
             }
         }
     }
+    */
 }
