@@ -3,7 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - BreadSprite
+  - CakeSprite
+  - Candy1Sprite
+  - Candy2Sprite
+  - Candy3Sprite
+  - CookieSprite
+  - CupcakeSprite
+  - DonutSprite
+  - CroissantSprite
   layers:
   - Default
   - TransparentFX

@@ -34,7 +34,7 @@ public class Tile : MonoBehaviour
         Debug.Log("Selected 1");
         selected = this;
         Select();
-        //GridManager2.Instance.MatchTiles(selected.Position);
+        //GridManager.Instance.MatchTiles(selected.Position);
         Unselect();
         selected = null;
     }
