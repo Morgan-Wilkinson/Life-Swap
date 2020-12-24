@@ -8,6 +8,9 @@ public class Tile : MonoBehaviour
     private SpriteRenderer Renderer;
 
     public Vector2Int Position;
+    public int column;
+    public int row;
+    
     Animator animator;
 
     private void Start()
@@ -28,27 +31,11 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (selected != null)
-        {
-            if (selected == this)
-                return;
-            selected.Unselect();
-            //animator.SetTrigger("NoMatch");
-        
-            //Debug.Log("A = " + selected.Position + " B = " + Position + " Distance = " + Vector2Int.Distance(selected.Position, Position));
-            if (Vector2Int.Distance(selected.Position, Position) == 1)
-            {
-                GridManager.Instance.SwapTiles(Position, selected.Position);
-                selected = null;
-            } else {
-                Debug.Log("No Match");
-                selected = this;
-                Select();
-            }
-        } else {
-            Debug.Log("First select");
-            selected = this;
-            Select();
-        }
+        Debug.Log("Selected 1");
+        selected = this;
+        Select();
+        //GridManager2.Instance.MatchTiles(selected.Position);
+        Unselect();
+        selected = null;
     }
 }

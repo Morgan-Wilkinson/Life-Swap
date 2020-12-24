@@ -36,8 +36,11 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\GridManager.cs" />
+     <Compile Include="Assets\Scripts\GridManager2.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />
+     <Compile Include="Assets\Scripts\BackgroundTile.cs" />
+     <Compile Include="Assets\Scripts\NewBehaviourScript.cs" />
+     <Compile Include="Assets\Scripts\Sprite.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
@@ -600,85 +603,85 @@
         <HintPath>/Applications/Unity/Hub/Editor/2020.1.4f1/Unity.app/Contents/NetStandard/compat/2.0.0/shims/netfx/mscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Animation.Runtime">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.Animation.Runtime.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.Animation.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.PixelPerfect.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.SpriteShape.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.SpriteShape.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.SpriteShape.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Path.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.Path.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.Path.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Animation.Triangle.Runtime">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.Animation.Triangle.Runtime.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.Animation.Triangle.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="PsdPlugin">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/PsdPlugin.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/PsdPlugin.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Psdimporter.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.Psdimporter.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.Psdimporter.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InternalAPIEngineBridge.001">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.001.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.001.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Common.Runtime">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.Common.Runtime.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.Common.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.SpriteShape.Runtime">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.PixelPerfect">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Animation.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.Animation.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.Animation.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Common.Editor">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.2D.Common.Editor.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.Common.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InternalAPIEditorBridge.001">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.001.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.001.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-        <HintPath>/Users/morgan/Desktop/Life-Swap/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
