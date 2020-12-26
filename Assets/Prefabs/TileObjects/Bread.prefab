@@ -103,7 +103,6 @@ MonoBehaviour:
   targetX: 0
   targetY: 0
   isMatched: 0
-  Position: {x: 0, y: 0}
   otherDot: {fileID: 0}
 --- !u!61 &-1515979105824035455
 BoxCollider2D:

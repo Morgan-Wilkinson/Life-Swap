@@ -977,9 +977,8 @@ MonoBehaviour:
   - {fileID: 98101872559680855, guid: 82dceb99df3d44be1a198c6940b92d8d, type: 3}
   - {fileID: 5212736497764640044, guid: 2aeb00340ac2547dbb306a2583491fd6, type: 3}
   - {fileID: 8995430255336854345, guid: 319976aa098a74df8a6eb114ab44320a, type: 3}
-  TilePrefab: {fileID: 2112744585714510340, guid: 6024e5dc0c4d04015abe2e6a3d7e0a56, type: 3}
   height: 7
   width: 6
-  offSet: 0
+  offSet: 15
   Distance: 1
   destroyParticle: {fileID: 0}
