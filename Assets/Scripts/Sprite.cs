@@ -13,7 +13,6 @@ public class Sprite : MonoBehaviour
     public int targetY;
     public bool isMatched = false;
 
-    public Vector2 Position;  
     //private FindMatches findMatches;
     private GridManager grid;
     public GameObject otherDot;
@@ -25,55 +24,126 @@ public class Sprite : MonoBehaviour
     void Start()
     {
         grid = FindObjectOfType<GridManager>();
+        column = (int)(transform.position.x);
+        row = (int)(transform.position.y);
     }
 
     // Update is called once per frame
     void Update()
     {
-        FindMatches();
+        /*FindMatches();
         if(isMatched){
             
             SpriteRenderer mySprite = GetComponent<SpriteRenderer>();
             Color currentColor = mySprite.color;
             mySprite.color = new Color(currentColor.r, currentColor.g, currentColor.b, .5f);
-        }
+        }*/
     }
 
     private void OnMouseDown()
     {
-        Position = new Vector2(transform.position.x, transform.position.y);
-        //Debug.Log(Position.x);
-        
+        // On press check if sprite match anything on left and right then start Coroutine
+        //StartCoroutine(CheckMoveCo());
+        FindMatches();
+        StartCoroutine(CheckMoveCo());
+        /*if(isMatched){
+            
+            SpriteRenderer mySprite = GetComponent<SpriteRenderer>();
+            Color currentColor = mySprite.color;
+            mySprite.color = new Color(currentColor.r, currentColor.g, currentColor.b, .5f);
+        }*/
     }
 
-    void FindMatches(){
-        column = (int)(Position.x);
-        row = (int)(Position.y);
+    public IEnumerator CheckMoveCo()
+    {
+        // Created in ep 7.
+        if(!isMatched)
+        {
+            yield return new WaitForSeconds(.5f);
+            // Enable shake animation
+        }
+        else
+        {
+            // DestroyMatches()
+            grid.DestroyMatches();
+            // Enable destroyed matches animation
+        }
+    }
+
+    void FindMatches()
+    {
+        // Vertical
         if(column > 0 && column < grid.width - 1)
         {
-            GameObject leftSprite1 = grid.allSprites[column - 1, row];
-            GameObject rightSprite1 = grid.allSprites[column + 1, row];
-            if (leftSprite1 != null && rightSprite1 != null)
+            for(int i = column; i < grid.width - 1; i++)
             {
-                if (leftSprite1.tag == this.gameObject.tag && rightSprite1.tag == this.gameObject.tag)
+                GameObject tempSprite = grid.allSprites[i - 1, row];
+                if (tempSprite != null)
                 {
-                    leftSprite1.GetComponent<Sprite>().isMatched = true;
-                    rightSprite1.GetComponent<Sprite>().isMatched = true;
-                    isMatched = true;
+                    if (tempSprite.tag == this.gameObject.tag)
+                    {
+                        tempSprite.GetComponent<Sprite>().isMatched = true;
+                        isMatched = true;
+                        Debug.Log(i-1 +"," + row +" is a match");
+                    }
+                    else{
+                        break;
+                    }
+                }
+                //Debug.Log(i);
+            }
+            for(int i = column; i > 0; i--)
+            {
+                GameObject tempSprite = grid.allSprites[i + 1, row];
+                if (tempSprite != null)
+                {
+                    if (tempSprite.tag == this.gameObject.tag)
+                    {
+                        tempSprite.GetComponent<Sprite>().isMatched = true;
+                        isMatched = true;
+                        //Debug.Log(2);
+                        Debug.Log(i-1 +"," + row +" is a match");
+                    }
+                    else{
+                        break;
+                    }
                 }
             }
         }
+
+        // Horizontal
         if (row > 0 && row < grid.height - 1)
         {
-            GameObject upSprite1 = grid.allSprites[column, row + 1];
-            GameObject downSprite1 = grid.allSprites[column, row - 1];
-            if (upSprite1 != null && downSprite1 != null)
+            for(int i = row; i < grid.width - 1; i++)
             {
-                if (upSprite1.tag == this.gameObject.tag && downSprite1.tag == this.gameObject.tag)
+                GameObject tempSprite = grid.allSprites[column, i + 1];
+                if (tempSprite != null)
                 {
-                    upSprite1.GetComponent<Sprite>().isMatched = true;
-                    downSprite1.GetComponent<Sprite>().isMatched = true;
-                    isMatched = true;
+                    if (tempSprite.tag == this.gameObject.tag)
+                    {
+                        tempSprite.GetComponent<Sprite>().isMatched = true;
+                        isMatched = true;
+                        //Debug.Log(3);
+                    }
+                    else{
+                        break;
+                    }
+                }
+            }
+            for(int i = row; i > 0; i--)
+            {
+                GameObject tempSprite = grid.allSprites[column, i - 1];
+                if (tempSprite != null)
+                {
+                    if (tempSprite.tag == this.gameObject.tag)
+                    {
+                        tempSprite.GetComponent<Sprite>().isMatched = true;
+                        isMatched = true;
+                        //Debug.Log(4);
+                    }
+                    else{
+                        break;
+                    }
                 }
             }
         }

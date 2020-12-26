@@ -10,8 +10,10 @@ public class GridManager : MonoBehaviour
     public int width = 8; // y
     public int offSet = 15;
     public float Distance = 1.0f;
-    private GameObject[,] Grid;
+    public GameObject destroyParticle;
+    //private GameObject[,] Grid;
     public GameObject[,] allSprites;
+    private FindMatches findMatches;
 
     public static GridManager Instance { get; private set; }
 
@@ -23,7 +25,8 @@ public class GridManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Grid = new GameObject[width, height];
+        findMatches = FindObjectOfType<FindMatches>();
+        //Grid = new GameObject[width, height];
         allSprites = new GameObject[width, height];
         InitGrid();
     }
@@ -46,6 +49,128 @@ public class GridManager : MonoBehaviour
                 sprite.name = "(" + x + "," + y + ")";
                 allSprites[x, y] = sprite;
             }
+    }
+
+    private bool MatchesAt(int column, int row, GameObject sprite){
+        if(column > 1 && row > 1){
+            if(allSprites[column -1, row].tag == sprite.tag && allSprites[column -2, row].tag == sprite.tag){
+                return true;
+            }
+            if (allSprites[column, row-1].tag == sprite.tag && allSprites[column, row-2].tag == sprite.tag)
+            {
+                return true;
+            }
+
+        }else if(column <= 1 || row <= 1){
+            if(row > 1){
+                if(allSprites[column, row - 1].tag == sprite.tag && allSprites[column, row -2].tag == sprite.tag){
+                    return true;
+                }
+            }
+            if (column > 1)
+            {
+                if (allSprites[column-1, row].tag == sprite.tag && allSprites[column-2, row].tag == sprite.tag)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void DestroyMatchesAt(int column, int row){
+        if(allSprites[column, row].GetComponent<Sprite>().isMatched){
+            //How many elements are in the matched pieces list from findmatches?
+            ///if(findMatches.currentMatches.Count == 4 || findMatches.currentMatches.Count == 7){
+                //findMatches.CheckBombs();
+            //}
+
+            //GameObject particle = Instantiate(destroyParticle, 
+             //                                 allSprites[column, row].transform.position, 
+               //                               Quaternion.identity);
+            //Destroy(particle, .5f);
+            Destroy(allSprites[column, row]);
+            allSprites[column, row] = null;
+        }
+    }
+
+    public void DestroyMatches(){
+        for (int i = 0; i < width; i++){
+            for (int j = 0; j < height; j++){
+                if (allSprites[i, j] != null){
+                    DestroyMatchesAt(i, j);
+                }
+            }
+        }
+        //findMatches.currentMatches.Clear();
+        Debug.Log("LoP");
+        StartCoroutine(DecreaseRowCo());
+    }
+
+    private IEnumerator DecreaseRowCo(){
+        int nullCount = 0;
+        for (int i = 0; i < width; i ++){
+            for (int j = 0; j < height; j ++){
+                if(allSprites[i, j] == null){
+                    Debug.Log("MEP");
+                    nullCount++;
+                }else if(nullCount > 0){
+                    // Fix row dropping
+                    Debug.Log("Row before "+ allSprites[i, j].GetComponent<Sprite>().row);
+                    allSprites[i, j].GetComponent<Sprite>().row -= nullCount;
+                    Debug.Log("Row after "+ allSprites[i, j].GetComponent<Sprite>().row);
+                    allSprites[i, j] = null;
+                }
+            }
+            nullCount = 0;
+        }
+        yield return new WaitForSeconds(.4f);
+        //StartCoroutine(FillBoardCo());
+    }
+
+    private void RefillBoard(){
+        for (int i = 0; i < width; i ++){
+            for (int j = 0; j < height; j ++){
+                if(allSprites[i, j] == null){
+                    Vector2 tempPosition = new Vector2(i, j + offSet);
+                    int spriteToUse = Random.Range(0, Sprites.Length);
+                    GameObject piece = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
+                    allSprites[i, j] = piece;
+                    piece.GetComponent<Sprite>().row = j;
+                    piece.GetComponent<Sprite>().column = i;
+
+                }
+            }
+        }
+    }
+
+    private bool MatchesOnBoard(){
+        for (int i = 0; i < width; i ++){
+            for (int j = 0; j < height; j ++){
+                if(allSprites[i, j]!= null){
+                    if(allSprites[i, j].GetComponent<Sprite>().isMatched){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private IEnumerator FillBoardCo(){
+        RefillBoard();
+        yield return new WaitForSeconds(.5f);
+
+        while(MatchesOnBoard()){
+            yield return new WaitForSeconds(.5f);
+            DestroyMatches();
+        }
+        findMatches.currentMatches.Clear();
+        //currentSprite = null;
+        yield return new WaitForSeconds(.5f);
+        //currentState = GameState.move;
+
     }
 
 /*
