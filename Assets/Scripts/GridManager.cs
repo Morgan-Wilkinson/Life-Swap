@@ -95,10 +95,10 @@ public class GridManager : MonoBehaviour
             for (int j = 0; j < height; j++){
                 if(allSprites[i, j] == null){
                     nullCount++;
-                }else if(nullCount > 0){
+                } else if(nullCount > 0){
                     allSprites[i, j].GetComponent<Sprite>().row -= nullCount;
-                    //allSprites[i, j].name = "(" + i + "," + (j - 1) + ")";
-                    allSprites[i, j - 1] = allSprites[i, j];
+                    allSprites[i, j - nullCount] = allSprites[i, j];
+                    allSprites[i, j - nullCount].name = "(" + i + "," + (j - nullCount) + ")";
                     allSprites[i, j] = null;
                 }
             }
