@@ -28,19 +28,17 @@ public class GridManager : MonoBehaviour
         InitGrid();
     }
 
-    // Change init so that it allows for the creation of multiple 3 or more matches.
     void InitGrid()
     {
-        for (int x = 0; x < width; x++) 
-            for (int y = 0; y < height; y++) 
+        for (int i = 0; i < width; i++) 
+            for (int j = 0; j < height; j++) 
             {
-                
-                Vector2 tempPosition = new Vector2(x, y);
+                Vector2 tempPosition = new Vector2(i, j);
                 int spriteToUse = Random.Range(0, Sprites.Length);
                 GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
                 sprite.transform.parent = this.transform;
-                sprite.name = "(" + x + "," + y + ")";
-                allSprites[x, y] = sprite;
+                sprite.name = "(" + i + "," + j + ")";
+                allSprites[i, j] = sprite;
             }
     }
 
@@ -75,18 +73,8 @@ public class GridManager : MonoBehaviour
 
     private void DestroyMatchesAt(int column, int row){
         if(allSprites[column, row].GetComponent<Sprite>().isMatched){
-            //How many elements are in the matched pieces list from findmatches?
-            ///if(findMatches.currentMatches.Count == 4 || findMatches.currentMatches.Count == 7){
-                //findMatches.CheckBombs();
-            //}
-
-            //GameObject particle = Instantiate(destroyParticle, 
-             //                                 allSprites[column, row].transform.position, 
-               //                               Quaternion.identity);
-            //Destroy(particle, .5f);
             Destroy(allSprites[column, row]);
             allSprites[column, row] = null;
-            //Debug.Log(column +" , " + row);
         }
     }
 
@@ -103,20 +91,15 @@ public class GridManager : MonoBehaviour
 
     private IEnumerator DecreaseRowCo(){
         int nullCount = 0;
-        for (int i = 0; i < width; i ++){
-            for (int j = 0; j < height; j ++){
+        for (int i = 0; i < width; i++){
+            for (int j = 0; j < height; j++){
                 if(allSprites[i, j] == null){
                     nullCount++;
                 }else if(nullCount > 0){
-                    // Fix row dropping
-                    //Debug.Log("Row before "+ allSprites[i, j].GetComponent<Sprite>().row);+
-                    
                     allSprites[i, j].GetComponent<Sprite>().row -= nullCount;
-                    //Debug.Log("Row after "+ allSprites[i, j].GetComponent<Sprite>().row);
-                    allSprites[i, nullCount] = allSprites[i, j];
+                    //allSprites[i, j].name = "(" + i + "," + (j - 1) + ")";
+                    allSprites[i, j - 1] = allSprites[i, j];
                     allSprites[i, j] = null;
-                    Debug.Log(i +" , "+ j + " AND "+ i + " , " + nullCount);
-
                 }
             }
             nullCount = 0;
@@ -126,8 +109,8 @@ public class GridManager : MonoBehaviour
     }
 
     private void RefillBoard(){
-        for (int i = 0; i < width; i ++){
-            for (int j = 0; j < height; j ++){
+        for (int i = 0; i < width; i++){
+            for (int j = 0; j < height; j++){
                 if(allSprites[i, j] == null){
                     Vector2 tempPosition = new Vector2(i, j);
                     int spriteToUse = Random.Range(0, Sprites.Length);
@@ -135,6 +118,7 @@ public class GridManager : MonoBehaviour
                     allSprites[i, j] = piece;
                     piece.GetComponent<Sprite>().row = j;
                     piece.GetComponent<Sprite>().column = i;
+                    piece.name = "(" + i + "," + j + ")";
                     piece.transform.parent = this.transform;
                     //tempPosition = new Vector2(i, j);
                     //piece.transform.position = Vector2.Lerp(transform.position, tempPosition, .6f);
