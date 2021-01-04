@@ -10,7 +10,8 @@ public class GridManager : MonoBehaviour
     public int offSet = 15;
     public float Distance = 1.0f;
     public GameObject destroyParticle;
-    public GameObject[,] allSprites;
+    public List<GameObject>[] allSprites;
+    public GameObject[] allSpritesMatrix;
     private FindMatches findMatches;
 
     public static GridManager Instance { get; private set; }
@@ -24,24 +25,81 @@ public class GridManager : MonoBehaviour
     void Start()
     {
         findMatches = FindObjectOfType<FindMatches>();
-        allSprites = new GameObject[width, height];
+        allSpritesMatrix = new GameObject[width * height];
+        allSprites = new List<GameObject>[width * height];
         InitGrid();
+        Debug.Log(allSprites);
     }
 
     void InitGrid()
     {
-        for (int i = 0; i < width; i++) 
-            for (int j = 0; j < height; j++) 
+        int row = 0;
+        int column = 0;
+        // Maybe make a 1d arrage and mod by the height to get the number of 
+        for (int i = 0; i < width * height; i++)
+        {
+            column = i % height;
+            if(column == 0 && i > 0)
             {
-                Vector2 tempPosition = new Vector2(i, j);
-                int spriteToUse = Random.Range(0, Sprites.Length);
-                GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
-                sprite.transform.parent = this.transform;
-                sprite.name = "(" + i + "," + j + ")";
-                allSprites[i, j] = sprite;
+                row++;
             }
-    }
 
+            Vector2 tempPosition = new Vector2(row, column);
+            int spriteToUse = Random.Range(0, Sprites.Length);
+            GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
+            sprite.transform.parent = this.transform;
+            sprite.name = "(" + row + "," + column + ")";
+            allSpritesMatrix[i] = sprite; // (row * height) + column)           
+        }
+
+        for (int i = 0; i < width * height; i++)
+        {
+            // might need to make this into a while loop that calcuilates i as row, column and then assign the list vertices based on that 
+
+            allSprites[i] = new List<GameObject>();
+        
+            column = i % height;
+            if(column == 0 && i > 0)
+            {
+                row++;
+            }
+            
+            //if(row-1 >= 0) // 
+            if (((row-1 * height) + column) >= 0 && ((row-1 * height) + column) < width * height)
+            {
+                Debug.Log(((row-1 * height) + column));
+                //allSprites[i].Add(allSpritesMatrix[i-1, j]);
+                int index = ((row-1 * height) + column);
+                allSprites[i].Add(allSpritesMatrix[index]);
+            }
+
+            //if(row+1 < width) // 
+            if (((row+1 * height) + column) >= 0 && ((row+1 * height) + column) < width * height)
+            {
+                //allSprites[i].Add(allSpritesMatrix[i+1, j]);
+                int index = ((row+1 * height) + column);
+                allSprites[i].Add(allSpritesMatrix[index]);
+            }
+
+            //if(column-1 >= 0) // 
+            if (((row * height) + column - 1) >= 0 && ((row * height) + column - 1) < width * height)
+            {
+               //allSprites[i].Add(allSpritesMatrix[i, j-1]);
+                int index = ((row * height) + column - 1);
+                allSprites[i].Add(allSpritesMatrix[index]);
+            }
+
+            //if(column+1 < height) // 
+            if (((row * height) + column + 1) >= 0 && ((row * height) + column + 1) < width * height)
+            {
+                //allSprites[i].Add(allSpritesMatrix[i, j+1]);
+                int index = ((row * height) + column + 1);
+                allSprites[i].Add(allSpritesMatrix[index]);
+            }
+        }
+    }
+    
+/*
     private bool MatchesAt(int column, int row, GameObject sprite)
     {
         if(column > 1 && row > 1){
@@ -145,14 +203,15 @@ public class GridManager : MonoBehaviour
         RefillBoard();
         yield return new WaitForSeconds(.5f);
 
-        /*while(MatchesOnBoard()){
-            yield return new WaitForSeconds(.5f);
-            DestroyMatches();
-        }*/
+        //while(MatchesOnBoard()){
+        //    yield return new WaitForSeconds(.5f);
+        //    DestroyMatches();
+        //}
         //findMatches.currentMatches.Clear();
         //currentSprite = null;
         //yield return new WaitForSeconds(.5f);
         //currentState = GameState.move;
 
     }
+*/
 }

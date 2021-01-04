@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FindMatches : MonoBehaviour
-{private GridManager grid;
+{
+    /*
+    private GridManager grid;
     public List<GameObject> currentMatches = new List<GameObject>();
 
 	// Use this for initialization
@@ -120,5 +122,5 @@ public class FindMatches : MonoBehaviour
         }
         return sprites;
     }
-
+*/
 }

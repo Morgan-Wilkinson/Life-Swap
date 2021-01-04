@@ -7,17 +7,10 @@ public class Sprite : MonoBehaviour
     [Header("Grid Variables")]
     public int column;
     public int row;
-    public int previousColumn;
-    public int previousRow;
-    public int targetX;
-    public int targetY;
     public bool isMatched = false;
-
+    private bool visited = false;
     //private FindMatches findMatches;
     private GridManager grid;
-    public GameObject otherDot;
-    private Vector2 firstTouchPosition;
-    private Vector2 finalTouchPosition;
     private Vector2 tempPosition;
 
     // Start is called before the first frame update
@@ -33,17 +26,17 @@ public class Sprite : MonoBehaviour
     {
         tempPosition = new Vector2(column, row);
         transform.position = Vector2.Lerp(transform.position, tempPosition, .6f);
-
     }
 
     private void OnMouseDown()
     {
         // On press check if sprite match anything on left and right then start Coroutine
-        FindMatches();
-        grid.DestroyMatches();
-        StartCoroutine(CheckMoveCo());
+        //FindMatches();
+        //BFSMatchedTiles(grid.allSprites[column, row]);
+        //grid.DestroyMatches();
+        //StartCoroutine(CheckMoveCo());
     }
-
+/*
     public IEnumerator CheckMoveCo()
     {
         if(!isMatched)
@@ -59,89 +52,77 @@ public class Sprite : MonoBehaviour
         }
     }
 
-    void FindMatches()
+    List<GameObject> FindColumnMatchForTile(int col, int row, GameObject sprite)
     {
-        // Horizontal
-        if(column >= 0 && column <= grid.width - 1)
+        List<GameObject> result = new List<GameObject>();
+        for (int i = col + 1; i < grid.width; i++)
         {
-            // Right
-            for(int i = column; i < grid.width - 1; i++)
+            GameObject nextColumn = grid.allSprites[i, row];
+            if (nextColumn.tag != sprite.tag)
             {
-                if (i + 1 < grid.width)
-                {
-                    GameObject tempSprite = grid.allSprites[i + 1, row];
-                    if (tempSprite != null)
-                    {
-                        if (tempSprite.tag == this.gameObject.tag)
-                        {
-                            tempSprite.GetComponent<Sprite>().isMatched = true;
-                            isMatched = true;
-                        }
-                        else{
-                            break;
-                        }
-                    }
-                }
+                break;
+            }
+            result.Add(nextColumn);
+        }
+        return result;
+    }
+
+    List<GameObject> FindRowMatchForTile(int col, int row, GameObject sprite)
+    {
+        List<GameObject> result = new List<GameObject>();
+        for (int i = row + 1; i < grid.height; i++)
+        {
+            GameObject nextRow = grid.allSprites[col, i];
+            if (nextRow.tag != sprite.tag)
+            {
+                break;
+            }
+            result.Add(nextRow);
+        }
+        return result;
+    }
+
+    public void BFSMatchedTiles(GameObject sprite)
+    {
+        // Create a queue
+		Queue<GameObject> q = new Queue<GameObject>();
+		//q.Enqueue(grid.allSprites[row, column]);
+		q.Enqueue(sprite);
+
+		while (q.Count > 0)
+		{
+			GameObject node = q.Dequeue();
+			
+            if (node.tag == sprite.tag && node.GetComponent<Sprite>().isMatched == false)
+            {
+                node.GetComponent<Sprite>().isMatched = true;
+                //q.Enqueue(grid.allSprites[i, j]);
             }
             
-            // Left
-            for(int i = column; i >= 0; i--)
-            {
-                if (i - 1 >= 0)
-                {
-                    GameObject tempSprite = grid.allSprites[i - 1, row];
-                    if (tempSprite != null)
-                    {
-                        if (tempSprite.tag == this.gameObject.tag)
-                        {
-                            tempSprite.GetComponent<Sprite>().isMatched = true;
-                            isMatched = true;
-                        }
-                        else{
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        
-        // Vertical
-        if (row >= 0 && row <= grid.height - 1)
-        {
-            // Up
-            for(int i = row; i < grid.width - 1; i++)
-            {
-                GameObject tempSprite = grid.allSprites[column, i + 1];
-                if (tempSprite != null)
-                {
-                    if (tempSprite.tag == this.gameObject.tag)
-                    {
-                        tempSprite.GetComponent<Sprite>().isMatched = true;
-                        isMatched = true;
-                    }
-                    else{
-                        break;
-                    }
-                }
-            }
+            // Can create 4 for loops that check the up, down, right and left positions
+            // and break on none match
+		}
+    }
+*/
+    public void BFSMatchedTiles(GameObject sprite)
+    {
+        // Create a queue
+        Queue<GameObject> q = new Queue<GameObject>();
+        //q.Enqueue(grid.allSprites[row, column]);
+        q.Enqueue(sprite);
 
-            // Down
-            for(int i = row; i > 0; i--)
+        while (q.Count > 0)
+        {
+            GameObject node = q.Dequeue();
+            
+            if (node.tag == sprite.tag && node.GetComponent<Sprite>().isMatched == false)
             {
-                GameObject tempSprite = grid.allSprites[column, i - 1];
-                if (tempSprite != null)
-                {
-                    if (tempSprite.tag == this.gameObject.tag)
-                    {
-                        tempSprite.GetComponent<Sprite>().isMatched = true;
-                        isMatched = true;
-                    }
-                    else{
-                        break;
-                    }
-                }
+                node.GetComponent<Sprite>().isMatched = true;
+                //q.Enqueue(grid.allSprites[i, j]);
             }
+            
+            // Can create 4 for loops that check the up, down, right and left positions
+            // and break on none match
         }
-        
     }
 }
