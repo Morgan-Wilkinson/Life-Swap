@@ -7,6 +7,7 @@ public class Sprite : MonoBehaviour
     [Header("Grid Variables")]
     public int column;
     public int row;
+    public int index;
     public bool isMatched = false;
     private bool visited = false;
     //private FindMatches findMatches;
@@ -17,14 +18,15 @@ public class Sprite : MonoBehaviour
     void Start()
     {
         grid = FindObjectOfType<GridManager>();
-        column = (int)(transform.position.x);
-        row = (int)(transform.position.y);
+        row = (int)(transform.position.x);
+        column = (int)(transform.position.y); 
+        index = (row * grid.height) + column;
     }
 
     // Update is called once per frame
     void Update()
     {
-        tempPosition = new Vector2(column, row);
+        tempPosition = new Vector2(row, column);
         transform.position = Vector2.Lerp(transform.position, tempPosition, .6f);
     }
 

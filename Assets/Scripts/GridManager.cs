@@ -7,6 +7,7 @@ public class GridManager : MonoBehaviour
     public GameObject[] Sprites;
     public int height = 8; // x
     public int width = 8; // y
+    private int vertices; 
     public int offSet = 15;
     public float Distance = 1.0f;
     public GameObject destroyParticle;
@@ -24,11 +25,11 @@ public class GridManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        vertices = width * height;
         findMatches = FindObjectOfType<FindMatches>();
-        allSpritesMatrix = new GameObject[width * height];
-        allSprites = new List<GameObject>[width * height];
+        allSpritesMatrix = new GameObject[vertices];
+        allSprites = new List<GameObject>[vertices];
         InitGrid();
-        Debug.Log(allSprites);
     }
 
     void InitGrid()
@@ -36,12 +37,12 @@ public class GridManager : MonoBehaviour
         int row = 0;
         int column = 0;
         // Maybe make a 1d arrage and mod by the height to get the number of 
-        for (int i = 0; i < width * height; i++)
+        for (int i = 0; i < vertices; i++)
         {
             column = i % height;
             if(column == 0 && i > 0)
             {
-                row++;
+                row = i % width;
             }
 
             Vector2 tempPosition = new Vector2(row, column);
@@ -49,52 +50,44 @@ public class GridManager : MonoBehaviour
             GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
             sprite.transform.parent = this.transform;
             sprite.name = "(" + row + "," + column + ")";
-            allSpritesMatrix[i] = sprite; // (row * height) + column)           
+            int h = ((row * height) + column);
+            allSpritesMatrix[((row * height) + column)] = sprite; // (row * height) + column)           
         }
 
-        for (int i = 0; i < width * height; i++)
+        row = 0;
+        column = 0;
+        for (int i = 0; i < vertices; i++)
         {
-            // might need to make this into a while loop that calcuilates i as row, column and then assign the list vertices based on that 
-
-            allSprites[i] = new List<GameObject>();
-        
             column = i % height;
             if(column == 0 && i > 0)
             {
-                row++;
+                row = i % width;
             }
-            
-            //if(row-1 >= 0) // 
-            if (((row-1 * height) + column) >= 0 && ((row-1 * height) + column) < width * height)
+            int allSpritesIndex = ((row * height) + column);
+            allSprites[allSpritesIndex] = new List<GameObject>();
+
+            if ((((row - 1) * height) + column) >= 0 && (((row - 1) * height) + column) < vertices)
             {
-                Debug.Log(((row-1 * height) + column));
-                //allSprites[i].Add(allSpritesMatrix[i-1, j]);
-                int index = ((row-1 * height) + column);
-                allSprites[i].Add(allSpritesMatrix[index]);
+                int index = (((row - 1) * height) + column);
+                allSprites[allSpritesIndex].Add(allSpritesMatrix[index]);
             }
 
-            //if(row+1 < width) // 
-            if (((row+1 * height) + column) >= 0 && ((row+1 * height) + column) < width * height)
+            if ((((row + 1) * height) + column) >= 0 && (((row + 1) * height) + column) < vertices)
             {
-                //allSprites[i].Add(allSpritesMatrix[i+1, j]);
-                int index = ((row+1 * height) + column);
-                allSprites[i].Add(allSpritesMatrix[index]);
+                int index = (((row + 1) * height) + column);
+                allSprites[allSpritesIndex].Add(allSpritesMatrix[index]);
             }
 
-            //if(column-1 >= 0) // 
-            if (((row * height) + column - 1) >= 0 && ((row * height) + column - 1) < width * height)
+            if (((row * height) + (column - 1)) >= 0 && ((row * height) + (column - 1)) < vertices)
             {
-               //allSprites[i].Add(allSpritesMatrix[i, j-1]);
-                int index = ((row * height) + column - 1);
-                allSprites[i].Add(allSpritesMatrix[index]);
+                int index = ((row * height) + (column - 1));
+                allSprites[allSpritesIndex].Add(allSpritesMatrix[index]);
             }
 
-            //if(column+1 < height) // 
-            if (((row * height) + column + 1) >= 0 && ((row * height) + column + 1) < width * height)
+            if (((row * height) + (column + 1)) >= 0 && ((row * height) + (column + 1)) < vertices)
             {
-                //allSprites[i].Add(allSpritesMatrix[i, j+1]);
-                int index = ((row * height) + column + 1);
-                allSprites[i].Add(allSpritesMatrix[index]);
+                int index = ((row * height) + (column + 1));
+                allSprites[allSpritesIndex].Add(allSpritesMatrix[index]);
             }
         }
     }
