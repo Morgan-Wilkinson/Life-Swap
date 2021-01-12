@@ -9,7 +9,7 @@ public class Sprite : MonoBehaviour
     public int row;
     public int index;
     public bool isMatched = false;
-    private bool visited = false;
+    //private bool visited = false;
     //private FindMatches findMatches;
     private GridManager grid;
     private Vector2 tempPosition;
@@ -34,8 +34,8 @@ public class Sprite : MonoBehaviour
     {
         // On press check if sprite match anything on left and right then start Coroutine
         //FindMatches();
-        //BFSMatchedTiles(grid.allSprites[column, row]);
-        //grid.DestroyMatches();
+        BFSMatchedTiles(grid.allSpritesMatrix[index]);
+        grid.DestroyMatches();
         //StartCoroutine(CheckMoveCo());
     }
 /*
@@ -59,7 +59,7 @@ public class Sprite : MonoBehaviour
         List<GameObject> result = new List<GameObject>();
         for (int i = col + 1; i < grid.width; i++)
         {
-            GameObject nextColumn = grid.allSprites[i, row];
+            GameObject nextColumn = grid.spritesAdjacencyList[i, row];
             if (nextColumn.tag != sprite.tag)
             {
                 break;
@@ -74,7 +74,7 @@ public class Sprite : MonoBehaviour
         List<GameObject> result = new List<GameObject>();
         for (int i = row + 1; i < grid.height; i++)
         {
-            GameObject nextRow = grid.allSprites[col, i];
+            GameObject nextRow = grid.spritesAdjacencyList[col, i];
             if (nextRow.tag != sprite.tag)
             {
                 break;
@@ -88,7 +88,7 @@ public class Sprite : MonoBehaviour
     {
         // Create a queue
 		Queue<GameObject> q = new Queue<GameObject>();
-		//q.Enqueue(grid.allSprites[row, column]);
+		//q.Enqueue(grid.spritesAdjacencyList[row, column]);
 		q.Enqueue(sprite);
 
 		while (q.Count > 0)
@@ -98,7 +98,7 @@ public class Sprite : MonoBehaviour
             if (node.tag == sprite.tag && node.GetComponent<Sprite>().isMatched == false)
             {
                 node.GetComponent<Sprite>().isMatched = true;
-                //q.Enqueue(grid.allSprites[i, j]);
+                //q.Enqueue(grid.spritesAdjacencyList[i, j]);
             }
             
             // Can create 4 for loops that check the up, down, right and left positions
@@ -109,18 +109,22 @@ public class Sprite : MonoBehaviour
     public void BFSMatchedTiles(GameObject sprite)
     {
         // Create a queue
-        Queue<GameObject> q = new Queue<GameObject>();
-        //q.Enqueue(grid.allSprites[row, column]);
-        q.Enqueue(sprite);
+        Queue<int> q = new Queue<int>();
+        q.Enqueue(sprite.GetComponent<Sprite>().index);
 
         while (q.Count > 0)
         {
-            GameObject node = q.Dequeue();
+            int node = q.Dequeue();
             
-            if (node.tag == sprite.tag && node.GetComponent<Sprite>().isMatched == false)
+            List<int> list = grid.spritesAdjacencyList[node];
+
+            foreach(int i in list)
             {
-                node.GetComponent<Sprite>().isMatched = true;
-                //q.Enqueue(grid.allSprites[i, j]);
+                if(grid.allSpritesMatrix[i] != null && sprite.tag == grid.allSpritesMatrix[i].tag && grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched == false)
+                {
+                    grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
+                    q.Enqueue(i);
+                }
             }
             
             // Can create 4 for loops that check the up, down, right and left positions
