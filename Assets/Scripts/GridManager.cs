@@ -16,6 +16,8 @@ public class GridManager : MonoBehaviour
     public List<int>[] spritesAdjacencyList;
     // An array of all sprites on the board now.
     public GameObject[] allSpritesMatrix;
+    public List<int>[] nullSpriteList;
+    public int[] nullSpriteArray;
     private FindMatches findMatches;
 
     public static GridManager Instance { get; private set; }
@@ -32,6 +34,8 @@ public class GridManager : MonoBehaviour
         findMatches = FindObjectOfType<FindMatches>();
         allSpritesMatrix = new GameObject[vertices];
         spritesAdjacencyList = new List<int>[vertices];
+        nullSpriteList = new List<int>[height];
+        nullSpriteArray = new int[height];
         InitGrid();
     }
 
@@ -98,7 +102,6 @@ public class GridManager : MonoBehaviour
                 spritesAdjacencyList[allSpritesIndex].Add(index);
             }
         }
-        Debug.Log(spritesAdjacencyList);
     }
 
  /*   
@@ -135,6 +138,7 @@ public class GridManager : MonoBehaviour
         if(allSpritesMatrix[index] != null && allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
             Destroy(allSpritesMatrix[index]);
             allSpritesMatrix[index] = null;
+            nullSpriteArray[index % height]++;
         }
     }
 
@@ -142,37 +146,36 @@ public class GridManager : MonoBehaviour
         for (int i = 0; i < vertices; i++){
             DestroyMatchesAt(i);
         }
-        //StartCoroutine(DecreaseRowCo());
+        StartCoroutine(DecreaseRowCo());
     }
-/*
+
     private IEnumerator DecreaseRowCo(){
-        int nullCount = 0;
-        for (int i = 0; i < width; i++){
-            for (int j = 0; j < height; j++){
-                if(spritesAdjacencyList[i, j] == null){
-                    nullCount++;
-                } else if(nullCount > 0){
-                    spritesAdjacencyList[i, j].GetComponent<Sprite>().row -= nullCount;
-                    spritesAdjacencyList[i, j - nullCount] = spritesAdjacencyList[i, j];
-                    spritesAdjacencyList[i, j - nullCount].name = "(" + i + "," + (j - nullCount) + ")";
-                    spritesAdjacencyList[i, j] = null;
+        for(int i = 0; i < height; i++)
+        {
+            if(nullSpriteArray[i] != 0)
+            {
+                for(int j = width; j >= 0; j--)
+                {
+                    int oldIndex = (i * height) + j;
+                    int newIndex = (i * height) + (j - nullSpriteArray[i]);
+
+                    allSpritesMatrix[oldIndex].GetComponent<Sprite>().column -= nullSpriteArray[i];
                 }
             }
-            nullCount = 0;
         }
         yield return new WaitForSeconds(.4f);
-        StartCoroutine(FillBoardCo());
+        //StartCoroutine(FillBoardCo());
     }
 
-
+/*
     private void RefillBoard(){
         for (int i = 0; i < width; i++){
             for (int j = 0; j < height; j++){
-                if(spritesAdjacencyList[i, j] == null){
+                if(allSpritesMatrix[i, j] == null){
                     Vector2 tempPosition = new Vector2(i, j);
                     int spriteToUse = Random.Range(0, Sprites.Length);
                     GameObject piece = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
-                    spritesAdjacencyList[i, j] = piece;
+                    allSpritesMatrix[i, j] = piece;
                     piece.GetComponent<Sprite>().row = j;
                     piece.GetComponent<Sprite>().column = i;
                     piece.name = "(" + i + "," + j + ")";
@@ -188,8 +191,8 @@ public class GridManager : MonoBehaviour
     private bool MatchesOnBoard(){
         for (int i = 0; i < width; i ++){
             for (int j = 0; j < height; j ++){
-                if(spritesAdjacencyList[i, j]!= null){
-                    if(spritesAdjacencyList[i, j].GetComponent<Sprite>().isMatched){
+                if(allSpritesMatrix[i, j]!= null){
+                    if(allSpritesMatrix[i, j].GetComponent<Sprite>().isMatched){
                         return true;
                     }
                 }

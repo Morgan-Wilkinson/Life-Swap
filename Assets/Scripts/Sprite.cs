@@ -53,58 +53,6 @@ public class Sprite : MonoBehaviour
             // Enable destroyed matches animation
         }
     }
-
-    List<GameObject> FindColumnMatchForTile(int col, int row, GameObject sprite)
-    {
-        List<GameObject> result = new List<GameObject>();
-        for (int i = col + 1; i < grid.width; i++)
-        {
-            GameObject nextColumn = grid.spritesAdjacencyList[i, row];
-            if (nextColumn.tag != sprite.tag)
-            {
-                break;
-            }
-            result.Add(nextColumn);
-        }
-        return result;
-    }
-
-    List<GameObject> FindRowMatchForTile(int col, int row, GameObject sprite)
-    {
-        List<GameObject> result = new List<GameObject>();
-        for (int i = row + 1; i < grid.height; i++)
-        {
-            GameObject nextRow = grid.spritesAdjacencyList[col, i];
-            if (nextRow.tag != sprite.tag)
-            {
-                break;
-            }
-            result.Add(nextRow);
-        }
-        return result;
-    }
-
-    public void BFSMatchedTiles(GameObject sprite)
-    {
-        // Create a queue
-		Queue<GameObject> q = new Queue<GameObject>();
-		//q.Enqueue(grid.spritesAdjacencyList[row, column]);
-		q.Enqueue(sprite);
-
-		while (q.Count > 0)
-		{
-			GameObject node = q.Dequeue();
-			
-            if (node.tag == sprite.tag && node.GetComponent<Sprite>().isMatched == false)
-            {
-                node.GetComponent<Sprite>().isMatched = true;
-                //q.Enqueue(grid.spritesAdjacencyList[i, j]);
-            }
-            
-            // Can create 4 for loops that check the up, down, right and left positions
-            // and break on none match
-		}
-    }
 */
     public void BFSMatchedTiles(GameObject sprite)
     {
