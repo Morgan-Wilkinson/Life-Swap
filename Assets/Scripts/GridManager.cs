@@ -4,21 +4,24 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    [Header("GameObject Storage Lists and Arrays")]
     // Array that holds the types of sprites
     public GameObject[] Sprites;
+    // List of arrays that hold the various paths. An adjacency list
+    public List<int>[] spritesAdjacencyList;
+    // An array of all sprites on the board now.
+    public GameObject[] allSpritesMatrix;
+    // An array holding the null positions of the array 
+    public int[] nullSpriteArray;
+    //private FindMatches findMatches;
+
+    [Header("Board Variables")]
     public int height = 8; // x
     public int width = 8; // y
     private int vertices; 
     public int offSet = 15;
     public float Distance = 1.0f;
-    public GameObject destroyParticle;
-    // List of arrays that hold the various paths. An adjacency list
-    public List<int>[] spritesAdjacencyList;
-    // An array of all sprites on the board now.
-    public GameObject[] allSpritesMatrix;
-    public List<int>[] nullSpriteList;
-    public int[] nullSpriteArray;
-    private FindMatches findMatches;
+    //public GameObject destroyParticle;
 
     public static GridManager Instance { get; private set; }
 
@@ -31,11 +34,10 @@ public class GridManager : MonoBehaviour
     void Start()
     {
         vertices = width * height;
-        findMatches = FindObjectOfType<FindMatches>();
+        //findMatches = FindObjectOfType<FindMatches>();
         allSpritesMatrix = new GameObject[vertices];
         spritesAdjacencyList = new List<int>[vertices];
-        nullSpriteList = new List<int>[height];
-        nullSpriteArray = new int[height];
+        nullSpriteArray = new int[width];
         InitGrid();
     }
 
@@ -53,18 +55,16 @@ public class GridManager : MonoBehaviour
                 row = i % width;
             }
 
-            Vector2 tempPosition = new Vector2(row, column);
-            int spriteToUse = Random.Range(0, Sprites.Length);
-            GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
-            sprite.transform.parent = this.transform;
-            sprite.name = "(" + row + "," + column + ")";
+            // Creation of the sprite.
+            GameObject sprite = createSprite(row, column);
             allSpritesMatrix[((row * height) + column)] = sprite;        
-        }
+        }    
 
         row = 0;
         column = 0;
         for (int i = 0; i < vertices; i++)
         {
+            // Setup for determining rows and columns.
             column = i % height;
             if(column == 0 && i > 0)
             {
@@ -104,6 +104,17 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    private GameObject createSprite(int row, int column)
+    {
+        // Creation of the sprite.
+        Vector2 tempPosition = new Vector2(row, column);
+        int spriteToUse = Random.Range(0, Sprites.Length);
+        GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
+        sprite.transform.parent = this.transform;
+        sprite.name = "(" + row + "," + column + ")";
+        return sprite;
+    }
+
  /*   
     private bool MatchesAt(int column, int row, GameObject sprite)
     {
@@ -138,7 +149,7 @@ public class GridManager : MonoBehaviour
         if(allSpritesMatrix[index] != null && allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
             Destroy(allSpritesMatrix[index]);
             allSpritesMatrix[index] = null;
-            nullSpriteArray[index % height]++;
+            nullSpriteArray[index / height]++; // Gets the column of the index
         }
     }
 
@@ -150,18 +161,29 @@ public class GridManager : MonoBehaviour
     }
 
     private IEnumerator DecreaseRowCo(){
-        for(int i = 0; i < height; i++)
+        int nullCount = 0;
+        for(int i = 0; i < width; i++)
         {
-            if(nullSpriteArray[i] != 0)
+            if(nullSpriteArray[i] > 0)
             {
-                for(int j = width; j >= 0; j--)
+                for(int j = 0; j < height; j++)
                 {
                     int oldIndex = (i * height) + j;
-                    int newIndex = (i * height) + (j - nullSpriteArray[i]);
-
-                    allSpritesMatrix[oldIndex].GetComponent<Sprite>().column -= nullSpriteArray[i];
+                    if(allSpritesMatrix[oldIndex] == null){
+                        nullCount++;
+                    }
+                    else if(nullCount > 0) 
+                    {
+                        int newIndex = (i * height) + (j - nullCount);
+                        allSpritesMatrix[oldIndex].GetComponent<Sprite>().column -= nullCount;
+                        allSpritesMatrix[newIndex] = allSpritesMatrix[oldIndex];
+                        allSpritesMatrix[newIndex].name = "(" + i + "," + (j - nullCount) + ")";
+                        allSpritesMatrix[oldIndex] = null;
+                    }
                 }
             }
+            nullCount = 0;
+            nullSpriteArray[i] = 0;
         }
         yield return new WaitForSeconds(.4f);
         //StartCoroutine(FillBoardCo());

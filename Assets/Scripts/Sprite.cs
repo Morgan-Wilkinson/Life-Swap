@@ -27,7 +27,8 @@ public class Sprite : MonoBehaviour
     void Update()
     {
         tempPosition = new Vector2(row, column);
-        transform.position = Vector2.Lerp(transform.position, tempPosition, .6f);
+        transform.position = Vector2.Lerp(transform.position, tempPosition, 0.2f);
+        index = (row * grid.height) + column;
     }
 
     private void OnMouseDown()
