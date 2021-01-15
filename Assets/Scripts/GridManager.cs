@@ -56,8 +56,7 @@ public class GridManager : MonoBehaviour
             }
 
             // Creation of the sprite.
-            GameObject sprite = createSprite(row, column);
-            allSpritesMatrix[((row * height) + column)] = sprite;        
+            createSprite(row, column);
         }    
 
         row = 0;
@@ -104,7 +103,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private GameObject createSprite(int row, int column)
+    private void createSprite(int row, int column)
     {
         // Creation of the sprite.
         Vector2 tempPosition = new Vector2(row, column);
@@ -112,7 +111,7 @@ public class GridManager : MonoBehaviour
         GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
         sprite.transform.parent = this.transform;
         sprite.name = "(" + row + "," + column + ")";
-        return sprite;
+        allSpritesMatrix[((row * height) + column)] = sprite; 
     }
 
  /*   
@@ -183,38 +182,37 @@ public class GridManager : MonoBehaviour
                 }
             }
             nullCount = 0;
-            nullSpriteArray[i] = 0;
         }
         yield return new WaitForSeconds(.4f);
-        //StartCoroutine(FillBoardCo());
+        StartCoroutine(FillBoardCo());
     }
 
-/*
+
     private void RefillBoard(){
-        for (int i = 0; i < width; i++){
-            for (int j = 0; j < height; j++){
-                if(allSpritesMatrix[i, j] == null){
-                    Vector2 tempPosition = new Vector2(i, j);
-                    int spriteToUse = Random.Range(0, Sprites.Length);
-                    GameObject piece = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
-                    allSpritesMatrix[i, j] = piece;
-                    piece.GetComponent<Sprite>().row = j;
-                    piece.GetComponent<Sprite>().column = i;
-                    piece.name = "(" + i + "," + j + ")";
-                    piece.transform.parent = this.transform;
-                    //tempPosition = new Vector2(i, j);
-                    //piece.transform.position = Vector2.Lerp(transform.position, tempPosition, .6f);
-                    
+        for(int i = 0; i < width; i++)
+        {
+            if(nullSpriteArray[i] > 0)
+            {
+                for(int j = 0; j < height; j++)
+                {
+                    int index = (i * height) + j;
+                    if(allSpritesMatrix[index] == null){
+                        // Creation of the sprite.
+                        createSprite(i, j);
+                    }
                 }
             }
+            nullSpriteArray[i] = 0;
         }
     }
+
 
     private bool MatchesOnBoard(){
         for (int i = 0; i < width; i ++){
             for (int j = 0; j < height; j ++){
-                if(allSpritesMatrix[i, j]!= null){
-                    if(allSpritesMatrix[i, j].GetComponent<Sprite>().isMatched){
+                int index = (i * height) + j;
+                if(allSpritesMatrix[index]!= null){
+                    if(allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
                         return true;
                     }
                 }
@@ -237,5 +235,4 @@ public class GridManager : MonoBehaviour
         //currentState = GameState.move;
 
     }
-*/
 }
