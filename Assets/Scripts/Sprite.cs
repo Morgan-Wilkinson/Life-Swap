@@ -20,7 +20,7 @@ public class Sprite : MonoBehaviour
         grid = FindObjectOfType<GridManager>();
         //row = (int)(transform.position.x);
         //column = (int)(transform.position.y); 
-        index = (row * grid.height) + column;
+        //index = (row * grid.height) + column;
     }
 
     // Update is called once per frame
