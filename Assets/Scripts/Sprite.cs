@@ -5,12 +5,12 @@ using UnityEngine;
 public class Sprite : MonoBehaviour
 {
     [Header("Grid Variables")]
-    public int column;
     public int row;
+    public int column;
     public int index;
     public bool isMatched = false;
-    //private bool visited = false;
-    //private FindMatches findMatches;
+    
+    // Private variables.
     private GridManager grid;
     private Vector2 tempPosition;
 
@@ -18,8 +18,8 @@ public class Sprite : MonoBehaviour
     void Start()
     {
         grid = FindObjectOfType<GridManager>();
-        row = (int)(transform.position.x);
-        column = (int)(transform.position.y); 
+        //row = (int)(transform.position.x);
+        //column = (int)(transform.position.y); 
         index = (row * grid.height) + column;
     }
 
@@ -33,8 +33,6 @@ public class Sprite : MonoBehaviour
 
     private void OnMouseDown()
     {
-        // On press check if sprite match anything on left and right then start Coroutine
-        //FindMatches();
         BFSMatchedTiles(grid.allSpritesMatrix[index]);
         grid.DestroyMatches();
         //StartCoroutine(CheckMoveCo());
@@ -55,6 +53,7 @@ public class Sprite : MonoBehaviour
         }
     }
 */
+    // A Breath First implementation of search for the matching sprites
     public void BFSMatchedTiles(GameObject sprite)
     {
         // Create a queue
@@ -75,9 +74,6 @@ public class Sprite : MonoBehaviour
                     q.Enqueue(i);
                 }
             }
-            
-            // Can create 4 for loops that check the up, down, right and left positions
-            // and break on none match
         }
     }
 }

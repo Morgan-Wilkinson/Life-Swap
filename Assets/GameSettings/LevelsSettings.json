@@ -1,0 +1,7 @@
+{
+"levels":[
+  {"goal":10000, "starOne":4000, "starTwo":7000, "starThree": 9000}, 
+  {"goal":20000, "starOne":9000, "starTwo":15000, "starThree": 18500},
+  {"goal":30000, "starOne":16000, "starTwo":21000, "starThree": 28000}
+]
+}
