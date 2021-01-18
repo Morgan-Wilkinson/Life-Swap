@@ -34,22 +34,7 @@ public class Sprite : MonoBehaviour
             //StartCoroutine(CheckMoveCo());
         }
     }
-/*
-    public IEnumerator CheckMoveCo()
-    {
-        if(!isMatched)
-        {
-            yield return new WaitForSeconds(.5f);
-            // Enable shake animation
-        }
-        else
-        {
-            // DestroyMatches()
-            //grid.DestroyMatches();
-            // Enable destroyed matches animation
-        }
-    }
-*/
+
     // A Breath First implementation of search for the matching sprites
     public void BFSMatchedTiles(GameObject sprite){
         // Create a queue
@@ -71,7 +56,6 @@ public class Sprite : MonoBehaviour
                     grid.nullSpriteArray[i / grid.height]++; 
                     q.Enqueue(i);
                 }
-                Debug.Log(i);
             }
         }
     }

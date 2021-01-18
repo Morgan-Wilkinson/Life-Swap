@@ -19,7 +19,8 @@ public class GridManager : MonoBehaviour
     private int vertices;
     // Height from which the sprites drop in.
     public int offSet;
-    //public GameObject destroyParticle;
+    
+    private int majorAxis;
 
     public static GridManager Instance { get; private set; }
 
@@ -33,10 +34,6 @@ public class GridManager : MonoBehaviour
     // An array holding the null positions of the array.
     public int[] nullSpriteArray;
     //private FindMatches findMatches;
-
-    // Test
-    public List<GameObject>[] spritesTest;
-    //
 
     [Header("Game Progression")]
     public GameState currentState = GameState.move;
@@ -52,10 +49,11 @@ public class GridManager : MonoBehaviour
         width = settings.gridDimensions.width;
         offSet = settings.gridDimensions.offSet;
         vertices = width * height;
+        majorAxis = height;
         allSpritesMatrix = new GameObject[vertices];
         spritesAdjacencyList = new List<int>[vertices];
-        spritesTest = new List<GameObject>[vertices];
         nullSpriteArray = new int[width];
+        
         InitGrid();
     }
 
@@ -63,110 +61,62 @@ public class GridManager : MonoBehaviour
     void InitGrid(){
         int row = 0;
         int column = 0;
-        int index = 0;
 
-        for (int i = 0; i < vertices; i++)
-        {
-            column = i % height;
-            if(column == 0 && i > 0)
-            {
-                row = i % width;
-            }
-
-            // Creation of the sprite.
-            createSprite(row, column);
-        }    
-
-        row = 0;
-        column = 0;
-        for (int i = 0; i < vertices; i++)
-        {
-            /*
-            // Let every first sprite be the sprite at that index so that for every list there can be at most
-            // 5 elements in that list i.e the sprite and it's surrounding 4.
-            */
-
-            // Setup for determining rows and columns.
-            column = i % height;
-            if(column == 0 && i > 0)
-            {
-                row = i % width;
-            }
-            int allSpritesIndex = ((row * height) + column);
-            spritesAdjacencyList[allSpritesIndex] = new List<int>();
-
-            //// Head sprite node
-            if (spritesTest[allSpritesIndex] == null)
-            {
-                spritesTest[allSpritesIndex] = new List<GameObject>();
-                spritesTest[allSpritesIndex].Add(createSprite(row, column));
-            }
-
-            // Down
-            index = (((row - 1) * height) + column);
-            if (index >= 0 && index < vertices)
-            {
-                spritesAdjacencyList[allSpritesIndex].Add(index);
-                if (spritesTest[index] == null)
-                {
-                    spriteListBuilder(row, column, index);
-                }
-                // Need to add it to the list
-                spritesTest[allSpritesIndex].Add(spritesTest[index][0]);
-                
-            }
-
-
-            // Up
-            index = (((row + 1) * height) + column);
-            if (index >= 0 && index < vertices)
-            {
-                spritesAdjacencyList[allSpritesIndex].Add(index);
-                if (spritesTest[index] == null)
-                {
-                    spriteListBuilder(row, column, index);
-                }
-                spritesTest[allSpritesIndex].Add(spritesTest[index][0]);
-            }
-
-            // Left
-            index = ((row * height) + (column - 1));
-            if (index >= 0 && index < vertices && column != 0)
-            {
-                spritesAdjacencyList[allSpritesIndex].Add(index);
-                if (spritesTest[index] == null)
-                {
-                    spriteListBuilder(row, column, index);
-                }
-                spritesTest[allSpritesIndex].Add(spritesTest[index][0]);
-            }
-
-            // Right
-            index = ((row * height) + (column + 1));
-            if (index >= 0 && index < vertices && column != width)
-            {
-                spritesAdjacencyList[allSpritesIndex].Add(index);
-                if (spritesTest[index] == null)
-                {
-                    spriteListBuilder(row, column, index);
-                }
-                spritesTest[allSpritesIndex].Add(spritesTest[index][0]);
+        for (int i = 0; i < width; i++){
+            for(int j = 0; j < height; j++){
+                allSpritesMatrix[((i * majorAxis) + j)] = createSprite(i, j);
             }
         }
+
+        adjacencyListBuilder();
+
     }
 
-    // This function helps with creating the sprite adjacency list by check if the index
-    // is null and if so creating it and adding it to the list.
-    private void spriteListBuilder(int row, int column, int index){
-        if(spritesTest[index] == null){
-            spritesTest[index] = new List<GameObject>();
-            spritesTest[index].Add(createSprite(row, column));
+    // This function creates the adjacencyList of ints.
+    private void adjacencyListBuilder(){
+        int index = 0;
+        
+        for (int i = 0; i < width; i++){
+            for(int j = 0; j < height; j++){
+
+                // Setup for determining rows and columns.
+                int allSpritesIndex = ((i * majorAxis) + j);
+                spritesAdjacencyList[allSpritesIndex] = new List<int>();
+
+                // Down
+                index = (((i - 1) * majorAxis) + j);
+                if (index >= 0 && index < vertices)
+                {
+                    spritesAdjacencyList[allSpritesIndex].Add(index);
+                }
+
+
+                // Up
+                index = (((i + 1) * majorAxis) + j);
+                if (index >= 0 && index < vertices)
+                {
+                    spritesAdjacencyList[allSpritesIndex].Add(index);
+                }
+
+                // Left
+                index = ((i * majorAxis) + (j - 1));
+                if (index >= 0 && index < vertices && j != 0)
+                {
+                    spritesAdjacencyList[allSpritesIndex].Add(index);
+                }
+
+                // Right
+                index = ((i * majorAxis) + (j + 1));
+                if (index >= 0 && index < vertices && j != majorAxis)
+                {
+                    spritesAdjacencyList[allSpritesIndex].Add(index);
+                }
+            }
         }
     }
 
     // Creation of a sprite at row, column.
     private GameObject createSprite(int row, int column){
-        // Creation of the sprite.
         Vector2 tempPosition = new Vector2(row, column);
         int spriteToUse = Random.Range(0, Sprites.Length);
         GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
@@ -174,14 +124,12 @@ public class GridManager : MonoBehaviour
         sprite.name = "(" + row + "," + column + ")";
         sprite.GetComponent<Sprite>().row = row;
         sprite.GetComponent<Sprite>().column = column;
-        sprite.GetComponent<Sprite>().index = ((row * height) + column);
-        allSpritesMatrix[((row * height) + column)] = sprite; 
+        sprite.GetComponent<Sprite>().index = ((row * majorAxis) + column);
         return sprite;
     }
 
     // Creation of a sprite at row, column at offset.
     private GameObject createSpriteOffset(int row, int column){
-        // Creation of the sprite at offset.
         Vector2 tempPosition = new Vector2(row, column + offSet);
         int spriteToUse = Random.Range(0, Sprites.Length);
         GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
@@ -189,8 +137,7 @@ public class GridManager : MonoBehaviour
         sprite.name = "(" + row + "," + column + ")";
         sprite.GetComponent<Sprite>().row = row;
         sprite.GetComponent<Sprite>().column = column;
-        sprite.GetComponent<Sprite>().index = ((row * height) + column);
-        allSpritesMatrix[((row * height) + column)] = sprite; 
+        sprite.GetComponent<Sprite>().index = ((row * majorAxis) + column); 
         return sprite;
     }
 
@@ -202,9 +149,8 @@ public class GridManager : MonoBehaviour
             {
                 for(int j = 0; j < height; j++)
                 {
-                    int index = (i * height) + j;
+                    int index = (i * majorAxis) + j;
                     DestroyMatchesAt(index);
-                    Debug.Log("B");
                 }
             }
         }
@@ -229,13 +175,13 @@ public class GridManager : MonoBehaviour
             {
                 for(int j = 0; j < height; j++)
                 {
-                    int oldIndex = (i * height) + j;
+                    int oldIndex = (i * majorAxis) + j;
                     if(allSpritesMatrix[oldIndex] == null){
                         nullCount++;
                     }
                     else if(nullCount > 0) 
                     {
-                        int newIndex = (i * height) + (j - nullCount);
+                        int newIndex = (i * majorAxis) + (j - nullCount);
                         allSpritesMatrix[oldIndex].GetComponent<Sprite>().column -= nullCount;
                         allSpritesMatrix[newIndex] = allSpritesMatrix[oldIndex];
                         allSpritesMatrix[newIndex].name = "(" + i + "," + (j - nullCount) + ")";
@@ -249,6 +195,13 @@ public class GridManager : MonoBehaviour
         StartCoroutine(FillBoardCo());
     }
 
+    private IEnumerator FillBoardCo(){
+        RefillBoard();
+        yield return new WaitForSeconds(.2f);
+
+        currentState = GameState.move;
+    }
+
     // Function to create new sprites
     private void RefillBoard(){
         for(int i = 0; i < width; i++)
@@ -257,21 +210,14 @@ public class GridManager : MonoBehaviour
             {
                 for(int j = 0; j < height; j++)
                 {
-                    int index = (i * height) + j;
+                    int index = (i * majorAxis) + j;
                     if(allSpritesMatrix[index] == null){
                         // Creation of the sprite.
-                        createSpriteOffset(i, j);
+                        allSpritesMatrix[index] = createSpriteOffset(i, j);
                     }
                 }
             }
             nullSpriteArray[i] = 0;
         }
-    }
-
-    private IEnumerator FillBoardCo(){
-        RefillBoard();
-        yield return new WaitForSeconds(.2f);
-
-        currentState = GameState.move;
     }
 }
