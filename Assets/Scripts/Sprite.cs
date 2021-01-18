@@ -18,9 +18,6 @@ public class Sprite : MonoBehaviour
     void Start()
     {
         grid = FindObjectOfType<GridManager>();
-        //row = (int)(transform.position.x);
-        //column = (int)(transform.position.y); 
-        //index = (row * grid.height) + column;
     }
 
     // Update is called once per frame
@@ -33,9 +30,12 @@ public class Sprite : MonoBehaviour
 
     private void OnMouseDown()
     {
-        BFSMatchedTiles(grid.allSpritesMatrix[index]);
-        grid.DestroyMatches();
-        //StartCoroutine(CheckMoveCo());
+        if(grid.currentState == GameState.move) {
+            grid.currentState = GameState.wait;
+            BFSMatchedTiles(grid.allSpritesMatrix[index]);
+            grid.DestroyMatches();
+            //StartCoroutine(CheckMoveCo());
+        }
     }
 /*
     public IEnumerator CheckMoveCo()
@@ -73,6 +73,7 @@ public class Sprite : MonoBehaviour
                     grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
                     q.Enqueue(i);
                 }
+                Debug.Log("A");
             }
         }
     }

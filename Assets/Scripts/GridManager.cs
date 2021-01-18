@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GameState {
+    wait,
+    move
+}
+
 public class GridManager : MonoBehaviour
 {
     [Header("Board Variables")]
@@ -28,6 +33,9 @@ public class GridManager : MonoBehaviour
     // An array holding the null positions of the array.
     public int[] nullSpriteArray;
     //private FindMatches findMatches;
+
+    [Header("Game Progression")]
+    public GameState currentState = GameState.move;
 
     void Awake()
     {
@@ -112,7 +120,7 @@ public class GridManager : MonoBehaviour
     // Creation of a sprite at row, column.
     private void createSprite(int row, int column){
         // Creation of the sprite.
-        Vector2 tempPosition = new Vector2(row, column + offSet);
+        Vector2 tempPosition = new Vector2(row, column);
         int spriteToUse = Random.Range(0, Sprites.Length);
         GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
         sprite.transform.parent = this.transform;
@@ -136,14 +144,6 @@ public class GridManager : MonoBehaviour
         sprite.GetComponent<Sprite>().index = ((row * height) + column);
         allSpritesMatrix[((row * height) + column)] = sprite; 
     }
-    // Destruction of sprite at index in array.
-    private void DestroyMatchesAt(int index){
-        if(allSpritesMatrix[index] != null && allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
-            Destroy(allSpritesMatrix[index]);
-            allSpritesMatrix[index] = null;
-            nullSpriteArray[index / height]++; // Gets the column of the index
-        }
-    }
 
     // Function that checks each index for destruction
     public void DestroyMatches(){
@@ -151,6 +151,15 @@ public class GridManager : MonoBehaviour
             DestroyMatchesAt(i);
         }
         StartCoroutine(DecreaseRowCo());
+    }
+
+    // Destruction of sprite at index in array.
+    private void DestroyMatchesAt(int index){
+        if(allSpritesMatrix[index] != null && allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
+            Destroy(allSpritesMatrix[index]);
+            allSpritesMatrix[index] = null;
+            nullSpriteArray[index / height]++; // Gets the column of the index
+        }
     }
 
     // Function that slides down the sprites if the sprite below it is 
@@ -195,8 +204,6 @@ public class GridManager : MonoBehaviour
                     if(allSpritesMatrix[index] == null){
                         // Creation of the sprite.
                         createSpriteOffset(i, j);
-                        //Debug.Log(j);
-                        //allSpritesMatrix[index].GetComponent<Sprite>().column = j;
                     }
                 }
             }
@@ -208,7 +215,7 @@ public class GridManager : MonoBehaviour
         RefillBoard();
         yield return new WaitForSeconds(.5f);
 
-        //yield return new WaitForSeconds(.5f);
-        //currentState = GameState.move;
+        yield return new WaitForSeconds(.5f);
+        currentState = GameState.move;
     }
 }
