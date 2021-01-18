@@ -15,21 +15,18 @@ public class Sprite : MonoBehaviour
     private Vector2 tempPosition;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start(){
         grid = FindObjectOfType<GridManager>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update(){
         tempPosition = new Vector2(row, column);
         transform.position = Vector2.Lerp(transform.position, tempPosition, 0.2f);
         index = (row * grid.height) + column;
     }
 
-    private void OnMouseDown()
-    {
+    private void OnMouseDown(){
         if(grid.currentState == GameState.move) {
             grid.currentState = GameState.wait;
             BFSMatchedTiles(grid.allSpritesMatrix[index]);
@@ -54,8 +51,7 @@ public class Sprite : MonoBehaviour
     }
 */
     // A Breath First implementation of search for the matching sprites
-    public void BFSMatchedTiles(GameObject sprite)
-    {
+    public void BFSMatchedTiles(GameObject sprite){
         // Create a queue
         Queue<int> q = new Queue<int>();
         q.Enqueue(sprite.GetComponent<Sprite>().index);
@@ -71,9 +67,11 @@ public class Sprite : MonoBehaviour
                 if(grid.allSpritesMatrix[i] != null && sprite.tag == grid.allSpritesMatrix[i].tag && grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched == false)
                 {
                     grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
+                    // Gets the column of the index
+                    grid.nullSpriteArray[i / grid.height]++; 
                     q.Enqueue(i);
                 }
-                Debug.Log("A");
+                Debug.Log(i);
             }
         }
     }

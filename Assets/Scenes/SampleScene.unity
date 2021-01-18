@@ -995,7 +995,7 @@ MonoBehaviour:
   settings: {fileID: 0}
   height: 0
   width: 0
-  offSet: 5
+  offSet: 0
   Sprites:
   - {fileID: 2563379695601294013, guid: 9a6b4a881b8b34a778695ef7fb8de380, type: 3}
   - {fileID: 98101872559680855, guid: 82dceb99df3d44be1a198c6940b92d8d, type: 3}
@@ -1003,3 +1003,4 @@ MonoBehaviour:
   - {fileID: 8995430255336854345, guid: 319976aa098a74df8a6eb114ab44320a, type: 3}
   allSpritesMatrix: []
   nullSpriteArray: 
+  currentState: 1

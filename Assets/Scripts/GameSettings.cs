@@ -24,6 +24,8 @@ public class GridDimensions
 {
     public int height;
     public int width;
+    public int offSet;
+    
     public static GridDimensions CreateFromJSON(string jsonFileData)
     {
         return JsonUtility.FromJson<GridDimensions>(jsonFileData);
