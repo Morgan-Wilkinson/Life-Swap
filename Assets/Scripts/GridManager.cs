@@ -16,7 +16,7 @@ public class GridManager : MonoBehaviour
     // Width of the grid.
     public int width;
     // Maximum number of sprites on the grid.
-    private int vertices;
+    public int vertices;
     // Height from which the sprites drop in.
     public int offSet;
     
@@ -31,9 +31,10 @@ public class GridManager : MonoBehaviour
     public List<int>[] spritesAdjacencyList;
     // An array of all sprites on the board now.
     public GameObject[] allSpritesMatrix;
+    // List of arrays that hold the various paths of all possible matches. 
+    public List<int>[] allMatches; 
     // An array holding the null positions of the array.
     public int[] nullSpriteArray;
-    //private FindMatches findMatches;
 
     [Header("Game Progression")]
     public GameState currentState = GameState.move;
@@ -52,16 +53,14 @@ public class GridManager : MonoBehaviour
         majorAxis = height;
         allSpritesMatrix = new GameObject[vertices];
         spritesAdjacencyList = new List<int>[vertices];
+        allMatches = new List<int>[vertices];
         nullSpriteArray = new int[width];
-        
+
         InitGrid();
     }
 
     // Game Setup
     void InitGrid(){
-        int row = 0;
-        int column = 0;
-
         for (int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
                 allSpritesMatrix[((i * majorAxis) + j)] = createSprite(i, j);
@@ -69,7 +68,7 @@ public class GridManager : MonoBehaviour
         }
 
         adjacencyListBuilder();
-
+        findAllMatches();
     }
 
     // This function creates the adjacencyList of ints.
@@ -107,7 +106,7 @@ public class GridManager : MonoBehaviour
 
                 // Right
                 index = ((i * majorAxis) + (j + 1));
-                if (index >= 0 && index < vertices && j != majorAxis)
+                if (index >= 0 && index < vertices && j != width)
                 {
                     spritesAdjacencyList[allSpritesIndex].Add(index);
                 }
@@ -218,6 +217,62 @@ public class GridManager : MonoBehaviour
                 }
             }
             nullSpriteArray[i] = 0;
+        }
+    }
+
+    // A Breath First search implementation that keeps track of all possible matching sprites
+    public void findAllMatches(){
+        bool[] visited = new bool[vertices];
+        // Create a queue
+        Queue<int> q = new Queue<int>();
+        for(int i = 0; i < vertices; i++)
+        {
+            if(visited[i] == false) 
+            {
+                q.Enqueue(i);
+
+                // When count i empty then that would be a new section
+                while (q.Count > 0)
+                {
+                    int node = q.Dequeue();
+                    visited[node] = true;
+                    List<int> list = spritesAdjacencyList[node];
+
+                    foreach(int spriteIndex in list)
+                    {
+                        if(allSpritesMatrix[spriteIndex] != null && allSpritesMatrix[node].tag == allSpritesMatrix[spriteIndex].tag && visited[spriteIndex] == false)
+                        {
+                            if(allMatches[node] == null)
+                            {
+                                allMatches[node] = new List<int>();
+                            }
+                            q.Enqueue(spriteIndex);
+                            allMatches[node].Add(spriteIndex);
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
+
+    // Need to test//
+    public void clearAllMatches(int index){
+        // Create a queue
+        Queue<int> q = new Queue<int>();
+        q.Enqueue(index);
+
+        // When count i empty then that would be a new section
+        while (q.Count > 0)
+        {
+            int node = q.Dequeue();
+            List<int> list = allMatches[index];
+
+            foreach(int spriteIndex in list)
+            {
+                q.Enqueue(spriteIndex);
+            }
+            allMatches[index].Clear();
         }
     }
 }

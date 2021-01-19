@@ -32,6 +32,7 @@ public class Sprite : MonoBehaviour
             BFSMatchedTiles(grid.allSpritesMatrix[index]);
             grid.DestroyMatches();
             //StartCoroutine(CheckMoveCo());
+            // Here when we delete sprites remove from allMatches and then check if there are still matches on the board.
         }
     }
 

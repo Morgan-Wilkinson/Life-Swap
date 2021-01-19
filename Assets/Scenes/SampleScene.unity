@@ -954,6 +954,7 @@ GameObject:
   - component: {fileID: 7952576151916268946}
   - component: {fileID: 3451052047987468576}
   - component: {fileID: 5053693997496616779}
+  - component: {fileID: 5053693997496616780}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -978,8 +979,21 @@ MonoBehaviour:
   gridDimensions:
     height: 0
     width: 0
+    offSet: 0
   gameLevels:
     levels: []
+--- !u!114 &5053693997496616780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5053693997496616778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd482d736a14e401c8113c8f336c6c6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7952576151916268946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -995,6 +1009,7 @@ MonoBehaviour:
   settings: {fileID: 0}
   height: 0
   width: 0
+  vertices: 0
   offSet: 0
   Sprites:
   - {fileID: 2563379695601294013, guid: 9a6b4a881b8b34a778695ef7fb8de380, type: 3}
