@@ -29,15 +29,22 @@ public class Sprite : MonoBehaviour
     private void OnMouseDown(){
         if(grid.currentState == GameState.move) {
             grid.currentState = GameState.wait;
-            BFSMatchedTiles(grid.allSpritesMatrix[index]);
-            grid.DestroyMatches();
+            if(BFSMatchedTiles(grid.allSpritesMatrix[index]))
+            {
+                grid.BFSDestroyMatches(index);
+            }
+            else{
+                grid.currentState = GameState.move;
+            }
+
             //StartCoroutine(CheckMoveCo());
             // Here when we delete sprites remove from allMatches and then check if there are still matches on the board.
         }
     }
 
     // A Breath First implementation of search for the matching sprites
-    public void BFSMatchedTiles(GameObject sprite){
+    public bool BFSMatchedTiles(GameObject sprite){
+        bool matches = false;
         // Create a queue
         Queue<int> q = new Queue<int>();
         q.Enqueue(sprite.GetComponent<Sprite>().index);
@@ -52,6 +59,7 @@ public class Sprite : MonoBehaviour
             {
                 if(grid.allSpritesMatrix[i] != null && sprite.tag == grid.allSpritesMatrix[i].tag && grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched == false)
                 {
+                    matches = true;
                     grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
                     // Gets the column of the index
                     grid.nullSpriteArray[i / grid.height]++; 
@@ -59,5 +67,6 @@ public class Sprite : MonoBehaviour
                 }
             }
         }
+        return matches;
     }
 }

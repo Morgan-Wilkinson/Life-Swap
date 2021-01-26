@@ -50,6 +50,8 @@ public class Level
     public int starOne;
     public int startTwo;
     public int starThree;
+    public int multiplier;
+    
     public static Level CreateFromJSON(string jsonFileData)
     {
         return JsonUtility.FromJson<Level>(jsonFileData);

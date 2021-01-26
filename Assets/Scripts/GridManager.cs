@@ -1,6 +1,7 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum GameState {
     wait,
@@ -19,6 +20,10 @@ public class GridManager : MonoBehaviour
     public int vertices;
     // Height from which the sprites drop in.
     public int offSet;
+    // Score Variables
+    private int score = 0;
+    public Text scoreText;
+    private int multiplier;
     
     private int majorAxis;
 
@@ -32,7 +37,7 @@ public class GridManager : MonoBehaviour
     // An array of all sprites on the board now.
     public GameObject[] allSpritesMatrix;
     // List of arrays that hold the various paths of all possible matches. 
-    public List<int>[] allMatches; 
+    public List<int> allMatches; 
     // An array holding the null positions of the array.
     public int[] nullSpriteArray;
 
@@ -49,11 +54,12 @@ public class GridManager : MonoBehaviour
         height = settings.gridDimensions.height;
         width = settings.gridDimensions.width;
         offSet = settings.gridDimensions.offSet;
+        multiplier = settings.gameLevels.levels[0].multiplier;
         vertices = width * height;
         majorAxis = height;
         allSpritesMatrix = new GameObject[vertices];
         spritesAdjacencyList = new List<int>[vertices];
-        allMatches = new List<int>[vertices];
+        allMatches = new List<int>();
         nullSpriteArray = new int[width];
 
         InitGrid();
@@ -68,10 +74,11 @@ public class GridManager : MonoBehaviour
         }
 
         adjacencyListBuilder();
-        findAllMatches();
+        //findAllMatches();
+        findAllMatchesAdj();
     }
 
-    // This function creates the adjacencyList of ints.
+    // This function creates the adjacencyList of int type.
     private void adjacencyListBuilder(){
         int index = 0;
         
@@ -161,7 +168,52 @@ public class GridManager : MonoBehaviour
         if(allSpritesMatrix[index] != null && allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
             Destroy(allSpritesMatrix[index]);
             allSpritesMatrix[index] = null; 
+
+            score = score + (multiplier + 1);
+            scoreText.text = "Score: " + score.ToString();
         }
+    }
+
+    // A BFS implementation of a destroy function for sprites.
+    public void BFSDestroyMatches(int spriteIndex) {
+        int index = 0;
+        if(allMatches[0] == spriteIndex)
+        {
+            index = allMatches[0];
+        }
+        else{
+            index = allMatches.IndexOf(spriteIndex);
+        }
+        
+        int capcity = allMatches.Count;
+        Debug.Log(capcity);
+        for(int i = index; i < capcity; i++)
+        {
+            // As you delete the count and capcity gets smaller which results in the indexing to be off.
+            Debug.Log(allMatches.Count);
+            if(allMatches[i] != null && allSpritesMatrix[allMatches[i]] != null && allSpritesMatrix[allMatches[i]] == allSpritesMatrix[spriteIndex])
+            {
+                Destroy(allSpritesMatrix[allMatches[i]]);
+                allSpritesMatrix[allMatches[i]] = null; 
+                allMatches.RemoveAt(i);
+                score = score + (multiplier + 1);
+                scoreText.text = "Score: " + score.ToString();
+            }
+        }
+        Debug.Log("clear");
+        for(int i = index; i >= 0; i--)
+        {
+            if(allMatches[i] != null && allSpritesMatrix[allMatches[i]] != null && allSpritesMatrix[allMatches[i]] == allSpritesMatrix[spriteIndex])
+            {
+                Destroy(allSpritesMatrix[allMatches[i]]);
+                allSpritesMatrix[allMatches[i]] = null; 
+                allMatches.RemoveAt(i);
+                score = score + (multiplier + 1);
+                scoreText.text = "Score: " + score.ToString();
+            }
+        }
+        
+        
     }
 
     // Function that slides down the sprites if the sprite below it is 
@@ -220,8 +272,10 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    // A Breath First search implementation that keeps track of all possible matching sprites
-    public void findAllMatches(){
+    // A Breath First search implementation that keeps track of all possible matching sprites. If the first
+    // few sprites in this list is gone then that means we should recalculate the array. If empty
+    // then we should shuffle the board.
+    public void findAllMatchesAdj(){
         bool[] visited = new bool[vertices];
         // Create a queue
         Queue<int> q = new Queue<int>();
@@ -242,20 +296,19 @@ public class GridManager : MonoBehaviour
                     {
                         if(allSpritesMatrix[spriteIndex] != null && allSpritesMatrix[node].tag == allSpritesMatrix[spriteIndex].tag && visited[spriteIndex] == false)
                         {
-                            if(allMatches[node] == null)
-                            {
-                                allMatches[node] = new List<int>();
-                            }
                             q.Enqueue(spriteIndex);
-                            allMatches[node].Add(spriteIndex);
+                            allMatches.Add(node);
+                            allMatches.Add(spriteIndex);
+                            
                         }
-                        
                     }
                 }
             }
+            
         }
     }
 
+/*
     // Need to test//
     public void clearAllMatches(int index){
         // Create a queue
@@ -275,4 +328,6 @@ public class GridManager : MonoBehaviour
             allMatches[index].Clear();
         }
     }
+
+    */
 }
