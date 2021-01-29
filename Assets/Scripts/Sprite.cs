@@ -29,16 +29,13 @@ public class Sprite : MonoBehaviour
     private void OnMouseDown(){
         if(grid.currentState == GameState.move) {
             grid.currentState = GameState.wait;
-            if(BFSMatchedTiles(grid.allSpritesMatrix[index]))
-            {
-                grid.BFSDestroyMatches(index);
+            if(BFSMatchedTiles(grid.allSpritesMatrix[index])){
+                grid.DestroyMatches();
             }
             else{
                 grid.currentState = GameState.move;
+                // Sprites shake;
             }
-
-            //StartCoroutine(CheckMoveCo());
-            // Here when we delete sprites remove from allMatches and then check if there are still matches on the board.
         }
     }
 

@@ -1,7 +1,8 @@
-﻿ using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public enum GameState {
     wait,
@@ -169,84 +170,9 @@ public class GridManager : MonoBehaviour
             Destroy(allSpritesMatrix[index]);
             allSpritesMatrix[index] = null; 
 
-            score = score + (multiplier + 1);
+            score = (score + 1) + (multiplier);
             scoreText.text = "Score: " + score.ToString();
         }
-    }
-
-    // A BFS implementation of a destroy function for sprites.
-    public void BFSDestroyMatches(int spriteIndex) {
-        int index = 0;
-        int startIndex;
-        int endIndex;
-        int count = 1;
-
-        if(allMatches[0] == spriteIndex)
-        {
-            index = allMatches[0];
-        }
-        else{
-            index = allMatches.IndexOf(spriteIndex);
-        }
-
-        startIndex = index;
-        endIndex = index;
-
-        while(AdjacencyListChecker(startIndex, (startIndex - 1), spriteIndex))
-        {
-            count++;
-            startIndex--;
-        }
-
-        while(AdjacencyListChecker(endIndex, (endIndex + 1), spriteIndex))
-        {
-            count++;
-            endIndex++;
-        }
-
-        Debug.Log("Count: " + count);
-        Debug.Log("StartIndex: " + startIndex);
-        Debug.Log("EndIndex: " + endIndex);
-
-        
-        if(count > 1)
-        {
-            for(int i = startIndex; i <= endIndex; i++){
-                Destroy(allSpritesMatrix[allMatches[i]]);
-                allSpritesMatrix[allMatches[i]] = null;
-                score = score + (multiplier + 1);
-                scoreText.text = "Score: " + score.ToString();
-            }
-            allMatches.RemoveRange(startIndex, (endIndex-startIndex));
-        }
-        //currentState = GameState.move;
-        StartCoroutine(DecreaseRowCo());
-    }
-    // startIndex & nextIndex are based off spriteIndex in the allMatches list.
-    public bool AdjacencyListChecker(int startIndex, int nextIndex, int spriteIndex)
-    {
-        bool onList = false;
-
-        // Checks to see if beyond list size and above 0.
-        if (startIndex > allMatches.Count || nextIndex > allMatches.Count || startIndex < 0 || nextIndex < 0)
-        {
-            return false;
-        }
-
-        else if (allSpritesMatrix[allMatches[startIndex]].tag != allSpritesMatrix[spriteIndex].tag || allSpritesMatrix[allMatches[nextIndex]].tag != allSpritesMatrix[spriteIndex].tag)
-        {
-            return false;
-        }
-
-        foreach(int i in spritesAdjacencyList[allMatches[startIndex]])
-        {
-            if(i == allMatches[nextIndex])
-            {
-                onList = true;
-                break;
-            }
-        }
-        return onList;
     }
 
     // Function that slides down the sprites if the sprite below it is 
@@ -342,28 +268,39 @@ public class GridManager : MonoBehaviour
             }
             
         }
-    }
 
-/*
-    // Need to test//
-    public void clearAllMatches(int index){
-        // Create a queue
-        Queue<int> q = new Queue<int>();
-        q.Enqueue(index);
-
-        // When count i empty then that would be a new section
-        while (q.Count > 0)
+        if(!allMatches.Any())
         {
-            int node = q.Dequeue();
-            List<int> list = allMatches[index];
-
-            foreach(int spriteIndex in list)
-            {
-                q.Enqueue(spriteIndex);
-            }
-            allMatches[index].Clear();
+            Debug.Log("Empty list");
+            ShuffleNoMatches();
         }
     }
 
-    */
+    public void ShuffleNoMatches(){
+        // Based of Fisher–Yates shuffle algorthim.
+        for (int i = 0; i < allSpritesMatrix.Length; i++ )
+        {
+            GameObject temp = allSpritesMatrix[i];
+            int rando = Random.Range(i, allSpritesMatrix.Length);
+            allSpritesMatrix[i] = allSpritesMatrix[rando];
+            allSpritesMatrix[rando] = temp;
+
+            // index i
+            SpriteVariablesSetup(i);
+            SpriteVariablesSetup(rando);
+        }
+
+        FindAllMatchesAdj();
+    }
+
+    public void SpriteVariablesSetup(int index)
+    {
+        int column = index % height;
+        int row = (index - column) / height;
+
+        allSpritesMatrix[index].GetComponent<Sprite>().index = index;
+        allSpritesMatrix[index].GetComponent<Sprite>().row = row;
+        allSpritesMatrix[index].GetComponent<Sprite>().column = column;
+        allSpritesMatrix[index].name = "(" + row + "," + column + ")";
+    }
 }
