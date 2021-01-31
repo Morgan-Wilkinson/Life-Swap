@@ -4,15 +4,31 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
-  - 6
-  - 7
-  - 8
-  - Multi
+  - Reg1
+  - Reg2
+  - Reg3
+  - Reg4
+  - Reg5
+  - Reg6
+  - Reg7
+  - Reg8
+  - Arrow1
+  - Arrow2
+  - Arrow3
+  - Arrow4
+  - Arrow5
+  - Arrow6
+  - Arrow7
+  - Arrow8
+  - Bomb1
+  - Bomb2
+  - Bomb3
+  - Bomb4
+  - Bomb5
+  - Bomb6
+  - Bomb7
+  - Bomb8
+  - MultiBomb
   layers:
   - Default
   - TransparentFX
