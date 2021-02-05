@@ -1,5 +1,8 @@
 {
 	"height": 7, 
 	"width": 6,
-	"offSet": 3
+	"offSet": 3,
+	"arrow": 5,
+	"bomb": 8,
+	"multiBomb": 10
 }

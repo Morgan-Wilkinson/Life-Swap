@@ -25,6 +25,9 @@ public class GridDimensions
     public int height;
     public int width;
     public int offSet;
+    public int arrow;
+    public int bomb;
+    public int multiBomb;
     
     public static GridDimensions CreateFromJSON(string jsonFileData)
     {

@@ -21,11 +21,7 @@ public class GridManager : MonoBehaviour
     public int vertices;
     // Height from which the sprites drop in.
     public int offSet;
-    // Score Variables
-    private int score = 0;
-    public Text scoreText;
-    private int multiplier;
-    
+    // Major direction of sprites
     private int majorAxis;
 
     public static GridManager Instance { get; private set; }
@@ -42,8 +38,22 @@ public class GridManager : MonoBehaviour
     // An array holding the null positions of the array.
     public int[] nullSpriteArray;
 
+    // Testing a list of lists
+    public List<List<int>> testList; 
+
     [Header("Game Progression")]
     public GameState currentState = GameState.move;
+
+    [Header("GamePlay Variables")]
+    // Score Variables
+    private int score = 0;
+    public Text scoreText;
+    private int multiplier;
+
+    // Special sprites
+    public int arrow;
+    public int bomb;
+    public int multiBomb; 
 
     void Awake(){
         Instance = this;
@@ -52,16 +62,26 @@ public class GridManager : MonoBehaviour
     // Start is called before the first frame update
     void Start(){
         settings = FindObjectOfType<GameSettings>();
+        // Board Variables
         height = settings.gridDimensions.height;
         width = settings.gridDimensions.width;
         offSet = settings.gridDimensions.offSet;
-        multiplier = settings.gameLevels.levels[0].multiplier;
         vertices = width * height;
         majorAxis = height;
+
+        // GameObject Storage Lists and Arrays
         allSpritesMatrix = new GameObject[vertices];
         spritesAdjacencyList = new List<int>[vertices];
         allMatches = new List<int>();
         nullSpriteArray = new int[width];
+
+        testList = new List<List<int>>();
+
+        // GamePlay Variables
+        multiplier = settings.gameLevels.levels[0].multiplier;
+        arrow = settings.gridDimensions.arrow;
+        bomb = settings.gridDimensions.bomb;
+        multiBomb = settings.gridDimensions.multiBomb;
 
         InitGrid();
     }
@@ -75,7 +95,6 @@ public class GridManager : MonoBehaviour
         }
 
         adjacencyListBuilder();
-        //findAllMatches();
         FindAllMatchesAdj();
     }
 
@@ -237,6 +256,7 @@ public class GridManager : MonoBehaviour
     // then we should shuffle the board.
     public void FindAllMatchesAdj(){
         bool[] visited = new bool[vertices];
+
         // Clear any left over objects
         allMatches.Clear();
         // Create a queue
@@ -246,7 +266,7 @@ public class GridManager : MonoBehaviour
             if(visited[i] == false) 
             {
                 q.Enqueue(i);
-
+                List<int> listA = new List<int>();
                 // When count i empty then that would be a new section
                 while (q.Count > 0)
                 {
@@ -261,10 +281,22 @@ public class GridManager : MonoBehaviour
                             q.Enqueue(spriteIndex);
                             allMatches.Add(node);
                             allMatches.Add(spriteIndex);
-                            
+
+                            listA.Add(node);
+                            listA.Add(spriteIndex);
+                            //Debug.Log("Node " + node+ " & Sprite "+spriteIndex);
                         }
                     }
                 }
+                
+                if(listA.Any()){
+                    //Debug.Log("ADD NEW LIST");
+                    testList.Add(listA);
+                    Debug.Log(listA.Count);
+                    listA.Clear();
+                    Debug.Log(testList[0].Count);
+                }
+                
             }
             
         }
@@ -302,5 +334,13 @@ public class GridManager : MonoBehaviour
         allSpritesMatrix[index].GetComponent<Sprite>().row = row;
         allSpritesMatrix[index].GetComponent<Sprite>().column = column;
         allSpritesMatrix[index].name = "(" + row + "," + column + ")";
+    }
+
+    public void BombReplacement(){
+
+    }
+
+    public void ArrowReplacement(){
+        
     }
 }
