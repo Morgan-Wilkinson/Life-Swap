@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Sprite : MonoBehaviour
 {
-    [Header("Grid Variables")]
+    [Header("Sprite Variables")]
     public int row;
     public int column;
     public int index;

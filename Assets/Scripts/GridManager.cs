@@ -9,6 +9,20 @@ public enum GameState {
     move
 }
 
+public enum TileKind {
+    Breakable,
+    Blank,
+    Normal
+}
+
+[System.Serializable]
+public class TileType {
+    public int x;
+    public int y;
+    public int index;
+    public TileKind tileKind;
+}
+
 public class GridManager : MonoBehaviour
 {
     [Header("Board Variables")]
@@ -23,12 +37,16 @@ public class GridManager : MonoBehaviour
     public int offSet;
     // Major direction of sprites
     private int majorAxis;
+    // Board layout
+    public TileType[] boardLayout;
 
     public static GridManager Instance { get; private set; }
 
     [Header("GameObject Storage Lists and Arrays")]
     // Array that holds the types of sprites.
     public GameObject[] Sprites;
+    // Array that holds the types of breakables.
+    public GameObject[] Breakables;
     // List of arrays that hold the various paths. An adjacency list.
     public List<int>[] spritesAdjacencyList;
     // An array of all sprites on the board now.
@@ -45,15 +63,13 @@ public class GridManager : MonoBehaviour
     public GameState currentState = GameState.move;
 
     [Header("GamePlay Variables")]
-    // Score Variables
-    private int score = 0;
-    public Text scoreText;
-    private int multiplier;
-
     // Special sprites
     public int arrow;
     public int bomb;
     public int multiBomb; 
+
+    // Score Manager
+    public ScoreManager scoreManager;
 
     void Awake(){
         Instance = this;
@@ -61,7 +77,10 @@ public class GridManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start(){
+        // Get scripts
         settings = FindObjectOfType<GameSettings>();
+        scoreManager = FindObjectOfType<ScoreManager>();
+
         // Board Variables
         height = settings.gridDimensions.height;
         width = settings.gridDimensions.width;
@@ -78,7 +97,6 @@ public class GridManager : MonoBehaviour
         testList = new List<List<int>>();
 
         // GamePlay Variables
-        multiplier = settings.gameLevels.levels[0].multiplier;
         arrow = settings.gridDimensions.arrow;
         bomb = settings.gridDimensions.bomb;
         multiBomb = settings.gridDimensions.multiBomb;
@@ -88,9 +106,14 @@ public class GridManager : MonoBehaviour
 
     // Game Setup
     void InitGrid(){
+        int index = 0;
         for (int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
-                allSpritesMatrix[((i * majorAxis) + j)] = createSprite(i, j);
+                index = (i * majorAxis) + j;
+                if(allSpritesMatrix[index] == null)
+                {
+                    allSpritesMatrix[index] = createSprite(i, j);
+                }
             }
         }
 
@@ -141,6 +164,17 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    // Creation of breakable sprites
+    private GameObject createBreakableSprite(int row, int column){
+        Vector2 position = new Vector2(row, column);
+        GameObject sprite = Instantiate(Breakables[0], position, Quaternion.identity);
+        sprite.transform.parent = this.transform;
+        sprite.name = "Breakable: (" + row + "," + column + ")";
+        sprite.GetComponent<Breakables>().row = row;
+        sprite.GetComponent<Breakables>().column = column;
+        sprite.GetComponent<Breakables>().index = ((row * majorAxis) + column);
+        return sprite;
+    }
     // Creation of a sprite at row, column.
     private GameObject createSprite(int row, int column){
         Vector2 tempPosition = new Vector2(row, column);
@@ -169,6 +203,7 @@ public class GridManager : MonoBehaviour
 
     // Function that checks each index for destruction.
     public void DestroyMatches(){
+        int numberOfDestroyedSprites = 0;
         for(int i = 0; i < width; i++)
         {
             if(nullSpriteArray[i] > 0)
@@ -177,9 +212,14 @@ public class GridManager : MonoBehaviour
                 {
                     int index = (i * majorAxis) + j;
                     DestroyMatchesAt(index);
+                    numberOfDestroyedSprites++;
                 }
             }
         }
+        // Call scoreing function;
+        scoreManager.IncreaseScore(numberOfDestroyedSprites);
+
+        // Decrease rows and fill them in.
         StartCoroutine(DecreaseRowCo());
     }
 
@@ -188,9 +228,6 @@ public class GridManager : MonoBehaviour
         if(allSpritesMatrix[index] != null && allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
             Destroy(allSpritesMatrix[index]);
             allSpritesMatrix[index] = null; 
-
-            score = (score + 1) + (multiplier);
-            scoreText.text = "Score: " + score.ToString();
         }
     }
 
@@ -325,8 +362,7 @@ public class GridManager : MonoBehaviour
         FindAllMatchesAdj();
     }
 
-    public void SpriteVariablesSetup(int index)
-    {
+    public void SpriteVariablesSetup(int index){
         int column = index % height;
         int row = (index - column) / height;
 
@@ -337,10 +373,8 @@ public class GridManager : MonoBehaviour
     }
 
     public void BombReplacement(){
-
     }
 
     public void ArrowReplacement(){
-        
     }
 }
