@@ -39,11 +39,9 @@
      <Compile Include="Assets\Scripts\GameSettings.cs" />
      <Compile Include="Assets\Scripts\FindMatches.cs" />
      <Compile Include="Assets\Scripts\GridManager.cs" />
-     <Compile Include="Assets\Scripts\LevelSettings.cs" />
      <Compile Include="Assets\Scripts\Sprite.cs" />
-     <Compile Include="Assets\Scripts\ScoreManager.cs" />
-     <Compile Include="Assets\Scripts\LevelManager.cs" />
      <Compile Include="Assets\Scripts\Breakables.cs" />
+     <Compile Include="Assets\Scripts\ScoreManager.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
@@ -608,8 +606,14 @@
     <Reference Include="Unity.Timeline.Editor">
         <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.CacheServer">
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/UnityEditor.CacheServer.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.Animation.Runtime">
         <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.Animation.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline.Editor">
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.PixelPerfect.Editor">
         <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
@@ -626,11 +630,17 @@
     <Reference Include="Unity.2D.Path.Editor">
         <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.Path.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.ResourceManager">
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.ResourceManager.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
         <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
         <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables.Editor">
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.Addressables.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Animation.Triangle.Runtime">
         <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.2D.Animation.Triangle.Runtime.dll</HintPath>
@@ -670,6 +680,12 @@
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
         <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables">
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.Addressables.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline">
+        <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.ScriptableBuildPipeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics.Editor">
         <HintPath>/Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>

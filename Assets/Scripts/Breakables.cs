@@ -27,9 +27,6 @@ public class Breakables : MonoBehaviour
         index = (row * grid.height) + column;
     }
 
-    public void TakeDamage()
-    {
-        
-    }
+    
 
 }

@@ -54,7 +54,7 @@ public class Level
     public int startTwo;
     public int starThree;
     public int multiplier;
-    public string breakableType;
+    public string[] breakableType;
     public int[] breakablesArray;
     
     public static Level CreateFromJSON(string jsonFileData)

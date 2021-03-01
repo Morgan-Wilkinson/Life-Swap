@@ -1,7 +1,7 @@
 {
 "levels":[
-  {"goal":10000, "starOne":4000, "starTwo":7000, "starThree": 9000, "multiplier": 5, "breakableType": "UnstableCrystal", "breakablesArray": [ 0, 7, 14, 21, 28, 35 ]}, 
-  {"goal":20000, "starOne":9000, "starTwo":15000, "starThree": 18500, "multiplier": 10, "breakableType": "UnstableCrystal", "breakablesArray": [ 0, 1, 7, 8, 14, 15, 21, 22, 28, 29, 35, 36]},
-  {"goal":30000, "starOne":16000, "starTwo":21000, "starThree": 28000, "multiplier": 15, "breakableType": "UnstableCrystal", "breakablesArray": [ 6, 13, 20, 27, 24, 41]}
+  {"goal":10000, "starOne":4000, "starTwo":7000, "starThree": 9000, "multiplier": 5, "breakableType": ["Crystal"], "breakablesArray": [ 0, 7, 14, 21, 28, 35 ]}, 
+  {"goal":20000, "starOne":9000, "starTwo":15000, "starThree": 18500, "multiplier": 10, "breakableType": ["Crystal"], "breakablesArray": [ 0, 1, 7, 8, 14, 15, 21, 22, 28, 29, 35, 36]},
+  {"goal":30000, "starOne":16000, "starTwo":21000, "starThree": 28000, "multiplier": 15, "breakableType": ["Crystal"], "breakablesArray": [ 6, 13, 20, 27, 24, 41]}
 ]
 }

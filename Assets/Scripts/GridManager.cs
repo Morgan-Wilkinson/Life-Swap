@@ -1,26 +1,29 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.UI;
 
 public enum GameState {
     wait,
     move
 }
 
-public enum TileKind {
-    Breakable,
-    Blank,
-    Normal
+public enum SpriteType {
+    Normal,
+    Crystal,
+    Jelly,
+    Steel,
+    
 }
 
 [System.Serializable]
-public class TileType {
-    public int x;
-    public int y;
-    public int index;
-    public TileKind tileKind;
+public class BreakableSpriteProgression {
+    public SpriteType spriteType;
+    public Sprite[] breakableSpritesImage;
 }
 
 public class GridManager : MonoBehaviour
@@ -37,16 +40,19 @@ public class GridManager : MonoBehaviour
     public int offSet;
     // Major direction of sprites
     private int majorAxis;
-    // Board layout
-    public TileType[] boardLayout;
 
     public static GridManager Instance { get; private set; }
 
     [Header("GameObject Storage Lists and Arrays")]
     // Array that holds the types of sprites.
-    public GameObject[] Sprites;
-    // Array that holds the types of breakables.
-    public GameObject[] Breakables;
+    public GameObject[] SpritesPrefab;
+    // Array that holds the types of breakables and the various forms.
+    public BreakableSpriteProgression[] BreakableSpritesTypeOrder;
+    // This level's breakables
+    public string[] levelBreakableTypes;
+    public int breakableSpriteClassIndex;
+    // Array that holds the index of breakables for this level.
+    public int[] breakablesIndex;
     // List of arrays that hold the various paths. An adjacency list.
     public List<int>[] spritesAdjacencyList;
     // An array of all sprites on the board now.
@@ -55,9 +61,6 @@ public class GridManager : MonoBehaviour
     public List<int> allMatches; 
     // An array holding the null positions of the array.
     public int[] nullSpriteArray;
-
-    // Testing a list of lists
-    public List<List<int>> testList; 
 
     [Header("Game Progression")]
     public GameState currentState = GameState.move;
@@ -89,12 +92,12 @@ public class GridManager : MonoBehaviour
         majorAxis = height;
 
         // GameObject Storage Lists and Arrays
+        breakablesIndex = settings.gameLevels.levels[0].breakablesArray;
+        levelBreakableTypes = settings.gameLevels.levels[0].breakableType;
         allSpritesMatrix = new GameObject[vertices];
         spritesAdjacencyList = new List<int>[vertices];
         allMatches = new List<int>();
         nullSpriteArray = new int[width];
-
-        testList = new List<List<int>>();
 
         // GamePlay Variables
         arrow = settings.gridDimensions.arrow;
@@ -104,9 +107,34 @@ public class GridManager : MonoBehaviour
         InitGrid();
     }
 
+    void BreakablesSetup()
+    {
+        for(int i = 0; i < levelBreakableTypes.Length; i++)
+        {
+            foreach(SpriteType type in Enum.GetValues(typeof(SpriteType)))
+            {
+                if(type.ToString() == levelBreakableTypes[i])
+                {
+                    breakableSpriteClassIndex = (int)type;
+                }
+            }
+        }
+    }
+
     // Game Setup
     void InitGrid(){
         int index = 0;
+        if (breakablesIndex.Length > 0)
+        {
+            for(int i = 0; i < breakablesIndex.Length; i++)
+            {
+                index = breakablesIndex[i];
+                int column = index % majorAxis;
+                int row = index / majorAxis;
+                allSpritesMatrix[index] = createBreakableSprite(row, column);
+            }
+        }
+
         for (int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
                 index = (i * majorAxis) + j;
@@ -167,19 +195,22 @@ public class GridManager : MonoBehaviour
     // Creation of breakable sprites
     private GameObject createBreakableSprite(int row, int column){
         Vector2 position = new Vector2(row, column);
-        GameObject sprite = Instantiate(Breakables[0], position, Quaternion.identity);
+        // Maybe change so that the inspector holds all the sprites????
+        GameObject sprite = Instantiate(BreakableSpritesTypeOrder[breakableSpriteClassIndex].breakableSpritesImage[0], position, Quaternion.identity) as GameObject;
         sprite.transform.parent = this.transform;
         sprite.name = "Breakable: (" + row + "," + column + ")";
-        sprite.GetComponent<Breakables>().row = row;
-        sprite.GetComponent<Breakables>().column = column;
-        sprite.GetComponent<Breakables>().index = ((row * majorAxis) + column);
+        sprite.GetComponent<Sprite>().isBreakable = true;
+        sprite.GetComponent<Sprite>().row = row;
+        sprite.GetComponent<Sprite>().column = column;
+        sprite.GetComponent<Sprite>().index = ((row * majorAxis) + column);
         return sprite;
     }
+    
     // Creation of a sprite at row, column.
     private GameObject createSprite(int row, int column){
         Vector2 tempPosition = new Vector2(row, column);
-        int spriteToUse = Random.Range(0, Sprites.Length);
-        GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
+        int spriteToUse = Random.Range(0, SpritesPrefab.Length);
+        GameObject sprite = Instantiate(SpritesPrefab[spriteToUse], tempPosition, Quaternion.identity);
         sprite.transform.parent = this.transform;
         sprite.name = "(" + row + "," + column + ")";
         sprite.GetComponent<Sprite>().row = row;
@@ -191,8 +222,8 @@ public class GridManager : MonoBehaviour
     // Creation of a sprite at row, column at offset.
     private GameObject createSpriteOffset(int row, int column){
         Vector2 tempPosition = new Vector2(row, column + offSet);
-        int spriteToUse = Random.Range(0, Sprites.Length);
-        GameObject sprite = Instantiate(Sprites[spriteToUse], tempPosition, Quaternion.identity);
+        int spriteToUse = Random.Range(0, SpritesPrefab.Length);
+        GameObject sprite = Instantiate(SpritesPrefab[spriteToUse], tempPosition, Quaternion.identity);
         sprite.transform.parent = this.transform;
         sprite.name = "(" + row + "," + column + ")";
         sprite.GetComponent<Sprite>().row = row;
@@ -313,7 +344,7 @@ public class GridManager : MonoBehaviour
 
                     foreach(int spriteIndex in list)
                     {
-                        if(allSpritesMatrix[spriteIndex] != null && allSpritesMatrix[node].tag == allSpritesMatrix[spriteIndex].tag && visited[spriteIndex] == false)
+                        if(allSpritesMatrix[spriteIndex] != null && (allSpritesMatrix[node].GetComponent<Sprite>().isBreakable == false && allSpritesMatrix[node].tag == allSpritesMatrix[spriteIndex].tag) && visited[spriteIndex] == false)
                         {
                             q.Enqueue(spriteIndex);
                             allMatches.Add(node);
@@ -321,17 +352,12 @@ public class GridManager : MonoBehaviour
 
                             listA.Add(node);
                             listA.Add(spriteIndex);
-                            //Debug.Log("Node " + node+ " & Sprite "+spriteIndex);
                         }
                     }
                 }
                 
                 if(listA.Any()){
-                    //Debug.Log("ADD NEW LIST");
-                    testList.Add(listA);
-                    Debug.Log(listA.Count);
                     listA.Clear();
-                    Debug.Log(testList[0].Count);
                 }
                 
             }
@@ -340,7 +366,6 @@ public class GridManager : MonoBehaviour
 
         if(!allMatches.Any())
         {
-            Debug.Log("Empty list");
             ShuffleNoMatches();
         }
     }
@@ -349,14 +374,21 @@ public class GridManager : MonoBehaviour
         // Based of Fisher–Yates shuffle algorthim.
         for (int i = 0; i < allSpritesMatrix.Length; i++ )
         {
-            GameObject temp = allSpritesMatrix[i];
-            int rando = Random.Range(i, allSpritesMatrix.Length);
-            allSpritesMatrix[i] = allSpritesMatrix[rando];
-            allSpritesMatrix[rando] = temp;
+            if(allSpritesMatrix[i].GetComponent<Sprite>().isBreakable == false)
+            {
+                int rando = Random.Range(i, allSpritesMatrix.Length);
+                while(allSpritesMatrix[rando].GetComponent<Sprite>().isBreakable == true)
+                {
+                    rando = Random.Range(i, allSpritesMatrix.Length);
+                }
+                GameObject temp = allSpritesMatrix[i];
+                allSpritesMatrix[i] = allSpritesMatrix[rando];
+                allSpritesMatrix[rando] = temp;
 
-            // index i
-            SpriteVariablesSetup(i);
-            SpriteVariablesSetup(rando);
+                // index i
+                SpriteVariablesSetup(i);
+                SpriteVariablesSetup(rando);
+            }
         }
 
         FindAllMatchesAdj();

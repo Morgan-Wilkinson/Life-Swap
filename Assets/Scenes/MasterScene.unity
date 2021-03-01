@@ -1009,7 +1009,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1555713372
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1222,7 +1222,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.69, y: 0}
   m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0, y: 0}
 --- !u!1 &5053693997496616778
@@ -1312,8 +1312,7 @@ MonoBehaviour:
   width: 0
   vertices: 0
   offSet: 0
-  boardLayout: []
-  Sprites:
+  SpritesPrefab:
   - {fileID: 6840642283592560644, guid: 5a2f92b10bff64f0996dc514e8e78e06, type: 3}
   - {fileID: 1796743151874484886, guid: 533b6a99c29fc4a21b176486b24b7c96, type: 3}
   - {fileID: 5707232132958105008, guid: 898ff74190bdb47228e2a72b656ae580, type: 3}
@@ -1322,9 +1321,17 @@ MonoBehaviour:
   - {fileID: 7480966486538912828, guid: 0664806d97a1249b48a172163002006f, type: 3}
   - {fileID: 5277459805318041934, guid: d9c890f1f46644d57a7aa94449d873ad, type: 3}
   - {fileID: 5251274227703731797, guid: 628f6bcd506344f69bbf0e818823bfdb, type: 3}
-  Breakables:
-  - {fileID: 6034995074931534742, guid: 27ce2a8bc8c2348c9bfc4ae8e9476355, type: 3}
-  - {fileID: 5114103904112386753, guid: 45536f711edf0440db34d280fcec241c, type: 3}
+  BreakableSpritesImage:
+  - {fileID: 6390413735838795069, guid: e04beb7fd9dfe4affa44ba599ecd42b2, type: 3}
+  - {fileID: 8944091477586175579, guid: 0df3e6dcb00a24e2295b02efef02a518, type: 3}
+  - {fileID: 1117090532284096535, guid: 828008a531de8461898c558b4d7a7208, type: 3}
+  BreakableSpritesTypeOrder:
+  - spriteType: 0
+    breakableSpritesImage:
+    - {fileID: 6390413735838795069, guid: e04beb7fd9dfe4affa44ba599ecd42b2, type: 3}
+    - {fileID: 8944091477586175579, guid: 0df3e6dcb00a24e2295b02efef02a518, type: 3}
+    - {fileID: 1117090532284096535, guid: 828008a531de8461898c558b4d7a7208, type: 3}
+  breakablesIndex: 
   allSpritesMatrix: []
   allMatches: 
   nullSpriteArray: 
