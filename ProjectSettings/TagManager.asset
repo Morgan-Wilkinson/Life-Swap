@@ -29,8 +29,10 @@ TagManager:
   - Bomb7
   - Bomb8
   - MultiBomb
-  - UnstableCrystal
-  - BrokenCrystal
+  - SealedCrystal
+  - PartiallySealedCrystal
+  - Grid
+  - UnsealedCrystal
   layers:
   - Default
   - TransparentFX

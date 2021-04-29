@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,20 +9,6 @@ using UnityEngine.UI;
 public enum GameState {
     wait,
     move
-}
-
-public enum SpriteType {
-    Normal,
-    Crystal,
-    Jelly,
-    Steel,
-    
-}
-
-[System.Serializable]
-public class BreakableSpriteProgression {
-    public SpriteType spriteType;
-    public Sprite[] breakableSpritesImage;
 }
 
 public class GridManager : MonoBehaviour
@@ -46,11 +31,11 @@ public class GridManager : MonoBehaviour
     [Header("GameObject Storage Lists and Arrays")]
     // Array that holds the types of sprites.
     public GameObject[] SpritesPrefab;
-    // Array that holds the types of breakables and the various forms.
-    public BreakableSpriteProgression[] BreakableSpritesTypeOrder;
+
     // This level's breakables
     public string[] levelBreakableTypes;
-    public int breakableSpriteClassIndex;
+    // This levels BreakableSprites for instantiation.
+    public List<BreakableSpriteProgression> LevelBreakableSprites;
     // Array that holds the index of breakables for this level.
     public int[] breakablesIndex;
     // List of arrays that hold the various paths. An adjacency list.
@@ -90,10 +75,11 @@ public class GridManager : MonoBehaviour
         offSet = settings.gridDimensions.offSet;
         vertices = width * height;
         majorAxis = height;
+        levelBreakableTypes = settings.gameLevels.levels[0].breakableTypes;
 
         // GameObject Storage Lists and Arrays
         breakablesIndex = settings.gameLevels.levels[0].breakablesArray;
-        levelBreakableTypes = settings.gameLevels.levels[0].breakableType;
+        LevelBreakableSprites = BreakablesSpritesSetup(0);
         allSpritesMatrix = new GameObject[vertices];
         spritesAdjacencyList = new List<int>[vertices];
         allMatches = new List<int>();
@@ -107,18 +93,22 @@ public class GridManager : MonoBehaviour
         InitGrid();
     }
 
-    void BreakablesSetup()
+    
+    private List<BreakableSpriteProgression> BreakablesSpritesSetup(int level)
     {
-        for(int i = 0; i < levelBreakableTypes.Length; i++)
+        List<BreakableSpriteProgression> sprites = new List<BreakableSpriteProgression>();
+        foreach(string levelBreakableType in levelBreakableTypes)
         {
-            foreach(SpriteType type in Enum.GetValues(typeof(SpriteType)))
+            foreach(BreakableSpriteProgression spriteGroup in settings.BreakableSpritesTypeOrder)
             {
-                if(type.ToString() == levelBreakableTypes[i])
+                if(levelBreakableType == spriteGroup.spriteType.ToString())
                 {
-                    breakableSpriteClassIndex = (int)type;
+                    sprites.Add(spriteGroup);
+                    continue;
                 }
             }
         }
+        return sprites;
     }
 
     // Game Setup
@@ -195,8 +185,7 @@ public class GridManager : MonoBehaviour
     // Creation of breakable sprites
     private GameObject createBreakableSprite(int row, int column){
         Vector2 position = new Vector2(row, column);
-        // Maybe change so that the inspector holds all the sprites????
-        GameObject sprite = Instantiate(BreakableSpritesTypeOrder[breakableSpriteClassIndex].breakableSpritesImage[0], position, Quaternion.identity) as GameObject;
+        GameObject sprite = Instantiate(LevelBreakableSprites[0].breakableSprites[0], position, Quaternion.identity);
         sprite.transform.parent = this.transform;
         sprite.name = "Breakable: (" + row + "," + column + ")";
         sprite.GetComponent<Sprite>().isBreakable = true;
@@ -230,6 +219,11 @@ public class GridManager : MonoBehaviour
         sprite.GetComponent<Sprite>().column = column;
         sprite.GetComponent<Sprite>().index = ((row * majorAxis) + column); 
         return sprite;
+    }
+
+    private GameObject ReplaceBreakableSprite(int row, int column, int progression)
+    {
+        return null;
     }
 
     // Function that checks each index for destruction.

@@ -247,6 +247,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &360733745
 Canvas:
   m_ObjectHideFlags: 0
@@ -738,6 +739,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &1109105235
 Canvas:
   m_ObjectHideFlags: 0
@@ -817,6 +819,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &1114581802
 Canvas:
   m_ObjectHideFlags: 0
@@ -1145,6 +1148,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &2029427612
 Canvas:
   m_ObjectHideFlags: 0
@@ -1241,7 +1245,7 @@ GameObject:
   - component: {fileID: 5053693997496616781}
   m_Layer: 0
   m_Name: Grid
-  m_TagString: Untagged
+  m_TagString: Grid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1269,6 +1273,12 @@ MonoBehaviour:
     multiBomb: 0
   gameLevels:
     levels: []
+  BreakableSpritesTypeOrder:
+  - spriteType: 1
+    breakableSprites:
+    - {fileID: 4919706016643964492, guid: e04beb7fd9dfe4affa44ba599ecd42b2, type: 3}
+    - {fileID: 5354194696804965461, guid: 0df3e6dcb00a24e2295b02efef02a518, type: 3}
+    - {fileID: 2638478516012423183, guid: 828008a531de8461898c558b4d7a7208, type: 3}
 --- !u!114 &5053693997496616780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1321,16 +1331,8 @@ MonoBehaviour:
   - {fileID: 7480966486538912828, guid: 0664806d97a1249b48a172163002006f, type: 3}
   - {fileID: 5277459805318041934, guid: d9c890f1f46644d57a7aa94449d873ad, type: 3}
   - {fileID: 5251274227703731797, guid: 628f6bcd506344f69bbf0e818823bfdb, type: 3}
-  BreakableSpritesImage:
-  - {fileID: 6390413735838795069, guid: e04beb7fd9dfe4affa44ba599ecd42b2, type: 3}
-  - {fileID: 8944091477586175579, guid: 0df3e6dcb00a24e2295b02efef02a518, type: 3}
-  - {fileID: 1117090532284096535, guid: 828008a531de8461898c558b4d7a7208, type: 3}
-  BreakableSpritesTypeOrder:
-  - spriteType: 0
-    breakableSpritesImage:
-    - {fileID: 6390413735838795069, guid: e04beb7fd9dfe4affa44ba599ecd42b2, type: 3}
-    - {fileID: 8944091477586175579, guid: 0df3e6dcb00a24e2295b02efef02a518, type: 3}
-    - {fileID: 1117090532284096535, guid: 828008a531de8461898c558b4d7a7208, type: 3}
+  levelBreakableTypes: []
+  LevelBreakableSprites: []
   breakablesIndex: 
   allSpritesMatrix: []
   allMatches: 

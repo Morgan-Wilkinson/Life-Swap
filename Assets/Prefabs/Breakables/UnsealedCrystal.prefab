@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1117090532284096535}
   m_Layer: 0
   m_Name: UnsealedCrystal
-  m_TagString: UnstableCrystal
+  m_TagString: UnsealedCrystal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum SpriteType {
+    Normal,
+    Crystal,
+    Jelly,
+    Steel
+}
+
 public class GameSettings : MonoBehaviour {
     [Header("Game Settings")]
     public TextAsset gridDimensionsSettingsJsonFile;
@@ -11,10 +19,13 @@ public class GameSettings : MonoBehaviour {
     public GridDimensions gridDimensions;
     public GameLevels gameLevels;
 
+    // Array that holds the types of breakables and the various forms.
+    public List<BreakableSpriteProgression> BreakableSpritesTypeOrder;
+    // public Dictionary<string, GameObject[]> Breakables = new Dictionary<string, GameObject[]>();
+
     void Start()
     {
         gridDimensions = GridDimensions.CreateFromJSON(gridDimensionsSettingsJsonFile.text);
-
         gameLevels = GameLevels.CreateFromJSON(levelsSettingsJsonFile.text);
     }
 }
@@ -44,6 +55,7 @@ public class GameLevels
     {
         return JsonUtility.FromJson<GameLevels>(jsonFileData);
     }
+
 }
 
 [System.Serializable]
@@ -54,13 +66,19 @@ public class Level
     public int startTwo;
     public int starThree;
     public int multiplier;
-    public string[] breakableType;
+    public string[] breakableTypes;
     public int[] breakablesArray;
     
     public static Level CreateFromJSON(string jsonFileData)
     {
-        return JsonUtility.FromJson<Level>(jsonFileData);
+        return JsonUtility.FromJson<Level>(jsonFileData); 
     }
+}
+
+[System.Serializable]
+public class BreakableSpriteProgression {
+    public SpriteType spriteType;
+    public GameObject[] breakableSprites;
 }
 
 
