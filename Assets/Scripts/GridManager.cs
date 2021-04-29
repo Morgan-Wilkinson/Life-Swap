@@ -188,10 +188,13 @@ public class GridManager : MonoBehaviour
         GameObject sprite = Instantiate(LevelBreakableSprites[0].breakableSprites[0], position, Quaternion.identity);
         sprite.transform.parent = this.transform;
         sprite.name = "Breakable: (" + row + "," + column + ")";
-        sprite.GetComponent<Sprite>().isBreakable = true;
-        sprite.GetComponent<Sprite>().row = row;
-        sprite.GetComponent<Sprite>().column = column;
-        sprite.GetComponent<Sprite>().index = ((row * majorAxis) + column);
+        Sprite spriteClass = sprite.GetComponent<Sprite>();
+        spriteClass.isBreakable = true;
+        spriteClass.row = row;
+        spriteClass.column = column;
+        spriteClass.index = ((row * majorAxis) + column);
+        spriteClass.BreakableSpriteSetup(0, 3);
+        
         return sprite;
     }
     
@@ -202,9 +205,10 @@ public class GridManager : MonoBehaviour
         GameObject sprite = Instantiate(SpritesPrefab[spriteToUse], tempPosition, Quaternion.identity);
         sprite.transform.parent = this.transform;
         sprite.name = "(" + row + "," + column + ")";
-        sprite.GetComponent<Sprite>().row = row;
-        sprite.GetComponent<Sprite>().column = column;
-        sprite.GetComponent<Sprite>().index = ((row * majorAxis) + column);
+        Sprite spriteClass = sprite.GetComponent<Sprite>();
+        spriteClass.row = row;
+        spriteClass.column = column;
+        spriteClass.index = ((row * majorAxis) + column);
         return sprite;
     }
 
@@ -215,9 +219,10 @@ public class GridManager : MonoBehaviour
         GameObject sprite = Instantiate(SpritesPrefab[spriteToUse], tempPosition, Quaternion.identity);
         sprite.transform.parent = this.transform;
         sprite.name = "(" + row + "," + column + ")";
-        sprite.GetComponent<Sprite>().row = row;
-        sprite.GetComponent<Sprite>().column = column;
-        sprite.GetComponent<Sprite>().index = ((row * majorAxis) + column); 
+        Sprite spriteClass = sprite.GetComponent<Sprite>();
+        spriteClass.row = row;
+        spriteClass.column = column;
+        spriteClass.index = ((row * majorAxis) + column); 
         return sprite;
     }
 

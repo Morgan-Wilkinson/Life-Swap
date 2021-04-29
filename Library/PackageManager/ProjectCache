@@ -5,7 +5,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637510234240000000
+      ticks: 637553077980000000
     m_Hash: 2338359907
   m_LockFileStatus:
     m_FilePath: /Users/morgan/Library/Mobile Documents/com~apple~CloudDocs/Development/GitHub/Life-Swap/Packages/packages-lock.json
@@ -13,7 +13,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637510234280000000
+      ticks: 637553078840000000
     m_Hash: 3427826425
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}

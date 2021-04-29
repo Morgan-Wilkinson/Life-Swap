@@ -8,9 +8,15 @@ public class Sprite : MonoBehaviour
     public int row;
     public int column;
     public int index;
-    public int breakableSpriteProgress = 0;
-    public bool isBreakable = false;
-    public bool damaged = false;
+
+    [Header("Breakable Sprite Variables")]
+    public int BreakableSpriteType;
+    public int breakableSpriteProgress;
+    public bool isBreakable;
+    public int lifeforce;
+
+    [Header("Life Cycle Variables")]
+    public bool destroyed = false;
     public bool isMatched = false;
     
     // Private variables.
@@ -77,7 +83,7 @@ public class Sprite : MonoBehaviour
                 else if(grid.allSpritesMatrix[i].GetComponent<Sprite>().isBreakable && visited[i] == false)
                 {
                     visited[i] = true;
-                    grid.allSpritesMatrix[i].GetComponent<Sprite>().damaged = true;
+                    //grid.allSpritesMatrix[i].GetComponent<Sprite>().damaged = true;
                     grid.allSpritesMatrix[i].GetComponent<Sprite>().breakableSpriteProgress++;
                     //grid.allSpritesMatrix[i].GetComponent<SpriteRenderer>().sprite = grid.breakablesProgressionArray[breakableSpriteProgress];
                     /*
@@ -95,7 +101,33 @@ public class Sprite : MonoBehaviour
         return matches;
     }
 
-    private void changeOutSprite(int index)
+    // Breakable Sprite Functions
+
+    public void BreakableSpriteSetup(int BreakableSpriteType, int lifeforce)
+    {
+        this.BreakableSpriteType = BreakableSpriteType;
+        breakableSpriteProgress = 0;
+        isBreakable = false;
+        this.lifeforce = lifeforce;
+    }
+    private void DecreaseLife()
+    {
+        if(isBreakable)
+        {
+            life -= 1;
+            if(life <= 0)
+            {
+                destroyed = true;
+                // Call destroyed function and remove index;
+            }
+            else
+            {
+                // Swap out Sprint;
+            }
+        }
+    }
+
+    private void SwapBreakableSprite(int index)
     {
 
     }
