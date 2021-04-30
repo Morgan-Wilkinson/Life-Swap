@@ -260,7 +260,9 @@ public class GridManager : MonoBehaviour
     // Destruction of sprite at index in array.
     private void DestroyMatchesAt(int index){
         if(allSpritesMatrix[index] != null && allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
-            Destroy(allSpritesMatrix[index]);
+            Animator anim = allSpritesMatrix[index].GetComponent<Animator>();
+            anim.Play("Base Layer.ShrinkAnim");
+            Destroy(allSpritesMatrix[index], 0.35f);
             allSpritesMatrix[index] = null; 
         }
     }
