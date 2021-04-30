@@ -13,9 +13,16 @@ public enum GameState {
 
 public class GridManager : MonoBehaviour
 {
+    public static GridManager Instance { get; private set; }
+
     [Header("Board Variables")]
     public GameSettings settings;
-    // Height of the grid.
+    public GameLevels gameLevels;
+    public GridDimensions gridDimensions;
+    // The configuration of this levels breakable sprites
+    public GameBreakableSpriteProgression breakablesConfig;
+
+    public int level;    // Height of the grid.
     public int height;
     // Width of the grid.
     public int width;
@@ -26,18 +33,12 @@ public class GridManager : MonoBehaviour
     // Major direction of sprites
     private int majorAxis;
 
-    public static GridManager Instance { get; private set; }
-
     [Header("GameObject Storage Lists and Arrays")]
     // Array that holds the types of sprites.
     public GameObject[] SpritesPrefab;
-
-    // This level's breakables
+    public GameObject BreakablePrefab;
     public string[] levelBreakableTypes;
-    // This levels BreakableSprites for instantiation.
-    public List<BreakableSpriteProgression> LevelBreakableSprites;
-    // Array that holds the index of breakables for this level.
-    public int[] breakablesIndex;
+    public List<UnityEngine.Sprite>[] BreakableSprites;
     // List of arrays that hold the various paths. An adjacency list.
     public List<int>[] spritesAdjacencyList;
     // An array of all sprites on the board now.
@@ -68,18 +69,21 @@ public class GridManager : MonoBehaviour
         // Get scripts
         settings = FindObjectOfType<GameSettings>();
         scoreManager = FindObjectOfType<ScoreManager>();
+        
+        gameLevels = settings.gameLevels;
+        gridDimensions = settings.gridDimensions;
+        breakablesConfig = settings.breakableSpritesTypes;
+
+        level = 0;
 
         // Board Variables
-        height = settings.gridDimensions.height;
-        width = settings.gridDimensions.width;
-        offSet = settings.gridDimensions.offSet;
+        height = gridDimensions.height;
+        width = gridDimensions.width;
+        offSet = gridDimensions.offSet;
         vertices = width * height;
         majorAxis = height;
-        levelBreakableTypes = settings.gameLevels.levels[0].breakableTypes;
 
         // GameObject Storage Lists and Arrays
-        breakablesIndex = settings.gameLevels.levels[0].breakablesArray;
-        LevelBreakableSprites = BreakablesSpritesSetup(0);
         allSpritesMatrix = new GameObject[vertices];
         spritesAdjacencyList = new List<int>[vertices];
         allMatches = new List<int>();
@@ -90,35 +94,20 @@ public class GridManager : MonoBehaviour
         bomb = settings.gridDimensions.bomb;
         multiBomb = settings.gridDimensions.multiBomb;
 
+        FindBreakableType();
         InitGrid();
     }
 
-    
-    private List<BreakableSpriteProgression> BreakablesSpritesSetup(int level)
-    {
-        List<BreakableSpriteProgression> sprites = new List<BreakableSpriteProgression>();
-        foreach(string levelBreakableType in levelBreakableTypes)
-        {
-            foreach(BreakableSpriteProgression spriteGroup in settings.BreakableSpritesTypeOrder)
-            {
-                if(levelBreakableType == spriteGroup.spriteType.ToString())
-                {
-                    sprites.Add(spriteGroup);
-                    continue;
-                }
-            }
-        }
-        return sprites;
-    }
 
     // Game Setup
     void InitGrid(){
         int index = 0;
-        if (breakablesIndex.Length > 0)
+        int[] array = gameLevels.levels[level].breakablesArray;
+        if (array.Length > 0)
         {
-            for(int i = 0; i < breakablesIndex.Length; i++)
+            for(int i = 0; i < array.Length; i++)
             {
-                index = breakablesIndex[i];
+                index = array[i];
                 int column = index % majorAxis;
                 int row = index / majorAxis;
                 allSpritesMatrix[index] = createBreakableSprite(row, column);
@@ -134,7 +123,6 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
-
         adjacencyListBuilder();
         FindAllMatchesAdj();
     }
@@ -182,10 +170,31 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    private void FindBreakableType()
+    {
+        levelBreakableTypes = gameLevels.levels[level].breakableTypes;
+        BreakableSprites = new List<UnityEngine.Sprite>[levelBreakableTypes.Length];
+        for(int i = 0; i < levelBreakableTypes.Length; i++)
+        {
+            BreakableSprites[i] = new List<UnityEngine.Sprite>();
+            foreach(BreakableSpriteProgression type in breakablesConfig.breakablesProgression)
+            {
+                if(type.spriteType == levelBreakableTypes[0].ToString())
+                {
+                    foreach(string sprite in type.breakableSprites)
+                    {
+                        BreakableSprites[i].Add(Resources.Load<UnityEngine.Sprite>("Images/Sprites/Breakables/"+sprite.ToString()));
+                    }
+                }
+            }
+        }
+    }
+
     // Creation of breakable sprites
     private GameObject createBreakableSprite(int row, int column){
         Vector2 position = new Vector2(row, column);
-        GameObject sprite = Instantiate(LevelBreakableSprites[0].breakableSprites[0], position, Quaternion.identity);
+        GameObject sprite = Instantiate(BreakablePrefab, position, Quaternion.identity);
+        sprite.GetComponent<SpriteRenderer>().sprite = BreakableSprites[0][0];
         sprite.transform.parent = this.transform;
         sprite.name = "Breakable: (" + row + "," + column + ")";
         Sprite spriteClass = sprite.GetComponent<Sprite>();
@@ -224,11 +233,6 @@ public class GridManager : MonoBehaviour
         spriteClass.column = column;
         spriteClass.index = ((row * majorAxis) + column); 
         return sprite;
-    }
-
-    private GameObject ReplaceBreakableSprite(int row, int column, int progression)
-    {
-        return null;
     }
 
     // Function that checks each index for destruction.
@@ -396,10 +400,10 @@ public class GridManager : MonoBehaviour
     public void SpriteVariablesSetup(int index){
         int column = index % height;
         int row = (index - column) / height;
-
-        allSpritesMatrix[index].GetComponent<Sprite>().index = index;
-        allSpritesMatrix[index].GetComponent<Sprite>().row = row;
-        allSpritesMatrix[index].GetComponent<Sprite>().column = column;
+        Sprite sprite = allSpritesMatrix[index].GetComponent<Sprite>();
+        sprite.index = index;
+        sprite.row = row;
+        sprite.column = column;
         allSpritesMatrix[index].name = "(" + row + "," + column + ")";
     }
 

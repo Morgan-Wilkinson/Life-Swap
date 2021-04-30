@@ -1,0 +1,5 @@
+{
+    "breakablesProgression":[
+        {"spriteType": "Crystals", "lifeforce":3, "breakableSprites": ["SealedCrystal", "PartiallySealedCrystal", "UnsealedCrystal"]}
+    ]
+}

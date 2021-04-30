@@ -14,19 +14,23 @@ public class GameSettings : MonoBehaviour {
     [Header("Game Settings")]
     public TextAsset gridDimensionsSettingsJsonFile;
     public TextAsset levelsSettingsJsonFile;
+    public TextAsset breakablesProgressionJsonFile;
 
     [Header("Game Variables")]
     public GridDimensions gridDimensions;
     public GameLevels gameLevels;
 
+
     // Array that holds the types of breakables and the various forms.
-    public List<BreakableSpriteProgression> BreakableSpritesTypeOrder;
+    public GameBreakableSpriteProgression breakableSpritesTypes;
+
     // public Dictionary<string, GameObject[]> Breakables = new Dictionary<string, GameObject[]>();
 
     void Start()
     {
         gridDimensions = GridDimensions.CreateFromJSON(gridDimensionsSettingsJsonFile.text);
         gameLevels = GameLevels.CreateFromJSON(levelsSettingsJsonFile.text);
+        breakableSpritesTypes = GameBreakableSpriteProgression.CreateFromJSON(breakablesProgressionJsonFile.text);
     }
 }
 
@@ -76,9 +80,23 @@ public class Level
 }
 
 [System.Serializable]
-public class BreakableSpriteProgression {
-    public SpriteType spriteType;
-    public GameObject[] breakableSprites;
+public class GameBreakableSpriteProgression
+{
+    public BreakableSpriteProgression[] breakablesProgression;
+    public static GameBreakableSpriteProgression CreateFromJSON(string jsonFileData)
+    {
+        return JsonUtility.FromJson<GameBreakableSpriteProgression>(jsonFileData);
+    }
 }
+[System.Serializable]
+public class BreakableSpriteProgression 
+{
+    public string spriteType;
+    public int lifeforce;
+    public string[] breakableSprites;
 
-
+    public static BreakableSpriteProgression CreateFromJSON(string jsonFileData)
+    {
+        return JsonUtility.FromJson<BreakableSpriteProgression>(jsonFileData); 
+    }
+}

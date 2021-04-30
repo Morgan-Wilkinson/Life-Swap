@@ -14,6 +14,7 @@ public class Sprite : MonoBehaviour
     public int breakableSpriteProgress;
     public bool isBreakable;
     public int lifeforce;
+    private int damageProgression = 0;
 
     [Header("Life Cycle Variables")]
     public bool destroyed = false;
@@ -33,6 +34,20 @@ public class Sprite : MonoBehaviour
         tempPosition = new Vector2(row, column);
         transform.position = Vector2.Lerp(transform.position, tempPosition, 0.2f);
         index = (row * grid.height) + column;
+    }
+
+    // Breakable Sprite Functions
+    public void BreakableSpriteSetup(int BreakableSpriteType, int lifeforce)
+    {
+        this.BreakableSpriteType = BreakableSpriteType;
+        breakableSpriteProgress = 0;
+        isBreakable = true;
+        this.lifeforce = lifeforce;
+    }
+
+    private void SwapBreakableSprite(int index)
+    {
+
     }
 
     private void OnMouseDown(){
@@ -83,52 +98,21 @@ public class Sprite : MonoBehaviour
                 else if(grid.allSpritesMatrix[i].GetComponent<Sprite>().isBreakable && visited[i] == false)
                 {
                     visited[i] = true;
-                    //grid.allSpritesMatrix[i].GetComponent<Sprite>().damaged = true;
-                    grid.allSpritesMatrix[i].GetComponent<Sprite>().breakableSpriteProgress++;
-                    //grid.allSpritesMatrix[i].GetComponent<SpriteRenderer>().sprite = grid.breakablesProgressionArray[breakableSpriteProgress];
-                    /*
-                    if(grid.allSpritesMatrix[i].GetComponent<Sprite>().breakableSpriteProgress == grid.breakablesProgressionArray.Length)
+                    Sprite spriteI = grid.allSpritesMatrix[i].GetComponent<Sprite>();
+                    spriteI.breakableSpriteProgress++;
+                    spriteI.damageProgression += 1;
+                    if(spriteI.damageProgression == spriteI.lifeforce)
                     {
-                        matches = true;
-                        grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
-                        // Gets the column of the index
+                        spriteI.isMatched = true;
                         grid.nullSpriteArray[i / grid.height]++;
                     }
-                    */
+                    else
+                    {
+                        grid.allSpritesMatrix[i].GetComponent<SpriteRenderer>().sprite = grid.BreakableSprites[0][spriteI.damageProgression];
+                    }
                 }
             }
         }
         return matches;
-    }
-
-    // Breakable Sprite Functions
-
-    public void BreakableSpriteSetup(int BreakableSpriteType, int lifeforce)
-    {
-        this.BreakableSpriteType = BreakableSpriteType;
-        breakableSpriteProgress = 0;
-        isBreakable = false;
-        this.lifeforce = lifeforce;
-    }
-    private void DecreaseLife()
-    {
-        if(isBreakable)
-        {
-            life -= 1;
-            if(life <= 0)
-            {
-                destroyed = true;
-                // Call destroyed function and remove index;
-            }
-            else
-            {
-                // Swap out Sprint;
-            }
-        }
-    }
-
-    private void SwapBreakableSprite(int index)
-    {
-
     }
 }

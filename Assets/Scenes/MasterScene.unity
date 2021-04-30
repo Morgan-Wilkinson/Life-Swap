@@ -1264,6 +1264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridDimensionsSettingsJsonFile: {fileID: 4900000, guid: db7775d1e8ffe4a6e8707d0e1fe159e2, type: 3}
   levelsSettingsJsonFile: {fileID: 4900000, guid: 53ba9142a2e9b4564ae7ec605d444803, type: 3}
+  breakablesProgressionJsonFile: {fileID: 4900000, guid: bcf53a9d939fa4e0594e0a8d66fa3eaa, type: 3}
   gridDimensions:
     height: 0
     width: 0
@@ -1273,12 +1274,8 @@ MonoBehaviour:
     multiBomb: 0
   gameLevels:
     levels: []
-  BreakableSpritesTypeOrder:
-  - spriteType: 1
-    breakableSprites:
-    - {fileID: 4919706016643964492, guid: e04beb7fd9dfe4affa44ba599ecd42b2, type: 3}
-    - {fileID: 5354194696804965461, guid: 0df3e6dcb00a24e2295b02efef02a518, type: 3}
-    - {fileID: 2638478516012423183, guid: 828008a531de8461898c558b4d7a7208, type: 3}
+  breakableSpritesTypes:
+    breakablesProgression: []
 --- !u!114 &5053693997496616780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1318,6 +1315,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 0}
+  gameLevels:
+    levels: []
+  gridDimensions:
+    height: 0
+    width: 0
+    offSet: 0
+    arrow: 0
+    bomb: 0
+    multiBomb: 0
+  breakablesConfig:
+    breakablesProgression: []
+  level: 0
   height: 0
   width: 0
   vertices: 0
@@ -1332,8 +1341,6 @@ MonoBehaviour:
   - {fileID: 5277459805318041934, guid: d9c890f1f46644d57a7aa94449d873ad, type: 3}
   - {fileID: 5251274227703731797, guid: 628f6bcd506344f69bbf0e818823bfdb, type: 3}
   levelBreakableTypes: []
-  LevelBreakableSprites: []
-  breakablesIndex: 
   allSpritesMatrix: []
   allMatches: 
   nullSpriteArray: 
