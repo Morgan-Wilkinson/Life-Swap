@@ -1340,6 +1340,7 @@ MonoBehaviour:
   - {fileID: 7480966486538912828, guid: 0664806d97a1249b48a172163002006f, type: 3}
   - {fileID: 5277459805318041934, guid: d9c890f1f46644d57a7aa94449d873ad, type: 3}
   - {fileID: 5251274227703731797, guid: 628f6bcd506344f69bbf0e818823bfdb, type: 3}
+  BreakablePrefab: {fileID: 3867429879466767961, guid: 7a9df1ff7eef140d5b1b64a68837246f, type: 3}
   levelBreakableTypes: []
   allSpritesMatrix: []
   allMatches: 
