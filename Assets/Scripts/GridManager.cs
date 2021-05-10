@@ -258,24 +258,10 @@ public class GridManager : MonoBehaviour
         StartCoroutine(DecreaseRowCo());
     }
 
-    // Destruction of sprite at index in array.
-    // private IEnumerator DestroyMatchesAt(int index){
-    //     if(allSpritesMatrix[index] != null && allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
-    //         Animator anim = allSpritesMatrix[index].GetComponent<Animator>();
-    //         anim.Play("Base Layer.ShrinkAnim");
-    //         yield return new WaitForSeconds(0.3f);
-    //         // while (anim.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.ShrinkAnim"))
-    //         // {
-    //         //     yield return null;
-    //         // }
-    //         Destroy(allSpritesMatrix[index]);
-    //         allSpritesMatrix[index] = null; 
-    //     }
-    // }
-
     private void DestroyMatchesAt(int index){
         if(allSpritesMatrix[index] != null && allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
-            Instantiate(destroyEffect, allSpritesMatrix[index].transform.position, Quaternion.identity, this.transform);
+            GameObject particle = Instantiate(destroyEffect, allSpritesMatrix[index].transform.position, Quaternion.identity, this.transform);
+            Destroy(particle, 0.5f);
             Destroy(allSpritesMatrix[index]);
             allSpritesMatrix[index] = null; 
         }
@@ -285,6 +271,7 @@ public class GridManager : MonoBehaviour
     // destroyed.
     private IEnumerator DecreaseRowCo(){
         int nullCount = 0;
+        yield return new WaitForSeconds(0.5f);
         for(int i = 0; i < width; i++)
         {
             if(nullSpriteArray[i] > 0)
@@ -307,7 +294,7 @@ public class GridManager : MonoBehaviour
             }
             nullCount = 0;
         }
-        yield return new WaitForSeconds(.2f);
+        yield return new WaitForSeconds(0.4f);
         StartCoroutine(FillBoardCo());
     }
 
