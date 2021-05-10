@@ -32,7 +32,7 @@ public class Sprite : MonoBehaviour
     // Update is called once per frame
     void Update(){
         tempPosition = new Vector2(row, column);
-        transform.position = Vector2.Lerp(transform.position, tempPosition, 0.2f);
+        transform.position = Vector2.Lerp(transform.position, tempPosition, 0.08f);
         index = (row * grid.height) + column;
     }
 

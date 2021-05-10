@@ -34,6 +34,7 @@ public class GridManager : MonoBehaviour
     private int majorAxis;
 
     [Header("GameObject Storage Lists and Arrays")]
+    public GameObject destroyEffect;
     // Array that holds the types of sprites.
     public GameObject[] SpritesPrefab;
     public GameObject BreakablePrefab;
@@ -258,11 +259,24 @@ public class GridManager : MonoBehaviour
     }
 
     // Destruction of sprite at index in array.
+    // private IEnumerator DestroyMatchesAt(int index){
+    //     if(allSpritesMatrix[index] != null && allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
+    //         Animator anim = allSpritesMatrix[index].GetComponent<Animator>();
+    //         anim.Play("Base Layer.ShrinkAnim");
+    //         yield return new WaitForSeconds(0.3f);
+    //         // while (anim.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.ShrinkAnim"))
+    //         // {
+    //         //     yield return null;
+    //         // }
+    //         Destroy(allSpritesMatrix[index]);
+    //         allSpritesMatrix[index] = null; 
+    //     }
+    // }
+
     private void DestroyMatchesAt(int index){
         if(allSpritesMatrix[index] != null && allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
-            Animator anim = allSpritesMatrix[index].GetComponent<Animator>();
-            anim.Play("Base Layer.ShrinkAnim");
-            Destroy(allSpritesMatrix[index], 0.35f);
+            Instantiate(destroyEffect, allSpritesMatrix[index].transform.position, Quaternion.identity, this.transform);
+            Destroy(allSpritesMatrix[index]);
             allSpritesMatrix[index] = null; 
         }
     }

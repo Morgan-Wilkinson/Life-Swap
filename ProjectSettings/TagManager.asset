@@ -79,6 +79,9 @@ TagManager:
   - name: Sprites
     uniqueID: 1541346517
     locked: 0
+  - name: DestroyEffect
+    uniqueID: 1641908523
+    locked: 0
   - name: ProgressBar
     uniqueID: 1671268063
     locked: 0

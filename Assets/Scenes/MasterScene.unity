@@ -1331,6 +1331,7 @@ MonoBehaviour:
   width: 0
   vertices: 0
   offSet: 0
+  destroyEffect: {fileID: 5271747511425547197, guid: ac0c6060c17f54bf2a407cd71a910ffe, type: 3}
   SpritesPrefab:
   - {fileID: 6840642283592560644, guid: 5a2f92b10bff64f0996dc514e8e78e06, type: 3}
   - {fileID: 1796743151874484886, guid: 533b6a99c29fc4a21b176486b24b7c96, type: 3}
