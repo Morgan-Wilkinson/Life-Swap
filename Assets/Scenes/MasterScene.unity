@@ -1288,6 +1288,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd482d736a14e401c8113c8f336c6c6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OriginalSprites:
+  - {fileID: 21300000, guid: f0406f596d5ee43e1b40e409fcea3298, type: 3}
+  - {fileID: 21300000, guid: 546990239c7b943f58a8100b4ebaad8e, type: 3}
+  - {fileID: 21300000, guid: b1fa07ff630844b86b9752b958c8cb7d, type: 3}
+  - {fileID: 21300000, guid: 9f388a51004a442389e4b783dc3d6736, type: 3}
+  - {fileID: 21300000, guid: 27cb698a713d9418e877f1cddc4a74d7, type: 3}
+  - {fileID: 21300000, guid: ee60d890d722041b294b4caf54f8c165, type: 3}
+  - {fileID: 21300000, guid: f85c4ab1c69b5470483b4b4783ca8ed7, type: 3}
+  - {fileID: 21300000, guid: 81243b7d7d57b45b58618fc5e1bee5eb, type: 3}
+  ArrowSprites:
+  - {fileID: 21300000, guid: 94fbdb68ddaa34998aff6251d0d5f72c, type: 3}
+  - {fileID: 21300000, guid: 0cc9583a2d7ab468bb1f19bbd92d059a, type: 3}
+  - {fileID: 21300000, guid: 718284ef40db7410a93925e0ea2979ef, type: 3}
+  - {fileID: 21300000, guid: 1052c5f8997584a62a9a799a5b5f2b09, type: 3}
+  - {fileID: 21300000, guid: 6a3071adf2cb146109b03e68273ca859, type: 3}
+  - {fileID: 21300000, guid: 2d98edf52650e45a885c8cdea11a0f23, type: 3}
+  - {fileID: 21300000, guid: e93563fda8804452091baed57c742a02, type: 3}
+  - {fileID: 21300000, guid: a93e049bbf117418f84dba12711d1072, type: 3}
+  BombSprites:
+  - {fileID: 21300000, guid: 75bc51d393926415f9efcac62eb0704f, type: 3}
+  - {fileID: 21300000, guid: 4b98d734bd3ae45258b334430c1663b5, type: 3}
+  - {fileID: 21300000, guid: f98779862c19a45298a3004a726abe17, type: 3}
+  - {fileID: 21300000, guid: ad9d17ab1ad694b85a8d7d6cb314cd3d, type: 3}
+  - {fileID: 21300000, guid: fb470deb51cd04996bbc0b949f33553c, type: 3}
+  - {fileID: 21300000, guid: 2ae18e147a7be400ab1b53429312a4db, type: 3}
+  - {fileID: 21300000, guid: f9dfc8af6b8484dab9faca8a82dfbdce, type: 3}
+  - {fileID: 21300000, guid: a2de069c2a554457b8f65c35d315959f, type: 3}
 --- !u!114 &5053693997496616781
 MonoBehaviour:
   m_ObjectHideFlags: 0

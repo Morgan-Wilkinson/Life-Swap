@@ -14,6 +14,7 @@ public enum GameState {
 public class GridManager : MonoBehaviour
 {
     public static GridManager Instance { get; private set; }
+    private FindMatches findMatches;
 
     [Header("Board Variables")]
     public GameSettings settings;
@@ -40,6 +41,7 @@ public class GridManager : MonoBehaviour
     public GameObject BreakablePrefab;
     public string[] levelBreakableTypes;
     public List<UnityEngine.Sprite>[] BreakableSprites;
+    
     // List of arrays that hold the various paths. An adjacency list.
     public List<int>[] spritesAdjacencyList;
     // An array of all sprites on the board now.
@@ -70,6 +72,7 @@ public class GridManager : MonoBehaviour
         // Get scripts
         settings = FindObjectOfType<GameSettings>();
         scoreManager = FindObjectOfType<ScoreManager>();
+        findMatches = FindObjectOfType<FindMatches>();
         
         gameLevels = settings.gameLevels;
         gridDimensions = settings.gridDimensions;
@@ -120,12 +123,12 @@ public class GridManager : MonoBehaviour
                 index = (i * majorAxis) + j;
                 if(allSpritesMatrix[index] == null)
                 {
-                    allSpritesMatrix[index] = createSprite(i, j);
+                    allSpritesMatrix[index] = createSpriteOffset(i, j);
                 }
             }
         }
         adjacencyListBuilder();
-        FindAllMatchesAdj();
+        findMatches.FindAllMatchesAdj();
     }
 
     // This function creates the adjacencyList of int type.
@@ -209,18 +212,18 @@ public class GridManager : MonoBehaviour
     }
     
     // Creation of a sprite at row, column.
-    private GameObject createSprite(int row, int column){
-        Vector2 tempPosition = new Vector2(row, column);
-        int spriteToUse = Random.Range(0, SpritesPrefab.Length);
-        GameObject sprite = Instantiate(SpritesPrefab[spriteToUse], tempPosition, Quaternion.identity);
-        sprite.transform.parent = this.transform;
-        sprite.name = "(" + row + "," + column + ")";
-        Sprite spriteClass = sprite.GetComponent<Sprite>();
-        spriteClass.row = row;
-        spriteClass.column = column;
-        spriteClass.index = ((row * majorAxis) + column);
-        return sprite;
-    }
+    // private GameObject createSprite(int row, int column){
+    //     Vector2 tempPosition = new Vector2(row, column);
+    //     int spriteToUse = Random.Range(0, SpritesPrefab.Length);
+    //     GameObject sprite = Instantiate(SpritesPrefab[spriteToUse], tempPosition, Quaternion.identity);
+    //     sprite.transform.parent = this.transform;
+    //     sprite.name = "(" + row + "," + column + ")";
+    //     Sprite spriteClass = sprite.GetComponent<Sprite>();
+    //     spriteClass.row = row;
+    //     spriteClass.column = column;
+    //     spriteClass.index = ((row * majorAxis) + column);
+    //     return sprite;
+    // }
 
     // Creation of a sprite at row, column at offset.
     private GameObject createSpriteOffset(int row, int column){
@@ -300,7 +303,7 @@ public class GridManager : MonoBehaviour
 
     private IEnumerator FillBoardCo(){
         RefillBoard();
-        FindAllMatchesAdj();
+        findMatches.FindAllMatchesAdj();
         yield return new WaitForSeconds(.2f);
 
         currentState = GameState.move;
@@ -323,96 +326,5 @@ public class GridManager : MonoBehaviour
             }
             nullSpriteArray[i] = 0;
         }
-    }
-
-    // A Breath First search implementation that keeps track of all possible matching sprites. If the first
-    // few sprites in this list is gone then that means we should recalculate the array. If empty
-    // then we should shuffle the board.
-    public void FindAllMatchesAdj(){
-        bool[] visited = new bool[vertices];
-
-        // Clear any left over objects
-        allMatches.Clear();
-        // Create a queue
-        Queue<int> q = new Queue<int>();
-        for(int i = 0; i < vertices; i++)
-        {
-            if(visited[i] == false) 
-            {
-                q.Enqueue(i);
-                List<int> listA = new List<int>();
-                // When count i empty then that would be a new section
-                while (q.Count > 0)
-                {
-                    int node = q.Dequeue();
-                    visited[node] = true;
-                    List<int> list = spritesAdjacencyList[node];
-
-                    foreach(int spriteIndex in list)
-                    {
-                        if(allSpritesMatrix[spriteIndex] != null && (allSpritesMatrix[node].GetComponent<Sprite>().isBreakable == false && allSpritesMatrix[node].tag == allSpritesMatrix[spriteIndex].tag) && visited[spriteIndex] == false)
-                        {
-                            q.Enqueue(spriteIndex);
-                            allMatches.Add(node);
-                            allMatches.Add(spriteIndex);
-
-                            listA.Add(node);
-                            listA.Add(spriteIndex);
-                        }
-                    }
-                }
-                
-                if(listA.Any()){
-                    listA.Clear();
-                }
-                
-            }
-            
-        }
-
-        if(!allMatches.Any())
-        {
-            ShuffleNoMatches();
-        }
-    }
-
-    public void ShuffleNoMatches(){
-        // Based of Fisher–Yates shuffle algorthim.
-        for (int i = 0; i < allSpritesMatrix.Length; i++ )
-        {
-            if(allSpritesMatrix[i].GetComponent<Sprite>().isBreakable == false)
-            {
-                int rando = Random.Range(i, allSpritesMatrix.Length);
-                while(allSpritesMatrix[rando].GetComponent<Sprite>().isBreakable == true)
-                {
-                    rando = Random.Range(i, allSpritesMatrix.Length);
-                }
-                GameObject temp = allSpritesMatrix[i];
-                allSpritesMatrix[i] = allSpritesMatrix[rando];
-                allSpritesMatrix[rando] = temp;
-
-                // index i
-                SpriteVariablesSetup(i);
-                SpriteVariablesSetup(rando);
-            }
-        }
-
-        FindAllMatchesAdj();
-    }
-
-    public void SpriteVariablesSetup(int index){
-        int column = index % height;
-        int row = (index - column) / height;
-        Sprite sprite = allSpritesMatrix[index].GetComponent<Sprite>();
-        sprite.index = index;
-        sprite.row = row;
-        sprite.column = column;
-        allSpritesMatrix[index].name = "(" + row + "," + column + ")";
-    }
-
-    public void BombReplacement(){
-    }
-
-    public void ArrowReplacement(){
     }
 }

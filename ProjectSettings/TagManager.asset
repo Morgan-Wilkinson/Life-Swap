@@ -4,14 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Reg1
-  - Reg2
-  - Reg3
-  - Reg4
-  - Reg5
-  - Reg6
-  - Reg7
-  - Reg8
   - Arrow1
   - Arrow2
   - Arrow3
@@ -33,6 +25,15 @@ TagManager:
   - PartiallySealedCrystal
   - Grid
   - UnsealedCrystal
+  - Arrow
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
   layers:
   - Default
   - TransparentFX
