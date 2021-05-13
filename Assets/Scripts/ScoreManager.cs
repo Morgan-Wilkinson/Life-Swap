@@ -28,7 +28,6 @@ public class ScoreManager : MonoBehaviour
 
     public void IncreaseScore(int amountOfDestroyedSprites)
     {
-        Debug.Log(amountOfDestroyedSprites);
         score = score + (multiplier * amountOfDestroyedSprites);
         scoreText.text = score.ToString();
     }

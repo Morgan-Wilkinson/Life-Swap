@@ -6,6 +6,8 @@ using UnityEngine;
 public class FindMatches : MonoBehaviour
 {
     private GridManager grid;
+    public GameObject ArrowPrefab;
+    public GameObject BombPrefab;
     public UnityEngine.Sprite[] OriginalSprites;
     public UnityEngine.Sprite[] ArrowSprites;
     public UnityEngine.Sprite[] BombSprites;
@@ -63,6 +65,7 @@ public class FindMatches : MonoBehaviour
         grid.allMatches.Clear();
         // Create a queue
         Queue<int> queue = new Queue<int>();
+
         for(int i = 0; i < grid.vertices; i++)
         {
             if(visited[i] == false) 
@@ -74,28 +77,32 @@ public class FindMatches : MonoBehaviour
                 while (queue.Count > 0)
                 {
                     int node = queue.Dequeue();
-                    visited[node] = true;
                     List<int> list = grid.spritesAdjacencyList[node];
 
                     foreach(int spriteIndex in list)
                     {
-
-                        //visited[spriteIndex] = true;
-                        if(grid.allSpritesMatrix[spriteIndex] != null && (grid.allSpritesMatrix[node].GetComponent<Sprite>().isBreakable == false && 
+                        if((grid.allSpritesMatrix[node].GetComponent<Sprite>().isBreakable == false && 
                         grid.allSpritesMatrix[node].tag == grid.allSpritesMatrix[spriteIndex].tag) && visited[spriteIndex] == false)
                         {
                             queue.Enqueue(spriteIndex);
-                            grid.allMatches.Add(node);
-                            grid.allMatches.Add(spriteIndex);
-
-                            specialSprite.Add(node);
-                            specialSprite.Add(spriteIndex);
+                            visited[spriteIndex] = true;
+                            
+                            if(!grid.allMatches.Contains(node))
+                            {
+                                grid.allMatches.Add(node);
+                                specialSprite.Add(node);
+                            }
+                            if(!grid.allMatches.Contains(spriteIndex))
+                            {
+                                grid.allMatches.Add(spriteIndex);
+                                specialSprite.Add(spriteIndex);
+                            }
                         }
                     }
                 }
                 if(specialSprite.Count >= grid.gridDimensions.arrow && specialSprite.Count < grid.gridDimensions.bomb)
                 {
-                    ArrowReplacement(grid.allSpritesMatrix[specialSprite[0]].tag, specialSprite);
+                    ArrowReplacement(grid.allSpritesMatrix[specialSprite[0]].tag, specialSprite); 
                 }
                 else if(specialSprite.Count >= grid.gridDimensions.bomb && specialSprite.Count < grid.gridDimensions.multiBomb)
                 {
@@ -316,5 +323,81 @@ public class FindMatches : MonoBehaviour
                 }
             }
         }
+    }
+
+    // A Breath First implementation of search for the matching sprites
+    public bool BFSMatchedTiles(GameObject sprite){
+        bool[] visited = new bool[grid.vertices];
+        bool matches = false;
+        // Create a queue
+        Queue<int> q = new Queue<int>();
+        q.Enqueue(sprite.GetComponent<Sprite>().index);
+        
+        // For bombs or arrows
+        List<int> specialSprite = new List<int>();
+
+        while (q.Count > 0)
+        {
+            int node = q.Dequeue();
+            
+            List<int> list = grid.spritesAdjacencyList[node];
+
+            foreach(int i in list)
+            {
+                if(grid.allSpritesMatrix[i] != null && sprite.tag == grid.allSpritesMatrix[i].tag && grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched == false)
+                {
+                    visited[i] = true;
+                    matches = true;
+                    grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
+                    // Gets the column of the index
+                    grid.nullSpriteArray[i / grid.height]++;
+
+                    specialSprite.Add(i);
+                    q.Enqueue(i);
+                }
+
+                else if(grid.allSpritesMatrix[i].GetComponent<Sprite>().isBreakable && visited[i] == false)
+                {
+                    visited[i] = true;
+                    Sprite spriteI = grid.allSpritesMatrix[i].GetComponent<Sprite>();
+                    spriteI.breakableSpriteProgress++;
+                    spriteI.damageProgression += 1;
+                    if(spriteI.damageProgression == spriteI.lifeforce)
+                    {
+                        spriteI.isMatched = true;
+                        grid.nullSpriteArray[i / grid.height]++;
+                    }
+                    else
+                    {
+                        grid.allSpritesMatrix[i].GetComponent<SpriteRenderer>().sprite = grid.BreakableSprites[0][spriteI.damageProgression];
+                    }
+                }
+            }
+        }
+
+        if(specialSprite.Count >= grid.gridDimensions.arrow && specialSprite.Count < grid.gridDimensions.bomb)
+        {
+            //MakeArrowBomb();
+        }
+        else if(specialSprite.Count >= grid.gridDimensions.bomb && specialSprite.Count < grid.gridDimensions.multiBomb)
+        {
+           
+        }
+        else if(specialSprite.Count >= grid.gridDimensions.multiBomb)
+        {
+            
+        }
+        specialSprite.Clear();
+        return matches;
+    }
+
+    public void MakeArrowBomb(int row, int column, int index){
+        GameObject arrow = Instantiate(ArrowPrefab, transform.position, Quaternion.identity, this.transform.parent);
+        Sprite sprite = arrow.GetComponent<Sprite>();
+        sprite.isArrow = true;
+        sprite.row = row;
+        sprite.column = column;
+        grid.allSpritesMatrix[index] = arrow;
+       //arrow.transform.parent = this.transform;
     }
 }

@@ -100,11 +100,15 @@ MonoBehaviour:
   row: 0
   column: 0
   index: 0
+  isArrow: 0
+  isBomb: 0
+  isMultiBomb: 0
+  ArrowPrefab: {fileID: 6672531507271042698, guid: 579dd46711112449aa42e28b8bfd7b57, type: 3}
+  BombPrefab: {fileID: 0}
   BreakableSpriteType: 0
   breakableSpriteProgress: 0
   isBreakable: 0
   lifeforce: 0
-  destroyed: 0
   isMatched: 0
 --- !u!61 &1241448625688474681
 BoxCollider2D:

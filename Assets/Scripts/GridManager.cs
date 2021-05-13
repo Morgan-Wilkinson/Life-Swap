@@ -22,7 +22,6 @@ public class GridManager : MonoBehaviour
     public GridDimensions gridDimensions;
     // The configuration of this levels breakable sprites
     public GameBreakableSpriteProgression breakablesConfig;
-
     public int level;    // Height of the grid.
     public int height;
     // Width of the grid.
@@ -32,7 +31,7 @@ public class GridManager : MonoBehaviour
     // Height from which the sprites drop in.
     public int offSet;
     // Major direction of sprites
-    private int majorAxis;
+    public int majorAxis;
 
     [Header("GameObject Storage Lists and Arrays")]
     public GameObject destroyEffect;
@@ -83,7 +82,7 @@ public class GridManager : MonoBehaviour
         // Board Variables
         height = gridDimensions.height;
         width = gridDimensions.width;
-        offSet = gridDimensions.offSet;
+        offSet = height + 1;
         vertices = width * height;
         majorAxis = height;
 
