@@ -59,13 +59,14 @@ public class Sprite : MonoBehaviour
             }
             else{
                 grid.currentState = GameState.wait;
-                if(findMatches.BFSMatchedTiles(grid.allSpritesMatrix[index])){
-                    grid.DestroyMatches();
-                }
-                else{
-                    grid.currentState = GameState.move;
-                    // Sprites shake;
-                }
+                findMatches.BFSMatchedTiles(grid.allSpritesMatrix[index]);
+                // if(findMatches.BFSMatchedTiles(grid.allSpritesMatrix[index])){
+                //     grid.DestroyMatches();
+                // }
+                // else{
+                //     grid.currentState = GameState.move;
+                //     // Sprites shake;
+                // }
             }
         }
     }

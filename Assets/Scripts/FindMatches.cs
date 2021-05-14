@@ -326,7 +326,12 @@ public class FindMatches : MonoBehaviour
     }
 
     // A Breath First implementation of search for the matching sprites
-    public bool BFSMatchedTiles(GameObject sprite){
+    public void BFSMatchedTiles(GameObject sprite){
+        // For special Sprite if needed.
+        int row = 0;
+        int column = 0;
+        int index = 0;
+
         bool[] visited = new bool[grid.vertices];
         bool matches = false;
         // Create a queue
@@ -374,25 +379,41 @@ public class FindMatches : MonoBehaviour
                 }
             }
         }
+        
+        if(matches){
+            if(specialSprite.Count >= grid.arrow)
+            {
+                Sprite spriteInfo = sprite.GetComponent<Sprite>();
+                row = spriteInfo.row;
+                column = spriteInfo.column;
+                index = spriteInfo.index;
+            }
 
-        if(specialSprite.Count >= grid.gridDimensions.arrow && specialSprite.Count < grid.gridDimensions.bomb)
-        {
-            //MakeArrowBomb();
+            grid.DestroyMatches();
         }
-        else if(specialSprite.Count >= grid.gridDimensions.bomb && specialSprite.Count < grid.gridDimensions.multiBomb)
+        else{
+            grid.currentState = GameState.move;
+            // Sprites shake;
+        }
+
+        if(specialSprite.Count >= grid.arrow && specialSprite.Count < grid.bomb)
+        {
+            MakeSpecialSprite(ArrowPrefab, row, column, index);
+        }
+        else if(specialSprite.Count >= grid.bomb && specialSprite.Count < grid.multiBomb)
         {
            
         }
-        else if(specialSprite.Count >= grid.gridDimensions.multiBomb)
+        else if(specialSprite.Count >= grid.multiBomb)
         {
             
         }
         specialSprite.Clear();
-        return matches;
     }
 
-    public void MakeArrowBomb(int row, int column, int index){
-        GameObject arrow = Instantiate(ArrowPrefab, transform.position, Quaternion.identity, this.transform.parent);
+    public void MakeSpecialSprite(GameObject prefab, int row, int column, int index){
+        Vector2 position = new Vector2(row, column);
+        GameObject arrow = Instantiate(prefab, position, Quaternion.identity, this.transform);
         Sprite sprite = arrow.GetComponent<Sprite>();
         sprite.isArrow = true;
         sprite.row = row;
