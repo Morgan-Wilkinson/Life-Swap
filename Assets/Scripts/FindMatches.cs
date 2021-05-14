@@ -334,81 +334,110 @@ public class FindMatches : MonoBehaviour
 
         bool[] visited = new bool[grid.vertices];
         bool matches = false;
-        // Create a queue
-        Queue<int> q = new Queue<int>();
-        q.Enqueue(sprite.GetComponent<Sprite>().index);
-        
-        // For bombs or arrows
-        List<int> specialSprite = new List<int>();
 
-        while (q.Count > 0)
+        if(sprite.tag != "Arrow" && sprite.tag != "Bomb" && sprite.tag != "MultiBomb")
         {
-            int node = q.Dequeue();
+            // Create a queue
+            Queue<int> q = new Queue<int>();
+            q.Enqueue(sprite.GetComponent<Sprite>().index);
             
-            List<int> list = grid.spritesAdjacencyList[node];
+            // For bombs or arrows
+            List<int> specialSprite = new List<int>();
 
-            foreach(int i in list)
+            while (q.Count > 0)
             {
-                if(grid.allSpritesMatrix[i] != null && sprite.tag == grid.allSpritesMatrix[i].tag && grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched == false)
-                {
-                    visited[i] = true;
-                    matches = true;
-                    grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
-                    // Gets the column of the index
-                    grid.nullSpriteArray[i / grid.height]++;
+                int node = q.Dequeue();
+                
+                List<int> list = grid.spritesAdjacencyList[node];
 
-                    specialSprite.Add(i);
-                    q.Enqueue(i);
-                }
-
-                else if(grid.allSpritesMatrix[i].GetComponent<Sprite>().isBreakable && visited[i] == false)
+                foreach(int i in list)
                 {
-                    visited[i] = true;
-                    Sprite spriteI = grid.allSpritesMatrix[i].GetComponent<Sprite>();
-                    spriteI.breakableSpriteProgress++;
-                    spriteI.damageProgression += 1;
-                    if(spriteI.damageProgression == spriteI.lifeforce)
+                    if(grid.allSpritesMatrix[i] != null && sprite.tag == grid.allSpritesMatrix[i].tag && grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched == false)
                     {
-                        spriteI.isMatched = true;
+                        visited[i] = true;
+                        matches = true;
+                        grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
+                        // Gets the column of the index
                         grid.nullSpriteArray[i / grid.height]++;
+
+                        specialSprite.Add(i);
+                        q.Enqueue(i);
                     }
-                    else
+
+                    else if(matches && grid.allSpritesMatrix[i].GetComponent<Sprite>().isBreakable && visited[i] == false)
                     {
-                        grid.allSpritesMatrix[i].GetComponent<SpriteRenderer>().sprite = grid.BreakableSprites[0][spriteI.damageProgression];
+                        visited[i] = true;
+                        Sprite spriteI = grid.allSpritesMatrix[i].GetComponent<Sprite>();
+                        spriteI.breakableSpriteProgress++;
+                        spriteI.damageProgression += 1;
+                        if(spriteI.damageProgression == spriteI.lifeforce)
+                        {
+                            spriteI.isMatched = true;
+                            grid.nullSpriteArray[i / grid.height]++;
+                        }
+                        else
+                        {
+                            grid.allSpritesMatrix[i].GetComponent<SpriteRenderer>().sprite = grid.BreakableSprites[0][spriteI.damageProgression];
+                        }
                     }
                 }
             }
-        }
-        
-        if(matches){
-            if(specialSprite.Count >= grid.arrow)
-            {
-                Sprite spriteInfo = sprite.GetComponent<Sprite>();
-                row = spriteInfo.row;
-                column = spriteInfo.column;
-                index = spriteInfo.index;
+            
+            if(matches){
+                if(specialSprite.Count >= grid.arrow)
+                {
+                    Sprite spriteInfo = sprite.GetComponent<Sprite>();
+                    row = spriteInfo.row;
+                    column = spriteInfo.column;
+                    index = spriteInfo.index;
+                }
+
+                grid.DestroyMatches();
+            }
+            else{
+                grid.currentState = GameState.move;
+                // Sprites shake;
             }
 
+            if(specialSprite.Count >= grid.arrow && specialSprite.Count < grid.bomb)
+            {
+                MakeSpecialSprite(ArrowPrefab, row, column, index);
+            }
+            else if(specialSprite.Count >= grid.bomb && specialSprite.Count < grid.multiBomb)
+            {
+            
+            }
+            else if(specialSprite.Count >= grid.multiBomb)
+            {
+                
+            }
+            specialSprite.Clear();
+        }
+
+        else if(sprite.tag == "Arrow")
+        {
+            Sprite spriteInfo = sprite.GetComponent<Sprite>();
+            row = spriteInfo.row;
+            column = spriteInfo.column;
+            index = spriteInfo.index;
+
+            int startXPosition = index - (row * grid.height);
+            int startYPosition = index - (grid.width - column);
+            int endYPosition = startYPosition + grid.width;
+            // Column Deletion
+            for(int i = startXPosition; i < grid.vertices; i += grid.height)
+            {
+                grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
+                grid.nullSpriteArray[i / grid.height]++;
+            }
+
+            for(int i = startYPosition; i < endYPosition; i++)
+            {
+                grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
+                grid.nullSpriteArray[i / grid.height]++;
+            }
             grid.DestroyMatches();
         }
-        else{
-            grid.currentState = GameState.move;
-            // Sprites shake;
-        }
-
-        if(specialSprite.Count >= grid.arrow && specialSprite.Count < grid.bomb)
-        {
-            MakeSpecialSprite(ArrowPrefab, row, column, index);
-        }
-        else if(specialSprite.Count >= grid.bomb && specialSprite.Count < grid.multiBomb)
-        {
-           
-        }
-        else if(specialSprite.Count >= grid.multiBomb)
-        {
-            
-        }
-        specialSprite.Clear();
     }
 
     public void MakeSpecialSprite(GameObject prefab, int row, int column, int index){
