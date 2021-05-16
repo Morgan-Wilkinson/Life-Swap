@@ -1289,7 +1289,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ArrowPrefab: {fileID: 6672531507271042698, guid: 579dd46711112449aa42e28b8bfd7b57, type: 3}
-  BombPrefab: {fileID: 0}
+  BombPrefab: {fileID: 4355647515080039086, guid: 6dc17a0beb08e44c98d789817e534b6c, type: 3}
+  MultiBombPrefab: {fileID: 0}
   OriginalSprites:
   - {fileID: 21300000, guid: f0406f596d5ee43e1b40e409fcea3298, type: 3}
   - {fileID: 21300000, guid: 546990239c7b943f58a8100b4ebaad8e, type: 3}
