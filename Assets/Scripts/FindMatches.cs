@@ -8,6 +8,7 @@ public class FindMatches : MonoBehaviour
     private GridManager grid;
     public GameObject ArrowPrefab;
     public GameObject BombPrefab;
+    public GameObject MultiBombPrefab;
     public UnityEngine.Sprite[] OriginalSprites;
     public UnityEngine.Sprite[] ArrowSprites;
     public UnityEngine.Sprite[] BombSprites;
@@ -110,7 +111,8 @@ public class FindMatches : MonoBehaviour
                 }
                 else if(specialSprite.Count >= grid.gridDimensions.multiBomb)
                 {
-                    MultiBomb(grid.allSpritesMatrix[specialSprite[0]].tag, specialSprite);
+                    //MultiBomb(grid.allSpritesMatrix[specialSprite[0]].tag, specialSprite);
+                    BombReplacement(grid.allSpritesMatrix[specialSprite[0]].tag, specialSprite);
                 }
                 specialSprite.Clear();
             }
@@ -405,11 +407,12 @@ public class FindMatches : MonoBehaviour
             }
             else if(specialSprite.Count >= grid.bomb && specialSprite.Count < grid.multiBomb)
             {
-            
+                MakeSpecialSprite(BombPrefab, row, column, index);
             }
             else if(specialSprite.Count >= grid.multiBomb)
             {
-                
+                MakeSpecialSprite(BombPrefab, row, column, index);
+                //MakeSpecialSprite(MultiBombPrefab, row, column, index);
             }
             specialSprite.Clear();
         }
@@ -422,7 +425,7 @@ public class FindMatches : MonoBehaviour
             index = spriteInfo.index;
 
             int startXPosition = index - (row * grid.height);
-            int startYPosition = index - (grid.width - column);
+            int startYPosition = index - column;
             int endYPosition = startYPosition + grid.width;
             // Column Deletion
             for(int i = startXPosition; i < grid.vertices; i += grid.height)
@@ -431,11 +434,54 @@ public class FindMatches : MonoBehaviour
                 grid.nullSpriteArray[i / grid.height]++;
             }
 
-            for(int i = startYPosition; i < endYPosition; i++)
+            for(int i = startYPosition; i <= endYPosition; i++)
             {
                 grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
                 grid.nullSpriteArray[i / grid.height]++;
             }
+            grid.DestroyMatches();
+        }
+
+        else if(sprite.tag == "Bomb")
+        {
+            Sprite spriteInfo = sprite.GetComponent<Sprite>();
+            row = spriteInfo.row;
+            column = spriteInfo.column;
+            index = spriteInfo.index;
+
+            int diagonalForward = grid.width + 2;
+            int diagonalBackwards = grid.width;
+
+            foreach(int i in grid.spritesAdjacencyList[index])
+            {
+                grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
+                grid.nullSpriteArray[i / grid.height]++;
+            }
+
+            grid.allSpritesMatrix[index - diagonalBackwards].GetComponent<Sprite>().isMatched = true;
+            grid.nullSpriteArray[(index - diagonalBackwards) / grid.height]++;
+
+            grid.allSpritesMatrix[index + diagonalBackwards].GetComponent<Sprite>().isMatched = true;
+            grid.nullSpriteArray[(index + diagonalBackwards) / grid.height]++;
+
+            grid.allSpritesMatrix[index - diagonalForward].GetComponent<Sprite>().isMatched = true;
+            grid.nullSpriteArray[(index - diagonalForward) / grid.height]++;
+
+            grid.allSpritesMatrix[index + diagonalForward].GetComponent<Sprite>().isMatched = true;
+            grid.nullSpriteArray[(index + diagonalForward) / grid.height]++;
+
+            grid.DestroyMatches();
+        }
+
+        // Removes all Sprites
+        else if(sprite.tag == "MultiBomb")
+        {
+            for(int i = 0; i < grid.vertices; i++)
+            {
+                grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
+                grid.nullSpriteArray[i / grid.height]++;
+            }
+
             grid.DestroyMatches();
         }
     }
