@@ -111,8 +111,7 @@ public class FindMatches : MonoBehaviour
                 }
                 else if(specialSprite.Count >= grid.gridDimensions.multiBomb)
                 {
-                    //MultiBomb(grid.allSpritesMatrix[specialSprite[0]].tag, specialSprite);
-                    BombReplacement(grid.allSpritesMatrix[specialSprite[0]].tag, specialSprite);
+                    MultiBomb(grid.allSpritesMatrix[specialSprite[0]].tag, specialSprite);
                 }
                 specialSprite.Clear();
             }
@@ -386,7 +385,7 @@ public class FindMatches : MonoBehaviour
             }
             
             if(matches){
-                if(specialSprite.Count >= grid.arrow)
+                if(specialSprite.Count >= grid.gridDimensions.arrow)
                 {
                     Sprite spriteInfo = sprite.GetComponent<Sprite>();
                     row = spriteInfo.row;
@@ -401,88 +400,35 @@ public class FindMatches : MonoBehaviour
                 // Sprites shake;
             }
 
-            if(specialSprite.Count >= grid.arrow && specialSprite.Count < grid.bomb)
+            if(specialSprite.Count >= grid.gridDimensions.arrow && specialSprite.Count < grid.gridDimensions.bomb)
             {
                 MakeSpecialSprite(ArrowPrefab, row, column, index);
             }
-            else if(specialSprite.Count >= grid.bomb && specialSprite.Count < grid.multiBomb)
+            else if(specialSprite.Count >= grid.gridDimensions.bomb && specialSprite.Count < grid.gridDimensions.multiBomb)
             {
                 MakeSpecialSprite(BombPrefab, row, column, index);
             }
-            else if(specialSprite.Count >= grid.multiBomb)
+            else if(specialSprite.Count >= grid.gridDimensions.multiBomb)
             {
-                MakeSpecialSprite(BombPrefab, row, column, index);
-                //MakeSpecialSprite(MultiBombPrefab, row, column, index);
+                MakeSpecialSprite(MultiBombPrefab, row, column, index);
             }
             specialSprite.Clear();
         }
 
         else if(sprite.tag == "Arrow")
         {
-            Sprite spriteInfo = sprite.GetComponent<Sprite>();
-            row = spriteInfo.row;
-            column = spriteInfo.column;
-            index = spriteInfo.index;
-
-            int startXPosition = index - (row * grid.height);
-            int startYPosition = index - column;
-            int endYPosition = startYPosition + grid.width;
-            // Column Deletion
-            for(int i = startXPosition; i < grid.vertices; i += grid.height)
-            {
-                grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
-                grid.nullSpriteArray[i / grid.height]++;
-            }
-
-            for(int i = startYPosition; i <= endYPosition; i++)
-            {
-                grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
-                grid.nullSpriteArray[i / grid.height]++;
-            }
-            grid.DestroyMatches();
+            ArrowActivation(sprite);
         }
 
         else if(sprite.tag == "Bomb")
         {
-            Sprite spriteInfo = sprite.GetComponent<Sprite>();
-            row = spriteInfo.row;
-            column = spriteInfo.column;
-            index = spriteInfo.index;
-
-            int diagonalForward = grid.width + 2;
-            int diagonalBackwards = grid.width;
-
-            foreach(int i in grid.spritesAdjacencyList[index])
-            {
-                grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
-                grid.nullSpriteArray[i / grid.height]++;
-            }
-
-            grid.allSpritesMatrix[index - diagonalBackwards].GetComponent<Sprite>().isMatched = true;
-            grid.nullSpriteArray[(index - diagonalBackwards) / grid.height]++;
-
-            grid.allSpritesMatrix[index + diagonalBackwards].GetComponent<Sprite>().isMatched = true;
-            grid.nullSpriteArray[(index + diagonalBackwards) / grid.height]++;
-
-            grid.allSpritesMatrix[index - diagonalForward].GetComponent<Sprite>().isMatched = true;
-            grid.nullSpriteArray[(index - diagonalForward) / grid.height]++;
-
-            grid.allSpritesMatrix[index + diagonalForward].GetComponent<Sprite>().isMatched = true;
-            grid.nullSpriteArray[(index + diagonalForward) / grid.height]++;
-
-            grid.DestroyMatches();
+            BombActivation(sprite);
         }
 
         // Removes all Sprites
         else if(sprite.tag == "MultiBomb")
         {
-            for(int i = 0; i < grid.vertices; i++)
-            {
-                grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
-                grid.nullSpriteArray[i / grid.height]++;
-            }
-
-            grid.DestroyMatches();
+           MultiBombActivation();
         }
     }
 
@@ -495,5 +441,103 @@ public class FindMatches : MonoBehaviour
         sprite.column = column;
         grid.allSpritesMatrix[index] = arrow;
        //arrow.transform.parent = this.transform;
+    }
+
+    public void ArrowActivation(GameObject sprite)
+    {
+        Sprite spriteInfo = sprite.GetComponent<Sprite>();
+        int row = spriteInfo.row;
+        int column = spriteInfo.column;
+        int index = spriteInfo.index;
+
+        int startXPosition = index - (row * grid.height);
+        int startYPosition = index - column;
+        int endYPosition = startYPosition + grid.width;
+        // Column Deletion
+        for(int i = startXPosition; i < grid.vertices; i += grid.height)
+        {
+            grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
+            grid.nullSpriteArray[i / grid.height]++;
+        }
+
+        for(int i = startYPosition; i <= endYPosition; i++)
+        {
+            grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
+            grid.nullSpriteArray[i / grid.height]++;
+        }
+        grid.DestroyMatches();
+    }
+    public void BombActivation(GameObject sprite)
+    {
+        Sprite spriteInfo = sprite.GetComponent<Sprite>();
+        int row = spriteInfo.row;
+        int column = spriteInfo.column;
+        int index = spriteInfo.index;
+
+        int newRow = 0;
+        int newColumn = 0;
+        int currentSprite = 0;
+
+        // Original Sprite
+        grid.allSpritesMatrix[index].GetComponent<Sprite>().isMatched = true;
+        grid.nullSpriteArray[index / grid.height]++;
+
+        foreach(int i in grid.spritesAdjacencyList[index])
+        {
+            grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
+            grid.nullSpriteArray[i / grid.height]++;
+        }
+        
+        // Left Up
+        newRow = row - 1;
+        newColumn = column + 1;
+        currentSprite = (newRow * grid.height) + newColumn;
+        if (currentSprite >= 0 && currentSprite < grid.vertices && newColumn < grid.height && newRow >= 0)
+        {
+            grid.allSpritesMatrix[currentSprite].GetComponent<Sprite>().isMatched = true;
+            grid.nullSpriteArray[currentSprite / grid.height]++;
+        }
+
+        // Left Down
+        newRow = row - 1;
+        newColumn = column - 1;
+        currentSprite = (newRow * grid.height) + newColumn;
+        if (currentSprite >= 0 && currentSprite < grid.vertices && newColumn >= 0 && newRow >= 0) 
+        {
+            grid.allSpritesMatrix[currentSprite].GetComponent<Sprite>().isMatched = true;
+            grid.nullSpriteArray[currentSprite / grid.height]++;
+        }
+
+        // Right Up
+        newRow = row + 1;
+        newColumn = column + 1;
+        currentSprite = (newRow * grid.height) + newColumn;
+        if (currentSprite >= 0 && currentSprite < grid.vertices && newColumn < grid.height && newRow < grid.width)
+        {
+            grid.allSpritesMatrix[currentSprite].GetComponent<Sprite>().isMatched = true;
+            grid.nullSpriteArray[currentSprite / grid.height]++;
+        }
+
+        // Right Down
+        newRow = row + 1;
+        newColumn = column - 1;
+        currentSprite = (newRow * grid.height) + newColumn;
+        if (currentSprite >= 0 && currentSprite < grid.vertices && newColumn >= 0 && newRow < grid.width)
+        {
+            grid.allSpritesMatrix[currentSprite].GetComponent<Sprite>().isMatched = true;
+            grid.nullSpriteArray[currentSprite / grid.height]++;
+        }
+
+        grid.DestroyMatches();
+    }
+    public void MultiBombActivation()
+    {
+        for(int i = 0; i < grid.vertices; i++)
+        {
+            grid.allSpritesMatrix[i].GetComponent<Sprite>().isMatched = true;
+            grid.nullSpriteArray[i / grid.height]++;
+        }
+
+        grid.DestroyMatches();
     }
 }

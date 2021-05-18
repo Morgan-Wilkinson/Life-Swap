@@ -14,6 +14,7 @@ public enum GameState {
 public class GridManager : MonoBehaviour
 {
     public static GridManager Instance { get; private set; }
+    public SaveDataGameState SavedData;
     private FindMatches findMatches;
 
     [Header("Board Variables")]
@@ -53,17 +54,12 @@ public class GridManager : MonoBehaviour
     [Header("Game Progression")]
     public GameState currentState = GameState.move;
 
-    [Header("GamePlay Variables")]
-    // Special sprites
-    public int arrow;
-    public int bomb;
-    public int multiBomb; 
-
     // Score Manager
     public ScoreManager scoreManager;
 
     void Awake(){
         Instance = this;
+        SavedData = GameManager.LoadData();
     }
 
     // Start is called before the first frame update
@@ -76,9 +72,8 @@ public class GridManager : MonoBehaviour
         gameLevels = settings.gameLevels;
         gridDimensions = settings.gridDimensions;
         breakablesConfig = settings.breakableSpritesTypes;
-
-        level = 0;
-
+        level = SavedData.currentLevel;
+        Debug.Log(level);
         // Board Variables
         height = gridDimensions.height;
         width = gridDimensions.width;
@@ -91,11 +86,6 @@ public class GridManager : MonoBehaviour
         spritesAdjacencyList = new List<int>[vertices];
         allMatches = new List<int>();
         nullSpriteArray = new int[width];
-
-        // GamePlay Variables
-        arrow = settings.gridDimensions.arrow;
-        bomb = settings.gridDimensions.bomb;
-        multiBomb = settings.gridDimensions.multiBomb;
 
         FindBreakableType();
         InitGrid();
@@ -147,7 +137,6 @@ public class GridManager : MonoBehaviour
                 {
                     spritesAdjacencyList[allSpritesIndex].Add(index);
                 }
-
 
                 // Up
                 index = (((i + 1) * majorAxis) + j);
@@ -210,20 +199,6 @@ public class GridManager : MonoBehaviour
         return sprite;
     }
     
-    // Creation of a sprite at row, column.
-    // private GameObject createSprite(int row, int column){
-    //     Vector2 tempPosition = new Vector2(row, column);
-    //     int spriteToUse = Random.Range(0, SpritesPrefab.Length);
-    //     GameObject sprite = Instantiate(SpritesPrefab[spriteToUse], tempPosition, Quaternion.identity);
-    //     sprite.transform.parent = this.transform;
-    //     sprite.name = "(" + row + "," + column + ")";
-    //     Sprite spriteClass = sprite.GetComponent<Sprite>();
-    //     spriteClass.row = row;
-    //     spriteClass.column = column;
-    //     spriteClass.index = ((row * majorAxis) + column);
-    //     return sprite;
-    // }
-
     // Creation of a sprite at row, column at offset.
     private GameObject createSpriteOffset(int row, int column){
         Vector2 tempPosition = new Vector2(row, column + offSet);

@@ -79,7 +79,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.8066667, y: 0.92}
+  m_Size: {x: 1.21, y: 1.38}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -103,12 +103,11 @@ MonoBehaviour:
   isArrow: 0
   isBomb: 0
   isMultiBomb: 0
-  ArrowPrefab: {fileID: 6672531507271042698, guid: 579dd46711112449aa42e28b8bfd7b57, type: 3}
-  BombPrefab: {fileID: 0}
   BreakableSpriteType: 0
   breakableSpriteProgress: 0
   isBreakable: 0
   lifeforce: 0
+  damageProgression: 0
   isMatched: 0
 --- !u!61 &5251274227703731796
 BoxCollider2D:
@@ -128,7 +127,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.8066667, y: 0.92}
-    newSize: {x: 0.8066667, y: 0.92}
+    newSize: {x: 1.21, y: 1.38}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

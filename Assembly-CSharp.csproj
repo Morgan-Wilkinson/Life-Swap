@@ -41,8 +41,10 @@
      <Compile Include="Assets\Scripts\Sprite.cs" />
      <Compile Include="Assets\Scripts\Breakables.cs" />
      <Compile Include="Assets\Scripts\FindMatches.cs" />
-     <Compile Include="Assets\Scripts\GameSettings.cs" />
      <Compile Include="Assets\Scripts\ExplosionSprites.cs" />
+     <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\GameSettings.cs" />
+     <Compile Include="Assets\Scripts\MainMenu.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

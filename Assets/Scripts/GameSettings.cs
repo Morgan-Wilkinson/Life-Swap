@@ -100,3 +100,21 @@ public class BreakableSpriteProgression
         return JsonUtility.FromJson<BreakableSpriteProgression>(jsonFileData); 
     }
 }
+
+// Save Data
+[System.Serializable]
+public class SaveDataGameState
+{
+    public int currentLevel;
+    public int powerUpArrows;
+    public int powerUpBombs;
+    public int powerUpMultiBombs;
+
+    public SaveDataGameState(int currentLevel, int powerUpArrows, int powerUpBombs, int powerUpMultiBombs)
+    {
+        this.currentLevel = currentLevel;
+        this.powerUpArrows = powerUpArrows;
+        this.powerUpBombs = powerUpBombs;
+        this.powerUpMultiBombs = powerUpMultiBombs;
+    }
+}
