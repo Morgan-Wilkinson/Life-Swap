@@ -126,49 +126,49 @@ public class FindMatches : MonoBehaviour
     public void BombReplacement(string tag, List<int> sprites){
         switch(tag)
         {
-            case "1":
+            case "0":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = BombSprites[0];
                 }
                 break;
-            case "2":
+            case "1":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = BombSprites[1];
                 }
                 break;
-            case "3":
+            case "2":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = BombSprites[2];
                 }
                 break;
-            case "4":
+            case "3":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = BombSprites[3];
                 }
                 break;
-            case "5":
+            case "4":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = BombSprites[4];
                 }
                 break;
-            case "6":
+            case "5":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = BombSprites[5];
                 }
                 break;
-            case "7":
+            case "6":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = BombSprites[6];
                 }
                 break;
-            case "8":
+            case "7":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = BombSprites[7];
@@ -181,49 +181,49 @@ public class FindMatches : MonoBehaviour
     public void ArrowReplacement(string tag, List<int> sprites){
         switch(tag)
         {
-            case "1":
+            case "0":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = ArrowSprites[0];
                 }
                 break;
-            case "2":
+            case "1":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = ArrowSprites[1];
                 }
                 break;
-            case "3":
+            case "2":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = ArrowSprites[2];
                 }
                 break;
-            case "4":
+            case "3":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = ArrowSprites[3];
                 }
                 break;
-            case "5":
+            case "4":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = ArrowSprites[4];
                 }
                 break;
-            case "6":
+            case "5":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = ArrowSprites[5];
                 }
                 break;
-            case "7":
+            case "6":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = ArrowSprites[6];
                 }
                 break;
-            case "8":
+            case "7":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = ArrowSprites[7];
@@ -236,49 +236,49 @@ public class FindMatches : MonoBehaviour
     public void MultiBomb(string tag, List<int> sprites){
         switch(tag)
         {
-            case "1":
+            case "0":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = MultiBombSprites[0];
                 }
                 break;
-            case "2":
+            case "1":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = MultiBombSprites[1];
                 }
                 break;
-            case "3":
+            case "2":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = MultiBombSprites[2];
                 }
                 break;
-            case "4":
+            case "3":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = MultiBombSprites[3];
                 }
                 break;
-            case "5":
+            case "4":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = MultiBombSprites[4];
                 }
                 break;
-            case "6":
+            case "5":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = MultiBombSprites[5];
                 }
                 break;
-            case "7":
+            case "6":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = MultiBombSprites[6];
                 }
                 break;
-            case "8":
+            case "7":
                 foreach(int index in sprites)
                 {
                     grid.allSpritesMatrix[index].GetComponent<SpriteRenderer>().sprite = MultiBombSprites[7];
@@ -296,28 +296,28 @@ public class FindMatches : MonoBehaviour
             {
                 switch(sprite.tag)
                 {
-                    case "1":
+                    case "0":
                         sprite.GetComponent<SpriteRenderer>().sprite = OriginalSprites[0];
                         break;
-                    case "2":
+                    case "1":
                         sprite.GetComponent<SpriteRenderer>().sprite = OriginalSprites[1];
                         break;
-                    case "3":
+                    case "2":
                         sprite.GetComponent<SpriteRenderer>().sprite = OriginalSprites[2];
                         break;
-                    case "4":
+                    case "3":
                         sprite.GetComponent<SpriteRenderer>().sprite = OriginalSprites[3];
                         break;
-                    case "5":
+                    case "4":
                         sprite.GetComponent<SpriteRenderer>().sprite = OriginalSprites[4];
                         break;
-                    case "6":
+                    case "5":
                         sprite.GetComponent<SpriteRenderer>().sprite = OriginalSprites[5];
                         break;
-                    case "7":
+                    case "6":
                         sprite.GetComponent<SpriteRenderer>().sprite = OriginalSprites[6];
                         break;
-                    case "8":
+                    case "7":
                         sprite.GetComponent<SpriteRenderer>().sprite = OriginalSprites[7];
                         break;
                     

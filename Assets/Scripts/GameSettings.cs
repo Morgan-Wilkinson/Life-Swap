@@ -70,6 +70,8 @@ public class Level
     public int startTwo;
     public int starThree;
     public int multiplier;
+    public int[] spriteTypeGoal;
+    public int[] spriteTypeAmount;
     public string[] breakableTypes;
     public int[] breakablesArray;
     

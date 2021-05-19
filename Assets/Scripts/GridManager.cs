@@ -66,14 +66,14 @@ public class GridManager : MonoBehaviour
     void Start(){
         // Get scripts
         settings = FindObjectOfType<GameSettings>();
-        scoreManager = FindObjectOfType<ScoreManager>();
         findMatches = FindObjectOfType<FindMatches>();
+        scoreManager = FindObjectOfType<ScoreManager>();
         
         gameLevels = settings.gameLevels;
         gridDimensions = settings.gridDimensions;
         breakablesConfig = settings.breakableSpritesTypes;
         level = SavedData.currentLevel;
-        Debug.Log(level);
+
         // Board Variables
         height = gridDimensions.height;
         width = gridDimensions.width;
@@ -86,9 +86,11 @@ public class GridManager : MonoBehaviour
         spritesAdjacencyList = new List<int>[vertices];
         allMatches = new List<int>();
         nullSpriteArray = new int[width];
+        
 
         FindBreakableType();
         InitGrid();
+        scoreManager.SetUpScorePlacement();
     }
 
 
@@ -215,7 +217,7 @@ public class GridManager : MonoBehaviour
 
     // Function that checks each index for destruction.
     public void DestroyMatches(){
-        int numberOfDestroyedSprites = 0;
+        int[] typeOfSpritesDestroyed = new int[SpritesPrefab.Length];
         for(int i = 0; i < width; i++)
         {
             if(nullSpriteArray[i] > 0)
@@ -223,25 +225,58 @@ public class GridManager : MonoBehaviour
                 for(int j = 0; j < height; j++)
                 {
                     int index = (i * majorAxis) + j;
-                    DestroyMatchesAt(index);
-                    numberOfDestroyedSprites++;
+                    DestroyMatchesAt(index, typeOfSpritesDestroyed);
                 }
             }
         }
         // Call scoreing function;
-        scoreManager.IncreaseScore(numberOfDestroyedSprites);
+        scoreManager.IncreaseScore(typeOfSpritesDestroyed);
 
         // Decrease rows and fill them in.
         StartCoroutine(DecreaseRowCo());
     }
 
-    private void DestroyMatchesAt(int index){
+    private void DestroyMatchesAt(int index, int[] typeOfSpritesDestroyed){
         if(allSpritesMatrix[index] != null && allSpritesMatrix[index].GetComponent<Sprite>().isMatched){
+            typeOfSpritesDestroyed[TypeOfSpriteParser(allSpritesMatrix[index].tag)]++;
             GameObject particle = Instantiate(destroyEffect, allSpritesMatrix[index].transform.position, Quaternion.identity, this.transform);
             Destroy(particle, 0.5f);
             Destroy(allSpritesMatrix[index]);
             allSpritesMatrix[index] = null; 
         }
+    }
+
+    private int TypeOfSpriteParser(string tag)
+    {
+        int returnType = 0;
+        switch(tag)
+        {
+            case "0":
+                returnType = 0;
+                break;
+            case "1":
+                returnType = 1;
+                break;
+            case "2":
+                returnType = 2;
+                break;
+            case "3":
+                returnType = 3;
+                break;
+            case "4":
+                returnType = 4;
+                break;
+            case "5":
+                returnType = 5;
+                break;
+            case "6":
+                returnType = 6;
+                break;
+            case "7":
+                returnType = 7;
+                break;
+        }
+        return returnType;
     }
 
     // Function that slides down the sprites if the sprite below it is 
