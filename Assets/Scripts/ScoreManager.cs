@@ -148,6 +148,14 @@ public class ScoreManager : MonoBehaviour
 
         if(score >= grid.gameLevels.levels[grid.level].starOne)
             objectivesMet = true;
+        for(int i = 0; i < numberOfObjectives; i++)
+        {
+            if(!objectiveCompletedChecks[i].activeInHierarchy)
+            {
+                objectivesMet = false;
+                Debug.Log("ObjectivesMet not met");
+            }
+        }
 
         return objectivesMet;
     }
