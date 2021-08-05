@@ -5,10 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - MultiBomb
-  - SealedCrystal
-  - PartiallySealedCrystal
   - Grid
-  - UnsealedCrystal
   - Arrow
   - 1
   - 2
@@ -19,6 +16,7 @@ TagManager:
   - 7
   - Bomb
   - 0
+  - Breakable
   layers:
   - Default
   - TransparentFX

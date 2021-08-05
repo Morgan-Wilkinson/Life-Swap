@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -3772847904705134544}
   m_Layer: 0
   m_Name: Breakable
-  m_TagString: PartiallySealedCrystal
+  m_TagString: Breakable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,11 +126,14 @@ MonoBehaviour:
   row: 0
   column: 0
   index: 0
+  isArrow: 0
+  isBomb: 0
+  isMultiBomb: 0
   BreakableSpriteType: 0
   breakableSpriteProgress: 0
   isBreakable: 0
   lifeforce: 0
-  destroyed: 0
+  damageProgression: 0
   isMatched: 0
 --- !u!95 &-3772847904705134544
 Animator:

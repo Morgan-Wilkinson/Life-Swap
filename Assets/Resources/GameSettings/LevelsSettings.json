@@ -1,7 +1,10 @@
 {
   "levels":[
-    {"goal":10000, "starOne":4000, "starTwo":7000, "starThree": 9000, "multiplier": 5, "spriteTypeGoal": [1, 2], "spriteTypeAmount": [10, 10], "breakableTypes": ["Crystals"], "breakablesArray": [ 0, 7, 14, 21, 28, 35 ]}, 
-    {"goal":20000, "starOne":9000, "starTwo":15000, "starThree": 18500, "multiplier": 10, "spriteTypeGoal": [1, 2, 4], "spriteTypeAmount": [10, 8, 5],  "breakableTypes": ["Crystals"], "breakablesArray": [ 0, 1, 7, 8, 14, 15, 21, 22, 28, 29, 35, 36]},
-    {"goal":30000, "starOne":16000, "starTwo":21000, "starThree": 28000, "multiplier": 15, "spriteTypeGoal": [1], "spriteTypeAmount": [10],  "breakableTypes": ["Crystals"], "breakablesArray": [ 6, 13, 20, 27, 24, 41]}
+    {"goal":10000, "starOne":4000, "starTwo":7000, "starThree": 9000, "multiplier": 100, "spriteTypeGoal": [1, 2, 8], "spriteTypeAmount": [10, 6], "breakableTypes": ["Crystals"], "breakablesArray": [ 0, 7, 14, 21, 28, 35 ]}, 
+    {"goal":20000, "starOne":9000, "starTwo":15000, "starThree": 18500, "multiplier": 100, "spriteTypeGoal": [1, 2, 8], "spriteTypeAmount": [10, 8, 12],  "breakableTypes": ["Crystals"], "breakablesArray": [ 0, 1, 7, 8, 14, 15, 21, 22, 28, 29, 35, 36]},
+    {"goal":30000, "starOne":16000, "starTwo":21000, "starThree": 28000, "multiplier": 100, "spriteTypeGoal": [1, 8], "spriteTypeAmount": [10, 6],  "breakableTypes": ["Crystals"], "breakablesArray": [ 6, 13, 20, 27, 34, 41]},
+    {"goal":10000, "starOne":4000, "starTwo":7000, "starThree": 9000, "multiplier": 100, "spriteTypeGoal": [5], "spriteTypeAmount": [10], "breakableTypes": [], "breakablesArray": []}, 
+    {"goal":20000, "starOne":9000, "starTwo":15000, "starThree": 18500, "multiplier": 100, "spriteTypeGoal": [2, 8], "spriteTypeAmount": [8, 4],  "breakableTypes": ["Crystals"], "breakablesArray": [ 0, 1, 35, 36]},
+    {"goal":30000, "starOne":16000, "starTwo":21000, "starThree": 28000, "multiplier": 100, "spriteTypeGoal": [7, 8], "spriteTypeAmount": [15, 3],  "breakableTypes": ["Crystals"], "breakablesArray": [ 6, 20, 41]}
   ]
 }

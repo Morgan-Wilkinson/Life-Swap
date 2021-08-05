@@ -46,64 +46,40 @@ public class ScoreManager : MonoBehaviour
         numberOfObjectives = grid.gameLevels.levels[grid.SavedData.currentLevel].spriteTypeGoal.Length;
         objectiveNumber = new int[numberOfObjectives];
 
-        if(numberOfObjectives == 1)
+        for(int i = 0; i < numberOfObjectives; i++)
         {
             // Change Sprites Images
-            objectiveImages[0].sprite = findMatches.OriginalSprites[grid.gameLevels.levels[grid.level].spriteTypeGoal[0]];
+            if(grid.gameLevels.levels[grid.SavedData.currentLevel].spriteTypeGoal[i] == 8)
+            {
+                objectiveImages[i].sprite = BreakbleSpriteObjective(grid.levelBreakableTypes[0]);
+            }
+            else
+            {
+                objectiveImages[i].sprite = findMatches.OriginalSprites[grid.gameLevels.levels[grid.level].spriteTypeGoal[i]];
+            }
 
             // Change Goal initial values
-            objectiveNumber[0] = grid.gameLevels.levels[grid.level].spriteTypeAmount[0];
-            objectiveTexts[0].text = objectiveNumber[0].ToString();
+            objectiveNumber[i] = grid.gameLevels.levels[grid.level].spriteTypeAmount[i];
+            objectiveTexts[i].text = objectiveNumber[i].ToString();
 
             // Turn on GamObjects 
-            objectives[0].SetActive(true);
-        }
-
-        if(numberOfObjectives == 2)
-        {
-            // Change GameObjects positions
-            objectives[0].transform.position = new Vector3(-45, 0, 0);
-            objectives[1].transform.position = new Vector3(45, 0, 0);
-
-            // Change Sprites Images
-            objectiveImages[0].sprite = findMatches.OriginalSprites[grid.gameLevels.levels[grid.level].spriteTypeGoal[0]];
-            objectiveImages[1].sprite = findMatches.OriginalSprites[grid.gameLevels.levels[grid.level].spriteTypeGoal[1]];
-
-            // Change Goal initial values
-            objectiveNumber[0] = grid.gameLevels.levels[grid.level].spriteTypeAmount[0];
-            objectiveTexts[0].text = objectiveNumber[0].ToString();
-
-            objectiveNumber[1] = grid.gameLevels.levels[grid.level].spriteTypeAmount[1];
-            objectiveTexts[1].text = objectiveNumber[1].ToString();
-
-            // Turn on GamObjects 
-            objectives[0].SetActive(true);
-            objectives[1].SetActive(true);
-        }
-
-        if(numberOfObjectives == 3)
-        {
-            // Change Sprites Images
-            objectiveImages[0].sprite = findMatches.OriginalSprites[grid.gameLevels.levels[grid.level].spriteTypeGoal[0]];
-            objectiveImages[1].sprite = findMatches.OriginalSprites[grid.gameLevels.levels[grid.level].spriteTypeGoal[1]];
-            objectiveImages[2].sprite = findMatches.OriginalSprites[grid.gameLevels.levels[grid.level].spriteTypeGoal[2]];
-
-            // Change Goal initial values
-            objectiveNumber[0] = grid.gameLevels.levels[grid.level].spriteTypeAmount[0];
-            objectiveTexts[0].text = objectiveNumber[0].ToString();
-
-            objectiveNumber[1] = grid.gameLevels.levels[grid.level].spriteTypeAmount[1];
-            objectiveTexts[1].text = objectiveNumber[1].ToString();
-
-            objectiveNumber[2] = grid.gameLevels.levels[grid.level].spriteTypeAmount[2];
-            objectiveTexts[2].text = objectiveNumber[2].ToString();
-
-            objectives[0].SetActive(true);
-            objectives[1].SetActive(true);
-            objectives[2].SetActive(true);
+            objectives[i].SetActive(true);
         }
     }
 
+    public UnityEngine.Sprite BreakbleSpriteObjective(string tag)
+    {
+       UnityEngine.Sprite spriteType = null;
+
+        switch(tag)
+        {
+            case "Crystals":
+                spriteType = grid.BreakableSprites[0][0];
+                break;
+        }
+
+        return spriteType;
+    }
     public void IncreaseScore(int[] sprites)
     {
         for(int i = 0; i < sprites.Length; i++)
@@ -111,7 +87,7 @@ public class ScoreManager : MonoBehaviour
             if(sprites[i] > 0)
             {
                 score = score + (multiplier * sprites[i]);
-                scoreText.text = score.ToString();
+                //scoreText.text = score.ToString();
             }
         }
 
@@ -121,8 +97,6 @@ public class ScoreManager : MonoBehaviour
             int type = grid.gameLevels.levels[grid.level].spriteTypeGoal[i];
             if(sprites[type] > 0)
             {
-                // Plus 1 for offset of 0;
-                Debug.Log(type);
                 objectiveNumber[i] -= sprites[type];
                 if(objectiveNumber[i] <= 0)
                 {
@@ -153,7 +127,6 @@ public class ScoreManager : MonoBehaviour
             if(!objectiveCompletedChecks[i].activeInHierarchy)
             {
                 objectivesMet = false;
-                Debug.Log("ObjectivesMet not met");
             }
         }
 

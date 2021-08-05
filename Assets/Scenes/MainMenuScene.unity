@@ -212,6 +212,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c0543cb1ccb44c5c86d502069530b12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SavedData:
+    currentLevel: 0
+    powerUpArrows: 0
+    powerUpBombs: 0
+    powerUpMultiBombs: 0
+  playButtonText: {fileID: 909269148}
 --- !u!1 &316247270
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,7 +269,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 500, y: 800}
+  m_ReferenceResolution: {x: 375, y: 812}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -415,7 +421,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 250, y: 60}
+  m_SizeDelta: {x: 300, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &813728260
 MonoBehaviour:

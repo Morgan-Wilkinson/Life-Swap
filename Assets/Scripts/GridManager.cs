@@ -217,7 +217,7 @@ public class GridManager : MonoBehaviour
 
     // Function that checks each index for destruction.
     public void DestroyMatches(){
-        int[] typeOfSpritesDestroyed = new int[SpritesPrefab.Length];
+        int[] typeOfSpritesDestroyed = new int[SpritesPrefab.Length + 1];
         for(int i = 0; i < width; i++)
         {
             if(nullSpriteArray[i] > 0)
@@ -274,6 +274,9 @@ public class GridManager : MonoBehaviour
                 break;
             case "7":
                 returnType = 7;
+                break;
+            case "Breakable":
+                returnType = 8;
                 break;
         }
         return returnType;
